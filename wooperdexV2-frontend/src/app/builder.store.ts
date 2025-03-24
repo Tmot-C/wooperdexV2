@@ -44,4 +44,36 @@ export class BuilderStore extends ComponentStore<BuilderState> {
             currentTrainer: null 
         });
     }
+
+    //selectors
+    readonly pokedex$ = this.select(state => state.pokedex);
+    readonly items$ = this.select(state => state.items);
+    readonly moves$ = this.select(state => state.moves);
+    readonly abilities$ = this.select(state => state.abilities);
+    readonly currentPokemon$ = this.select(state => state.currentPokemon);
+    readonly currentLearnset$ = this.select(state => state.currentLearnset);
+    readonly currentTrainer$ = this.select(state => state.currentTrainer);
+
+    //updaters
+    readonly updateCurrentPokemon = this.updater((state, pokemon: BuiltPokemon) => {
+        return {
+            ...state,
+            currentPokemon: pokemon
+        };
+    });
+
+    readonly updateCurrentLearnset = this.updater((state, learnset: Learnset) => {
+        return {
+            ...state,
+            currentLearnset: learnset
+        };
+    });
+
+    readonly updateCurrentTrainer = this.updater((state, trainer: Trainer) => {
+        return {
+            ...state,
+            currentTrainer: trainer
+        };
+    });
+    
 }
