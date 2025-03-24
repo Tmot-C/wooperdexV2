@@ -51,21 +51,21 @@ export interface Pokemon {
 }
 
 export interface BuiltPokemon {
-    id: string; //basically the pokemon's name in lowercase with no special characters, used as the general identifier
-    num: number;//dex number
-    name: string;
-    types: string[];
-    baseStats: BaseStats;
-    abilities: string[];
-    chosenAbility: string;
-    move1: string;
-    move2: string;
-    move3: string;
-    move4: string;
-    item?: string;
-    nature: string;
-    evs: BaseStats;//reusing the BaseStats interface
-    ivs: BaseStats;
+    id: string | null; //basically the pokemon's name in lowercase with no special characters, used as the general identifier
+    num: number | null;//dex number
+    name: string | null;
+    types: string[] | null;
+    baseStats: BaseStats | null;
+    abilities: string[] | null;
+    chosenAbility: string | null;
+    move1: string | null;
+    move2: string | null;
+    move3: string | null;
+    move4: string | null;
+    item: string | null;
+    nature: string | null;
+    evs: BaseStats | null;//reusing the BaseStats interface
+    ivs: BaseStats | null;
 }
 
 export interface Team {

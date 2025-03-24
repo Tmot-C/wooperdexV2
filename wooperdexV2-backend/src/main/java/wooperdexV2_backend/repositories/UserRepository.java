@@ -13,15 +13,15 @@ public class UserRepository {
     JdbcTemplate jdbcTemplate;
 
     final String SQL_UPSERT_USER = """
-        INSERT INTO users (email, name, firebaseId)
+        INSERT INTO users (id, email, name)
         VALUES (?, ?, ?)
-        ON DUPLICATE KEY UPDATE 
+        ON DUPLICATE KEY UPDATE
           name = VALUES(name),
-          firebaseId = VALUES(firebaseId)
+          email = VALUES(email)
     """;
 
     public void save(User user){
-        jdbcTemplate.update(SQL_UPSERT_USER, user.getEmail(), user.getName(), user.getFirebaseId());
+        jdbcTemplate.update(SQL_UPSERT_USER, user.getId(), user.getEmail(), user.getName());
     }
     
 }

@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
     try {
       const user = await this.authService.signInWithGoogle();
       if (user) {
-        this.router.navigate(['/homepage']);
+        this.router.navigate(['/teams']);
       }
     } catch (error: any) {
       console.error('Google Sign-In error:', error);

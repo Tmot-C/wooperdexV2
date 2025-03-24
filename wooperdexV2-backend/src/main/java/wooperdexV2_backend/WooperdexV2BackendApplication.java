@@ -17,6 +17,4 @@ public class WooperdexV2BackendApplication {
 		SpringApplication.run(WooperdexV2BackendApplication.class, args);
 	}
 
-
-
 }

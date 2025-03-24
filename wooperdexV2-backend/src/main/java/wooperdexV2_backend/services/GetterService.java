@@ -10,6 +10,7 @@ import wooperdexV2_backend.models.Item;
 import wooperdexV2_backend.models.Learnset;
 import wooperdexV2_backend.models.Move;
 import wooperdexV2_backend.models.Pokemon;
+import wooperdexV2_backend.models.Trainer;
 import wooperdexV2_backend.repositories.MongoRepository;
 
 @Service
@@ -43,5 +44,9 @@ public class GetterService {
     
     public Learnset getLearnset(String id) {
         return mongoRepository.getLearnset(id);
+    }
+
+    public Trainer getTrainer(String id) {
+        return mongoRepository.getTrainer(id);
     }
 }

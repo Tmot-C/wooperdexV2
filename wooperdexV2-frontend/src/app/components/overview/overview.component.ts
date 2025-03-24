@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { FirebaseAuthService } from '../../firebase-auth.service';
 
 @Component({
   selector: 'app-overview',
@@ -6,6 +7,17 @@ import { Component } from '@angular/core';
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.css'
 })
-export class OverviewComponent {
+export class OverviewComponent implements OnInit {
+  
+  private authSvc = inject(FirebaseAuthService);
+  userdata: any;
+ 
+  ngOnInit(): void {
+
+    this.userdata = this.authSvc.currentUser$;
+    this.userdata.subscribe((value: any) => {
+      console.log(value);
+    });
+  }
 
 }

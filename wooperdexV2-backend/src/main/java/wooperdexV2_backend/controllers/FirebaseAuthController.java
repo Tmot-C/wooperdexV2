@@ -2,6 +2,7 @@ package wooperdexV2_backend.controllers;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -50,19 +51,21 @@ public class FirebaseAuthController {
         }
 
         User newUser = new User();
+
+        newUser.setId(firebaseId);
         newUser.setEmail(email);
         newUser.setName(name);
-        newUser.setFirebaseId(firebaseId);
         userRepo.save(newUser);
 
         Trainer newTrainer = new Trainer();
+        newTrainer.setId(firebaseId);
         newTrainer.setEmail(email);
         newTrainer.setName(name);
         mongoRepo.saveTrainer(newTrainer);
 
 
         Map<String, Object> response = new HashMap<>();
-        response.put("id", newUser.getFirebaseId());
+        response.put("id", newUser.getId());
         response.put("name", newUser.getName());
         response.put("email", newUser.getEmail());
         

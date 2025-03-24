@@ -66,15 +66,16 @@ public class MongoRepository {
         }
     }
 
-    public Trainer getTrainer(String email) {
-        Query query = new Query(Criteria.where("email").is(email));
+    public Trainer getTrainer(String id) {
+        Query query = new Query(Criteria.where("id").is(id));
         return mongoTemplate.findOne(query, Trainer.class, "trainers");
     }
 
     public void saveTrainer(Trainer trainer) {
-        Query query = new Query(Criteria.where("email").is(trainer.getEmail()));
+        Query query = new Query(Criteria.where("id").is(trainer.getId()));
 
         Update update = new Update();
+        update.set("id", trainer.getId());
         update.set("email", trainer.getEmail());
         update.set("name", trainer.getName());
         update.set("teams", trainer.getTeams());

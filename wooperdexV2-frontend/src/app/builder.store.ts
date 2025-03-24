@@ -23,16 +23,25 @@ export interface BuilderState {
     items: Item[];
     moves: Item[];
     abilities: Item[];
-    currentPokemon: BuiltPokemon;
-    currentLearnset: Learnset
-    currentTrainer: Trainer;
+    currentPokemon: BuiltPokemon | null;
+    currentLearnset: Learnset | null;
+    currentTrainer: Trainer | null;
 }
-
-
 
 @Injectable({
   providedIn: 'root'
 })
-export class BuilderStore extends ComponentStore<any> {
+export class BuilderStore extends ComponentStore<BuilderState> {
 
+    constructor() {
+        super({
+            pokedex: [],
+            items: [],
+            moves: [],
+            abilities: [],
+            currentPokemon: null,
+            currentLearnset: null,
+            currentTrainer: null 
+        });
+    }
 }

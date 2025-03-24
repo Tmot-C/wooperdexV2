@@ -7,6 +7,7 @@ import wooperdexV2_backend.models.Item;
 import wooperdexV2_backend.models.Learnset;
 import wooperdexV2_backend.models.Move;
 import wooperdexV2_backend.models.Pokemon;
+import wooperdexV2_backend.models.Trainer;
 import wooperdexV2_backend.services.GetterService;
 
 import java.util.List;
@@ -52,6 +53,11 @@ public class WooperdexController {
     @GetMapping("/learnset/{id}")
     public Learnset getLearnsetById(@PathVariable String id) {
         return getSvc.getLearnset(id);
+    }
+
+    @GetMapping("/trainer/{id}")
+    public Trainer getTrainerById(@PathVariable String id) {
+        return getSvc.getTrainer(id);
     }
     
     
