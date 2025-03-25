@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { BuilderStore } from '../../../builder.store';
 import { BuiltPokemon, BaseStats } from '../../../models';
-import { POKEMON_NATURES, EV_TOTAL_MAX, EV_MAX, IV_MAX, IV_MIN } from '../../../constants';
+import { POKEMON_NATURES } from '../../../constants';
+import { StatsService } from '../../../stats.service';
 
 @Component({
   selector: 'app-statselect',
@@ -15,15 +16,12 @@ export class StatselectComponent implements OnInit {
   private store = inject(BuilderStore);
   private router = inject(Router);
   private fb = inject(FormBuilder);
+  private statsService = inject(StatsService);
   
   currentPokemon: BuiltPokemon | null = null;
   
   // Constants
   natures: string[] = POKEMON_NATURES;
-  evTotalMax: number = EV_TOTAL_MAX;
-  evMax: number = EV_MAX;
-  ivMax: number = IV_MAX;
-  ivMin: number = IV_MIN;
   
   // Stat keys in a specific order
   statKeys: Array<keyof BaseStats> = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
@@ -96,16 +94,6 @@ export class StatselectComponent implements OnInit {
     });
   }
   
-  // Round to nearest multiple of 4 for EVs
-  private roundToNearestEv(value: number): number {
-    return Math.round(value / 4) * 4;
-  }
-  
-  // Get just the nature name without the effect
-  private getNatureName(fullNature: string): string {
-    return fullNature.split(' (')[0];
-  }
-  
   // EV Methods
   // Check if a stat can receive more EVs
   canIncreaseEv(stat: keyof BaseStats): boolean {
@@ -117,8 +105,8 @@ export class StatselectComponent implements OnInit {
     const currentStatEv = currentEvs[stat] || 0;
     
     // Check if adding 4 EVs would exceed total or stat max
-    return (totalEvs + 4 <= this.evTotalMax) && 
-           (currentStatEv + 4 <= this.evMax);
+    return (totalEvs + 4 <= this.statsService.evTotalMax) && 
+           (currentStatEv + 4 <= this.statsService.evMax);
   }
   
   // Increase EV for a specific stat
@@ -154,7 +142,7 @@ export class StatselectComponent implements OnInit {
     const inputValue = parseInt(inputElement.value, 10) || 0;
     
     // Round to nearest multiple of 4
-    const roundedValue = this.roundToNearestEv(inputValue);
+    const roundedValue = this.statsService.roundToNearestEv(inputValue);
     
     // Calculate current total EVs
     const currentEvs = {...(this.evForm.value as BaseStats)};
@@ -164,13 +152,13 @@ export class StatselectComponent implements OnInit {
     
     // Adjust if total would exceed max
     let finalValue = roundedValue;
-    if (otherStatsTotalEvs + roundedValue > this.evTotalMax) {
-      finalValue = Math.max(0, this.evTotalMax - otherStatsTotalEvs);
-      finalValue = this.roundToNearestEv(finalValue);
+    if (otherStatsTotalEvs + roundedValue > this.statsService.evTotalMax) {
+      finalValue = Math.max(0, this.statsService.evTotalMax - otherStatsTotalEvs);
+      finalValue = this.statsService.roundToNearestEv(finalValue);
     }
     
     // Ensure individual stat doesn't exceed max
-    finalValue = Math.min(finalValue, this.evMax);
+    finalValue = Math.min(finalValue, this.statsService.evMax);
     
     // Set the value
     const control = this.evForm.get(stat);
@@ -185,7 +173,7 @@ export class StatselectComponent implements OnInit {
   // Calculate remaining EVs
   getRemainingEvs(): number {
     const currentEvs = this.evForm.value as BaseStats;
-    return this.evTotalMax - Object.values(currentEvs).reduce((a, b) => a + b, 0);
+    return this.statsService.evTotalMax - Object.values(currentEvs).reduce((a, b) => a + b, 0);
   }
   
   // IV Methods
@@ -198,7 +186,7 @@ export class StatselectComponent implements OnInit {
     const currentValue = control.value || 0;
     
     // Increase by 1, but not above max
-    const newValue = Math.min(this.ivMax, currentValue + 1);
+    const newValue = Math.min(this.statsService.ivMax, currentValue + 1);
     control.setValue(newValue);
   }
   
@@ -211,7 +199,7 @@ export class StatselectComponent implements OnInit {
     const currentValue = control.value || 0;
     
     // Decrease by 1, but not below min
-    const newValue = Math.max(this.ivMin, currentValue - 1);
+    const newValue = Math.max(this.statsService.ivMin, currentValue - 1);
     control.setValue(newValue);
   }
   
@@ -221,7 +209,7 @@ export class StatselectComponent implements OnInit {
     const inputValue = parseInt(inputElement.value, 10) || 0;
     
     // Ensure value is within bounds
-    let finalValue = Math.max(this.ivMin, Math.min(this.ivMax, inputValue));
+    let finalValue = Math.max(this.statsService.ivMin, Math.min(this.statsService.ivMax, inputValue));
     
     // Set the value
     const control = this.ivForm.get(stat);
@@ -238,6 +226,18 @@ export class StatselectComponent implements OnInit {
     return this.currentPokemon?.baseStats?.[stat] || 0;
   }
   
+  // Calculate the final stat value based on base stat, EVs, IVs, and nature
+  calculateFinalStat(stat: keyof BaseStats): number {
+    if (!this.currentPokemon || !this.currentPokemon.baseStats) return 0;
+    
+    const baseValue = this.getBaseStat(stat);
+    const ev = this.evForm.get(stat)?.value || 0;
+    const iv = this.ivForm.get(stat)?.value || 31;
+    const natureEffect = this.statsService.getNatureEffect(this.nature, stat);
+    
+    return this.statsService.calculateFinalStat(baseValue, ev, iv, natureEffect, stat === 'hp');
+  }
+  
   // Navigate to the next step or save
   saveStatsAndContinue(): void {
     if (!this.currentPokemon) return;
@@ -246,7 +246,7 @@ export class StatselectComponent implements OnInit {
       ...this.currentPokemon,
       evs: this.evForm.value as BaseStats,
       ivs: this.ivForm.value as BaseStats,
-      nature: this.getNatureName(this.nature) // Store only the name part
+      nature: this.statsService.extractNatureName(this.nature) // Store only the name part
     };
     
     this.store.updateCurrentPokemon(updatedPokemon);
@@ -259,17 +259,13 @@ export class StatselectComponent implements OnInit {
     this.router.navigate(['/teambuilder/item']);
   }
   
-  // Stat name mapping
+  // Use shared service for stat-related functionality
   getStatLabel(stat: keyof BaseStats): string {
-    switch (stat) {
-      case 'hp': return 'HP';
-      case 'atk': return 'Atk';
-      case 'def': return 'Def';
-      case 'spa': return 'SpA';
-      case 'spd': return 'SpD';
-      case 'spe': return 'Spe';
-      default: return '';
-    }
+    return this.statsService.getStatLabel(stat);
+  }
+  
+  getStatColor(stat: keyof BaseStats): string {
+    return this.statsService.getStatColor(stat);
   }
   
   // Reset EVs to zero
@@ -287,7 +283,7 @@ export class StatselectComponent implements OnInit {
     this.statKeys.forEach(stat => {
       const control = this.ivForm.get(stat);
       if (control) {
-        control.setValue(this.ivMax);
+        control.setValue(this.statsService.ivMax);
       }
     });
   }

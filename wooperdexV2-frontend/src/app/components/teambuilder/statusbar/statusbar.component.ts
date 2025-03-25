@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { BuilderStore } from '../../../builder.store';
 import { BuiltPokemon, BaseStats } from '../../../models';
 import { Observable } from 'rxjs';
+import { StatsService } from '../../../stats.service';
 
 @Component({
   selector: 'app-statusbar',
@@ -14,6 +15,7 @@ import { Observable } from 'rxjs';
 export class StatusbarComponent implements OnInit {
   private store = inject(BuilderStore);
   private router = inject(Router);
+  private statsService = inject(StatsService);
   
   currentPokemon$: Observable<BuiltPokemon | null> = this.store.currentPokemon$;
   currentPokemon: BuiltPokemon | null = null;
@@ -89,11 +91,13 @@ export class StatusbarComponent implements OnInit {
     }
   }
   
-  // Helper methods for UI display
+  // Use the shared service for stat-related functionality
   getStatPercentage(value: number): number {
-    // Map the stat value to a percentage for progress bars
-    // Assuming max base stat is around 255
-    return Math.min((value / 255) * 100, 100);
+    return this.statsService.getStatPercentage(value);
+  }
+  
+  getStatColor(stat: keyof BaseStats): string {
+    return this.statsService.getStatColor(stat);
   }
   
   getTypeClass(type: string): string {

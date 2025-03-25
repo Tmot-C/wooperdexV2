@@ -1,87 +1,143 @@
+/* statselect.component.scss */
 .stats-container {
     padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
-  }
-  
-  .base-stats-section, .ev-section, .iv-section, .nature-section {
+    gap: 16px;
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 8px;
-    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
-  h3 {
-    margin-top: 0;
-    margin-bottom: 16px;
+  .stats-header-section {
     display: flex;
+    justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 16px;
     
-    .ev-remaining {
-      margin-left: 8px;
-      font-size: 14px;
-      color: rgba(0, 0, 0, 0.6);
-    }
-    
-    .reset-button, .perfect-button {
-      margin-left: auto;
-      font-size: 12px;
-      padding: 0 8px;
-      min-width: 64px;
-      height: 24px;
-      line-height: 24px;
-    }
-  }
-  
-  .base-stats-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    
-    .base-stat-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
+    .stats-title {
+      flex: 2;
+      min-width: 300px;
       
-      .stat-label {
-        width: 40px;
-        font-weight: 500;
-      }
-      
-      .base-stat-value {
-        width: 30px;
-        text-align: right;
+      h3 {
+        margin: 0 0 8px 0;
         font-weight: 600;
       }
       
-      .base-stat-bar {
-        flex-grow: 1;
+      .stats-actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        
+        .ev-remaining {
+          font-size: 14px;
+          color: rgba(0, 0, 0, 0.7);
+          font-weight: 500;
+        }
+        
+        .action-button {
+          font-size: 12px;
+          padding: 0 8px;
+          min-width: 64px;
+          height: 24px;
+          line-height: 24px;
+        }
+      }
+    }
+    
+    .nature-selector {
+      flex: 1;
+      min-width: 260px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      
+      .nature-label {
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.7);
+      }
+      
+      mat-form-field {
+        flex: 1;
+        margin-bottom: -1.25em; // Reduce excess padding in mat-form-field
       }
     }
   }
   
-  .ev-grid, .iv-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  .stats-table {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
     
-    .ev-row, .iv-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
+    .stats-row {
+      display: table-row;
       
-      .stat-label {
-        width: 40px;
+      &.header-row {
         font-weight: 500;
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.7);
+        
+        > div {
+          padding-bottom: 8px;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
       }
       
-      .ev-controls, .iv-controls {
+      > div {
+        display: table-cell;
+        padding: 8px 4px;
+        vertical-align: middle;
+      }
+    }
+    
+    .column-stat {
+      width: 20%;
+      
+      .stat-label {
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      
+      .stat-bar-container {
+        width: 100%;
+      }
+    }
+    
+    .column-base {
+      width: 10%;
+      text-align: center;
+      font-weight: 600;
+    }
+    
+    .column-evs, .column-ivs {
+      width: 30%;
+      
+      .controls-container {
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 8px;
         
-        .ev-input, .iv-input {
+        .mini-control-button {
+          width: 28px;
+          height: 28px;
+          line-height: 28px;
+          
+          .mini-icon {
+            font-size: 16px;
+            line-height: 16px;
+            height: 16px;
+            width: 16px;
+          }
+        }
+        
+        .stat-input {
           width: 60px;
+          height: 28px;
           text-align: center;
           appearance: none;
           -moz-appearance: textfield;
@@ -96,48 +152,24 @@
             margin: 0;
           }
         }
-        
-        // Adjust mini fab button size
-        .mat-mdc-mini-fab {
-          width: 36px;
-          height: 36px;
-          
-          .mat-icon {
-            font-size: 18px;
-          }
-        }
       }
     }
-  }
-  
-  .nature-section {
-    .nature-content {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
     
-    .mat-form-field {
-      width: 100%;
-    }
-    
-    .nature-effect {
-      padding: 8px;
-      background-color: rgba(0, 0, 0, 0.05);
-      border-radius: 4px;
-      
-      p {
-        margin: 0;
-        font-size: 14px;
-        font-weight: 500;
-      }
+    .column-final {
+      width: 10%;
+      text-align: center;
+      font-weight: 700;
+      font-size: 18px;
+      color: #2962FF;
     }
   }
   
   .button-row {
     display: flex;
     justify-content: space-between;
-    margin-top: 16px;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
   }
   
   .no-pokemon {
@@ -145,12 +177,49 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 24px;
+    padding: 48px 24px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
     
-    mat-icon {
-      font-size: 48px;
-      width: 48px;
-      height: 48px;
+    p {
       margin-bottom: 16px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+  }
+  
+  /* Stat color customization */
+  .hp-color {
+    color: #FF5959;
+  }
+  
+  .atk-color {
+    color: #F5AC78;
+  }
+  
+  .def-color {
+    color: #FAE078;
+  }
+  
+  .spa-color {
+    color: #9DB7F5;
+  }
+  
+  .spd-color {
+    color: #A7DB8D;
+  }
+  
+  .spe-color {
+    color: #FA92B2;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .stats-header-section {
+      flex-direction: column;
+      
+      .stats-title, .nature-selector {
+        width: 100%;
+      }
     }
   }
