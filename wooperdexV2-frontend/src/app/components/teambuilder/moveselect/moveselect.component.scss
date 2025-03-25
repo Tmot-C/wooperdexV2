@@ -1,0 +1,186 @@
+.move-container {
+    padding: 16px;
+  }
+  
+  .move-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    
+    h3 {
+      margin: 0;
+    }
+    
+    .selected-moves {
+      display: flex;
+      gap: 8px;
+      
+      span {
+        font-size: 12px;
+        padding: 4px 8px;
+        background-color: rgba(0, 0, 0, 0.05);
+        border-radius: 4px;
+      }
+    }
+  }
+  
+  .search-filter-card {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 16px;
+    
+    .search-field {
+      width: 100%;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+  }
+  
+  .filter-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    
+    .filter-group {
+      flex: 1;
+      min-width: 200px;
+      
+      .filter-title {
+        margin-top: 0;
+        margin-bottom: 5px;
+        font-size: 14px;
+      }
+      
+      .type-buttons, .category-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+      }
+    }
+    
+    .clear-button {
+      align-self: flex-end;
+    }
+  }
+  
+  .type-button, .category-button {
+    min-width: auto;
+    line-height: 20px;
+    padding: 0 5px;
+    margin: 2px;
+    font-size: 11px;
+    color: white !important;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    
+    &.selected {
+      box-shadow: 0 0 0 2px white, 0 0 0 3px #000;
+    }
+  }
+  
+  .moves-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+  
+  .move-card {
+    cursor: pointer;
+    transition: background-color 0.2s;
+    
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+    
+    .move-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      
+      .move-name {
+        font-weight: bold;
+        font-size: 16px;
+      }
+      
+      .move-type {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        color: white;
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+      }
+    }
+    
+    .move-details {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+      
+      > div {
+        font-size: 12px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+      
+      .move-category {
+        color: white;
+        
+        &.category-physical { background-color: #C92112; }
+        &.category-special { background-color: #4F5870; }
+        &.category-status { background-color: #8C888C; }
+      }
+    }
+    
+    .move-description {
+      font-size: 13px;
+      color: rgba(0, 0, 0, 0.7);
+    }
+  }
+  
+  .button-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+  }
+  
+  .no-results, .no-pokemon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+    }
+  }
+  
+  /* Type colors (same as in your global styles) */
+  .type-normal { background-color: #A8A878 !important; }
+  .type-fire { background-color: #F08030 !important; }
+  .type-water { background-color: #6890F0 !important; }
+  .type-electric { background-color: #F8D030 !important; }
+  .type-grass { background-color: #78C850 !important; }
+  .type-ice { background-color: #98D8D8 !important; }
+  .type-fighting { background-color: #C03028 !important; }
+  .type-poison { background-color: #A040A0 !important; }
+  .type-ground { background-color: #E0C068 !important; }
+  .type-flying { background-color: #A890F0 !important; }
+  .type-psychic { background-color: #F85888 !important; }
+  .type-bug { background-color: #A8B820 !important; }
+  .type-rock { background-color: #B8A038 !important; }
+  .type-ghost { background-color: #705898 !important; }
+  .type-dragon { background-color: #7038F8 !important; }
+  .type-dark { background-color: #705848 !important; }
+  .type-steel { background-color: #B8B8D0 !important; }
+  .type-fairy { background-color: #EE99AC !important; }

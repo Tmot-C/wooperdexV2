@@ -1,1 +1,88 @@
-<p>moveselect works!</p>
+<div class="move-container" *ngIf="currentPokemon">
+    <div class="move-header">
+      <h3>Move {{ moveSlot }}</h3>
+      <span class="selected-moves">
+        <span *ngIf="currentPokemon.move1">1: {{ currentPokemon.move1 }}</span>
+        <span *ngIf="currentPokemon.move2">2: {{ currentPokemon.move2 }}</span>
+        <span *ngIf="currentPokemon.move3">3: {{ currentPokemon.move3 }}</span>
+        <span *ngIf="currentPokemon.move4">4: {{ currentPokemon.move4 }}</span>
+      </span>
+    </div>
+    
+    <div class="search-filter-card">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search Moves</mat-label>
+        <input matInput [formControl]="searchControl" placeholder="Search by name, type, or effect...">
+        <button *ngIf="searchControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="searchControl.setValue('')">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      
+      <div class="filter-section">
+        <div class="filter-group">
+          <h3 class="filter-title">Type Filter</h3>
+          <div class="type-buttons">
+            <button 
+              *ngFor="let type of currentPokemon.types"
+              mat-raised-button
+              [ngClass]="['type-button', 'type-' + type.toLowerCase(), selectedType === type ? 'selected' : '']"
+              (click)="selectedType === type ? setTypeFilter(null) : setTypeFilter(type)">
+              {{ type }}
+            </button>
+          </div>
+        </div>
+        
+        <div class="filter-group">
+          <h3 class="filter-title">Category Filter</h3>
+          <div class="category-buttons">
+            <button 
+              *ngFor="let category of categories"
+              mat-raised-button
+              [ngClass]="['category-button', 'category-' + category.toLowerCase(), selectedCategory === category ? 'selected' : '']"
+              (click)="selectedCategory === category ? setCategoryFilter(null) : setCategoryFilter(category)">
+              {{ category }}
+            </button>
+          </div>
+        </div>
+        
+        <button mat-raised-button color="warn" (click)="clearFilters()" class="clear-button">
+          Clear Filters
+        </button>
+      </div>
+    </div>
+    
+    <div class="moves-list">
+      <div *ngIf="filteredMoves.length === 0" class="no-results">
+        <mat-icon>search_off</mat-icon>
+        <p>No moves found matching your filters.</p>
+      </div>
+      
+      <mat-card *ngFor="let move of filteredMoves" class="move-card" (click)="selectMove(move)">
+        <div class="move-card-header">
+          <div class="move-name">{{ move.name }}</div>
+          <div class="move-type" [ngClass]="'type-' + move.type.toLowerCase()">{{ move.type }}</div>
+        </div>
+        
+        <div class="move-details">
+          <div class="move-category" [ngClass]="'category-' + move.category.toLowerCase()">{{ move.category }}</div>
+          <div class="move-power" *ngIf="move.category !== 'Status'">Power: {{ move.basePower }}</div>
+          <div class="move-accuracy">Accuracy: {{ move.accuracy }}</div>
+          <div class="move-pp">PP: {{ move.pp }}</div>
+        </div>
+        
+        <div class="move-description">
+          <p>{{ move.shortDesc }}</p>
+        </div>
+      </mat-card>
+    </div>
+    
+    <div class="button-row">
+      <button mat-button (click)="goBack()">Back</button>
+      <button mat-button color="primary" (click)="skipToStats()">Skip to Stats</button>
+    </div>
+  </div>
+  
+  <div class="no-pokemon" *ngIf="!currentPokemon">
+    <p>Please select a Pokémon first</p>
+    <button mat-button (click)="goBack()">Back to Pokémon Selection</button>
+  </div>

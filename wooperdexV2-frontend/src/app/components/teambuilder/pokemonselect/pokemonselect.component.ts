@@ -6,6 +6,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { BuilderStore } from '../../../builder.store';
 import { BuilderService } from '../../../builder.service';
 import { Pokemon, BaseStats } from '../../../models';
+import { POKEMON_TYPES, POKEMON_TIERS, ALL_POKEMON_TIERS, TIER_GROUPS } from '../../../constants';
 
 @Component({
   selector: 'app-pokemonselect',
@@ -30,16 +31,11 @@ export class PokemonselectComponent implements OnInit {
   selectedType: string | null = null;
   selectedTier: string | null = null;
   
-  // List of available types and tiers for filtering
-  types: string[] = [
-    'Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice',
-    'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic',
-    'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy'
-  ];
-  
-  tiers: string[] = [
-    'Uber', 'OU', 'UU', 'RU', 'NU', 'PU', 'LC'
-  ];
+  // Get constants from constants.ts
+  types: string[] = POKEMON_TYPES;
+  tiers: string[] = POKEMON_TIERS;
+  allTiers: string[] = ALL_POKEMON_TIERS;
+  tierGroups: { [key: string]: string[] } = TIER_GROUPS;
   
   ngOnInit(): void {
     // Load Pokemon list from store
@@ -61,23 +57,22 @@ export class PokemonselectComponent implements OnInit {
   // Sort Pokemon by tier and then alphabetically
   sortPokemonList(pokemonList: Pokemon[]): Pokemon[] {
     // Define tier order for sorting
-    const tierOrder: { [key: string]: number } = {
-      'Uber': 1,
-      'OU': 2,
-      'UU': 3,
-      'RU': 4,
-      'NU': 5,
-      'PU': 6,
-      'LC': 7,
-      'Illegal': 8 // For any Pokemon with an invalid tier
-    };
+    const tierOrder: { [key: string]: number } = {};
+    
+    // Assign numbers to tiers based on their position in ALL_POKEMON_TIERS
+    this.allTiers.forEach((tier, index) => {
+      tierOrder[tier] = index + 1;
+    });
+    
+    // Add 'Illegal' tier with a high number to place it at the end
+    tierOrder['Illegal'] = 99;
     
     return [...pokemonList].sort((a, b) => {
       // First sort by tier
       const tierA = a.tier || 'Illegal';
       const tierB = b.tier || 'Illegal';
       
-      const tierCompare = (tierOrder[tierA] || 999) - (tierOrder[tierB] || 999);
+      const tierCompare = (tierOrder[tierA] || 99) - (tierOrder[tierB] || 99);
       
       // If tiers are the same, sort alphabetically by name
       if (tierCompare === 0) {
@@ -120,13 +115,26 @@ export class PokemonselectComponent implements OnInit {
         pokemon.types.some(type => type.toLowerCase() === this.selectedType?.toLowerCase()) : 
         true;
       
-      // Apply tier filter
+      // Apply tier filter - now using tier groups
       const matchesTier = this.selectedTier ? 
-        pokemon.tier?.toLowerCase() === this.selectedTier.toLowerCase() : 
-        true;
+        this.isInTierGroup(pokemon.tier, this.selectedTier) : 
+        pokemon.tier !== 'Illegal'; // Filter out illegal Pokemon by default
       
       return matchesSearch && matchesType && matchesTier;
     });
+  }
+  
+  // Helper method to check if a Pokemon's tier belongs to a selected tier group
+  isInTierGroup(pokemonTier: string | undefined, selectedTier: string): boolean {
+    if (!pokemonTier) return false;
+    
+    // If the tier group exists, check if the Pokemon's tier is in that group
+    if (this.tierGroups[selectedTier]) {
+      return this.tierGroups[selectedTier].includes(pokemonTier);
+    }
+    
+    // Direct comparison if no group defined
+    return pokemonTier === selectedTier;
   }
   
   setTypeFilter(type: string | null): void {
