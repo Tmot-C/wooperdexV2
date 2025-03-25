@@ -1,1 +1,154 @@
-<p>teamviewer works!</p>
+<div class="teamviewer-container">
+    <app-navbar></app-navbar>
+    
+    <div class="team-header">
+      <div class="team-title">
+        <h1>Your Team</h1>
+        <!-- Simple form for team name -->
+        <form [formGroup]="teamForm" (ngSubmit)="saveTeam()">
+          <div class="input-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Team Name</mat-label>
+              <input matInput formControlName="teamName" placeholder="Enter team name">
+            </mat-form-field>
+            
+            <button 
+              mat-raised-button 
+              color="accent" 
+              type="submit"
+              [disabled]="!currentTeam || currentTeam.length === 0"
+              class="save-button">
+              <mat-icon>save</mat-icon>
+              Save Team
+            </button>
+          </div>
+        </form>
+      </div>
+      
+      <button 
+        mat-raised-button 
+        color="primary" 
+        [disabled]="teamCount >= 6" 
+        (click)="addNewPokemon()"
+        class="add-button">
+        <mat-icon>add</mat-icon>
+        Add Pokémon
+      </button>
+    </div>
+    
+    <div class="empty-team" *ngIf="!currentTeam || currentTeam.length === 0">
+      <mat-icon>catching_pokemon</mat-icon>
+      <p>Your team is empty. Click "Add Pokémon" to get started!</p>
+    </div>
+    
+    <div class="team-list" *ngIf="currentTeam && currentTeam.length > 0">
+      <!-- Rest of your team display code remains the same -->
+      <div class="team-member" *ngFor="let pokemon of currentTeam; let i = index">
+        <!-- Pokemon Card -->
+        <mat-card class="pokemon-card">
+          <div class="card-content">
+            <!-- Pokemon Info Section -->
+            <div class="pokemon-section" (click)="editPokemon(i)">
+              <div class="sprite-placeholder">
+                {{ pokemon.name?.charAt(0) || '?' }}
+              </div>
+              
+              <div class="pokemon-info">
+                <div class="pokemon-name">{{ pokemon.name || 'Unknown' }}</div>
+                
+                <!-- Type badges -->
+                <div *ngIf="pokemon.types" class="types-container">
+                  <div *ngFor="let type of pokemon.types" class="type-badge" [ngClass]="getTypeClass(type)">
+                    {{ type }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Details Section -->
+            <div class="details-section">
+              <!-- Item and Ability Section -->
+              <div class="item-ability-section">
+                <div class="info-card">
+                  Item: {{ pokemon.item || 'None' }}
+                </div>
+                <div class="info-card">
+                  Ability: {{ pokemon.chosenAbility || 'None' }}
+                </div>
+              </div>
+              
+              <!-- Moves Section -->
+              <div class="moves-section">
+                <div class="move-slot">{{ pokemon.move1 || 'Move 1' }}</div>
+                <div class="move-slot">{{ pokemon.move2 || 'Move 2' }}</div>
+                <div class="move-slot">{{ pokemon.move3 || 'Move 3' }}</div>
+                <div class="move-slot">{{ pokemon.move4 || 'Move 4' }}</div>
+              </div>
+              
+              <!-- Stats Section -->
+              <div class="stats-section">
+                <div class="stat-row">
+                  <div class="stat-label">HP</div>
+                  <mat-progress-bar 
+                    [value]="pokemon.baseStats ? getStatPercentage(getStat(pokemon.baseStats, 'hp')) : 0" 
+                    color="warn">
+                  </mat-progress-bar>
+                </div>
+                
+                <div class="stat-row">
+                  <div class="stat-label">Atk</div>
+                  <mat-progress-bar 
+                    [value]="pokemon.baseStats ? getStatPercentage(getStat(pokemon.baseStats, 'atk')) : 0" 
+                    color="accent">
+                  </mat-progress-bar>
+                </div>
+                
+                <div class="stat-row">
+                  <div class="stat-label">Def</div>
+                  <mat-progress-bar 
+                    [value]="pokemon.baseStats ? getStatPercentage(getStat(pokemon.baseStats, 'def')) : 0" 
+                    color="primary">
+                  </mat-progress-bar>
+                </div>
+                
+                <div class="stat-row">
+                  <div class="stat-label">SpA</div>
+                  <mat-progress-bar 
+                    [value]="pokemon.baseStats ? getStatPercentage(getStat(pokemon.baseStats, 'spa')) : 0" 
+                    color="accent">
+                  </mat-progress-bar>
+                </div>
+                
+                <div class="stat-row">
+                  <div class="stat-label">SpD</div>
+                  <mat-progress-bar 
+                    [value]="pokemon.baseStats ? getStatPercentage(getStat(pokemon.baseStats, 'spd')) : 0" 
+                    color="primary">
+                  </mat-progress-bar>
+                </div>
+                
+                <div class="stat-row">
+                  <div class="stat-label">Spe</div>
+                  <mat-progress-bar 
+                    [value]="pokemon.baseStats ? getStatPercentage(getStat(pokemon.baseStats, 'spe')) : 0" 
+                    color="warn">
+                  </mat-progress-bar>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Action buttons -->
+          <div class="card-actions">
+            <button mat-icon-button color="primary" (click)="editPokemon(i)" class="edit-button">
+              <mat-icon>edit</mat-icon>
+            </button>
+            
+            <button mat-icon-button color="warn" (click)="removePokemon(i)" class="remove-button">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>

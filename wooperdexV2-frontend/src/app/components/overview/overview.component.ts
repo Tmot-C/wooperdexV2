@@ -32,6 +32,7 @@ export class OverviewComponent implements OnInit {
     // Subscribe to the authenticated user
     this.authService.currentUser$.subscribe(user => {
       if (user) {
+        console.log(user.id)
         this.loadTrainerData(user.id);
       } else {
         this.isLoading = false;
@@ -52,6 +53,7 @@ export class OverviewComponent implements OnInit {
   loadTrainerData(userId: string): void {
     this.builderService.getTrainer(userId).subscribe({
       next: (trainerData) => {
+        console.log("Trainer data loaded:", trainerData);
         // Update the store with the trainer data
         this.store.updateCurrentTrainer(trainerData);
         // No need to directly set this.trainer as we're getting it from the store

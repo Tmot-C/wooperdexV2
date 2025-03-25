@@ -58,7 +58,7 @@ public class FirebaseAuthController {
         userRepo.save(newUser);
 
         Trainer newTrainer = new Trainer();
-        newTrainer.setId(firebaseId);
+        newTrainer.setFirebaseId(firebaseId);
         newTrainer.setEmail(email);
         newTrainer.setName(name);
         mongoRepo.saveTrainer(newTrainer);

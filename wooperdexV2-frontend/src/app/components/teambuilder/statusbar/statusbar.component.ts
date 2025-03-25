@@ -4,6 +4,7 @@ import { BuilderStore } from '../../../builder.store';
 import { BuiltPokemon, BaseStats } from '../../../models';
 import { Observable } from 'rxjs';
 import { StatsService } from '../../../stats.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-statusbar',
@@ -16,9 +17,11 @@ export class StatusbarComponent implements OnInit {
   private store = inject(BuilderStore);
   private router = inject(Router);
   private statsService = inject(StatsService);
+  private snackBar = inject(MatSnackBar);
   
   currentPokemon$: Observable<BuiltPokemon | null> = this.store.currentPokemon$;
   currentPokemon: BuiltPokemon | null = null;
+  currentTeamIndex: number = 0;
   
   // Track which tab is active for navigation
   activeTab: 'pokemon' | 'item' | 'ability' | 'moves' | 'stats' = 'pokemon';
@@ -29,6 +32,11 @@ export class StatusbarComponent implements OnInit {
     // Subscribe to the current Pokémon from the store
     this.currentPokemon$.subscribe(pokemon => {
       this.currentPokemon = pokemon;
+    });
+    
+    // Subscribe to the current team index
+    this.store.currentTeamIndex$.subscribe(index => {
+      this.currentTeamIndex = index;
     });
     
     // Determine active tab based on the current route
@@ -44,6 +52,27 @@ export class StatusbarComponent implements OnInit {
     } else if (currentUrl.includes('/item')) {
       this.activeTab = 'item';
     }
+  }
+  
+  // Save Pokemon to team
+  savePokemonToTeam(): void {
+    if (!this.currentPokemon || !this.currentPokemon.name) {
+      this.snackBar.open('Please select a Pokémon first', 'Close', {
+        duration: 3000,
+      });
+      return;
+    }
+    
+    // Add the current Pokemon to the team in the store
+    this.store.addPokemonToTeam();
+    
+    // Show success message
+    this.snackBar.open(`${this.currentPokemon.name} added to team!`, 'Close', {
+      duration: 3000,
+    });
+    
+    // Navigate to team viewer with the correct team index
+    this.router.navigate(['/teams', this.currentTeamIndex]);
   }
   
   // Navigation methods

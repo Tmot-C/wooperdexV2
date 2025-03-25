@@ -1,8 +1,10 @@
 package wooperdexV2_backend.models;
 
+import java.util.Arrays;
+
 public class Trainer {
 
-    private String id;
+    private String firebaseId;
     private String email;
     private String name;
     private Team[] teams;
@@ -29,13 +31,22 @@ public class Trainer {
         this.teams = teams;
     }
 
-    public String getId() {
-        return id;
+    
+
+    @Override
+    public String toString() {
+        return "Trainer [firebaseId=" + firebaseId + ", email=" + email + ", name=" + name + ", teams="
+                + Arrays.toString(teams) + "]";
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getFirebaseId() {
+        return firebaseId;
     }
+
+    public void setFirebaseId(String firebaseId) {
+        this.firebaseId = firebaseId;
+    }
+
 
     
     

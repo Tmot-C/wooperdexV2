@@ -74,6 +74,7 @@ export interface Team {
 }
 
 export interface Trainer {
+    firebaseId: string;
     email: string;
     name: string | null
     teams: Team[] | null;

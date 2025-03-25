@@ -31,6 +31,13 @@
             <div class="ability-card" (click)="navigateToAbilitySelect()">
               Ability: {{ currentPokemon?.chosenAbility || 'None' }}
             </div>
+            <!-- Save Button -->
+            <div class="save-button-container" *ngIf="currentPokemon">
+              <button class="save-button" (click)="savePokemonToTeam()">
+                <mat-icon>save</mat-icon>
+                Save to Team
+              </button>
+            </div>
           </div>
           
           <!-- Moves Section -->

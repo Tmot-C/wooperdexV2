@@ -251,8 +251,6 @@ export class StatselectComponent implements OnInit {
     
     this.store.updateCurrentPokemon(updatedPokemon);
     
-    // TODO: Add team saving logic when team builder is complete
-    this.router.navigate(['/teams']);
   }
   
   goBack(): void {

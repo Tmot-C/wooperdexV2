@@ -8,25 +8,28 @@
 }
 
 .status-bar-container {
-  width: 75%;
+  width: 100%;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 16px; /* match the content-area’s horizontal padding */
+  padding: 16px;
   box-sizing: border-box;
   display: flex;
-  /* no fixed height, let content define it */
   background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(5px);
   border-radius: 8px;
 }
+
 .status-sections {
   display: flex;
   width: 100%;
-  gap: 8px;
+  gap: 16px;
   padding: 0 8px;
+  flex-wrap: wrap;
 }
 
 .pokemon-section {
-  width: 600px;
+  flex: 1 1 250px;
+  min-width: 250px;
   height: 80px;
   background-color: var(--primary-dark-color, #4A90E2);
   color: white;
@@ -67,12 +70,17 @@
 
 .pokemon-name {
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 8px;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 200px;
+  width: 100%;
+  line-height: 1.2;
+  
+  /* Instead of nowrap, let it break if needed on very small screens */
+  @media (min-width: 576px) {
+    white-space: nowrap;
+  }
 }
 
 .types-container {
@@ -92,15 +100,17 @@
 
 .details-section {
   display: flex;
-  flex-grow: 1;
-  gap: 8px;
+  flex: 2 1 auto;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .item-ability-section {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 300px;
+  flex: 1 1 150px;
+  min-width: 150px;
 }
 
 .item-card, .ability-card {
@@ -118,8 +128,50 @@
   text-overflow: ellipsis;
 }
 
+/* Styling for the save button */
+.save-button-container {
+  margin-top: 8px;
+}
+
+.save-button {
+  width: 100%;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 0;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s, transform 0.1s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  
+  &:hover {
+    background-color: #3e8e41;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  mat-icon {
+    margin-right: 6px;
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+    line-height: 18px;
+  }
+}
+
 .moves-section {
-  width: 400px;
+  flex: 1 1 200px;
+  min-width: 200px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -144,7 +196,8 @@
 }
 
 .stats-section {
-  width: 300px;
+  flex: 1 1 150px;
+  min-width: 150px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -171,7 +224,8 @@
 .content-area {
   flex-grow: 1;
   overflow-y: auto;
-  width: 75%;
+  width: 100%;
+  max-width: 1400px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -201,3 +255,21 @@
 .type-dark { background-color: #705848; }
 .type-steel { background-color: #B8B8D0; }
 .type-fairy { background-color: #EE99AC; }
+
+/* Media queries for better responsive behavior */
+@media (max-width: 768px) {
+  .status-sections {
+    flex-direction: column;
+  }
+  
+  .pokemon-section, 
+  .item-ability-section, 
+  .moves-section, 
+  .stats-section {
+    width: 100%;
+  }
+  
+  .details-section {
+    flex-direction: column;
+  }
+}

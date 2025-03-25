@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ComponentStore } from "@ngrx/component-store";
-import { Ability, BuiltPokemon, Item, Learnset, Move, Pokemon, Trainer } from "./models";
+import { Ability, BuiltPokemon, Item, Learnset, Move, Pokemon, Team, Trainer } from "./models";
 
 export interface Pokedex {
     pokedex: Pokemon[];  
@@ -24,6 +24,8 @@ export interface BuilderState {
     movelist: Move[];
     abilitylist: Ability[];
     currentPokemon: BuiltPokemon | null;
+    currentTeam: BuiltPokemon[] | null;
+    currentTeamIndex: number;
     currentLearnset: Learnset | null;
     currentTrainer: Trainer | null;
 }
@@ -41,7 +43,9 @@ export class BuilderStore extends ComponentStore<BuilderState> {
             abilitylist: [],
             currentPokemon: null,
             currentLearnset: null,
-            currentTrainer: null 
+            currentTeam: null,
+            currentTeamIndex: 0,
+            currentTrainer: null
         });
     }
 
@@ -51,6 +55,8 @@ export class BuilderStore extends ComponentStore<BuilderState> {
     readonly movelist$ = this.select(state => state.movelist);
     readonly abilitylist$ = this.select(state => state.abilitylist);
     readonly currentPokemon$ = this.select(state => state.currentPokemon);
+    readonly currentTeam$ = this.select(state => state.currentTeam);
+    readonly currentTeamIndex$ = this.select(state => state.currentTeamIndex);
     readonly currentLearnset$ = this.select(state => state.currentLearnset);
     readonly currentTrainer$ = this.select(state => state.currentTrainer);
 
@@ -97,10 +103,108 @@ export class BuilderStore extends ComponentStore<BuilderState> {
         };
     });
 
+    readonly loadTeam = this.updater((state, team: BuiltPokemon[]) => {
+        return {
+            ...state,
+            currentTeam: team
+        };
+    });
+    readonly setCurrentTeamIndex = this.updater((state, index: number) => {
+        return {
+            ...state,
+            currentTeamIndex: index
+        };
+    });
+
     readonly updateCurrentTrainer = this.updater((state, trainer: Trainer) => {
         return {
             ...state,
             currentTrainer: trainer
+        };
+    });
+
+    // New updater to add the current Pokémon to the team
+    readonly addPokemonToTeam = this.updater((state) => {
+        // If there's no current Pokémon, return state unchanged
+        if (!state.currentPokemon) {
+            return state;
+        }
+
+        // Create a new team array, initializing it if it's null
+        const updatedTeam = state.currentTeam 
+            ? [...state.currentTeam, state.currentPokemon] 
+            : [state.currentPokemon];
+
+        return {
+            ...state,
+            currentTeam: updatedTeam
+        };
+    });
+
+
+    // Optional: Remove a Pokémon from the team at a specific index
+    readonly removePokemonFromTeam = this.updater((state, index: number) => {
+        // If there's no team, return state unchanged
+        if (!state.currentTeam) {
+            return state;
+        }
+
+        // Ensure index is within bounds
+        if (index < 0 || index >= state.currentTeam.length) {
+            return state;
+        }
+
+        // Create a new team array without the Pokémon at the specified index
+        const updatedTeam = state.currentTeam.filter((_, i) => i !== index);
+
+        return {
+            ...state,
+            currentTeam: updatedTeam.length > 0 ? updatedTeam : null
+        };
+    });
+
+    
+    readonly saveTeamToTrainer = this.updater((state, teamName?: string) => {
+        // If there's no current team or trainer, return state unchanged
+        if (!state.currentTeam || !state.currentTrainer) {
+            return state;
+        }
+    
+        // Create a new Team object with provided name or default name
+        const newTeam: Team = {
+            teamName: teamName || `Team ${state.currentTeamIndex || (state.currentTrainer.teams?.length || 0) + 1}`,
+            team: state.currentTeam
+        };
+        
+        if (!state.currentTeam || !state.currentTrainer) {
+            return state;
+        }
+
+
+        const existingTeams = state.currentTrainer.teams || [];
+        
+        let updatedTeams: Team[];
+        
+        // Check if we're updating an existing team or adding a new one
+        if (state.currentTeamIndex > 0 && state.currentTeamIndex <= existingTeams.length) {
+            // Update existing team
+            updatedTeams = [...existingTeams];
+            updatedTeams[state.currentTeamIndex - 1] = newTeam;
+        } else {
+            // Add new team
+            updatedTeams = [...existingTeams, newTeam];
+        }
+
+        // Create a new trainer object with the updated teams
+        const updatedTrainer: Trainer = {
+            ...state.currentTrainer,
+            teams: updatedTeams
+        };
+
+        
+        return {
+            ...state,
+            currentTrainer: updatedTrainer
         };
     });
 }

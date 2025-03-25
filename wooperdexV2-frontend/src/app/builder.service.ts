@@ -33,6 +33,17 @@ export class BuilderService{
         return this.http.post(`/pokemon-analysis/${pokemon}`, { pokemon }, { responseType: 'text' });
     }
 
+    saveTrainer(trainer: Trainer): Observable<any> {
+        const id = trainer.firebaseId;
+        console.log('saving trainer', trainer);
+        return this.http.post(`/api/trainer/${id}`, {
+            firebaseId: trainer.firebaseId,
+            email: trainer.email,
+            name: trainer.name,
+            teams: trainer.teams 
+        });
+    }
+
 
     mapPokemonToBuiltPokemon(pokemon: Pokemon): BuiltPokemon {
         return {

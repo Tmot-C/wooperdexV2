@@ -49,4 +49,8 @@ public class GetterService {
     public Trainer getTrainer(String id) {
         return mongoRepository.getTrainer(id);
     }
+
+    public void saveTrainer(Trainer trainer) {
+        mongoRepository.saveTrainer(trainer);
+    }
 }
