@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-statselect',
   standalone: false,
   templateUrl: './statselect.component.html',
-  styleUrl: './statselect.component.css'
+  styleUrl: './statselect.component.scss'
 })
 export class StatselectComponent {
 

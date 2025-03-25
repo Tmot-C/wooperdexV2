@@ -1,1 +1,43 @@
-<p>overview works!</p>
+<!-- overview.component.html -->
+<div class="overview-container">
+    <app-navbar></app-navbar>
+    
+    <div class="main-content">
+      <h1 class="page-title">Your Pokémon Teams</h1>
+      
+      <!-- Loading state -->
+      <div *ngIf="isLoading" class="loading-container">
+        <p>Loading your teams...</p>
+      </div>
+      
+      <!-- Error message -->
+      <div *ngIf="loadError && !isLoading" class="error-container">
+        <p>{{ loadError }}</p>
+      </div>
+      
+      <!-- No teams state -->
+      <div *ngIf="!isLoading && !loadError && (!teams || teams.length === 0)" class="no-teams-container">
+        <p>You don't have any teams yet!</p>
+        <button class="create-team-btn" (click)="navigateToTeamBuilder()">
+          Create Your First Team
+        </button>
+      </div>
+      
+      <!-- Teams list -->
+      <div *ngIf="!isLoading && !loadError && teams && teams.length > 0" class="teams-list">
+        <div *ngFor="let team of teams; let i = index" class="team-card" (click)="viewTeam(i)">
+          <h2 class="team-name">{{ team.teamName || 'Unnamed Team' }}</h2>
+          <div class="team-preview">
+            <div *ngFor="let pokemon of team.team" class="pokemon-icon">
+              <!-- In a real implementation, you might add Pokémon icons here -->
+              <span>{{ pokemon.name }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <button class="create-team-btn" (click)="navigateToTeamBuilder()">
+          Create New Team
+        </button>
+      </div>
+    </div>
+  </div>

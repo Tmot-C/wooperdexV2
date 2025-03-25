@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-dex-ai',
   standalone: false,
   templateUrl: './dex-ai.component.html',
-  styleUrl: './dex-ai.component.css'
+  styleUrl: './dex-ai.component.scss'
 })
 export class DexAIComponent {
 

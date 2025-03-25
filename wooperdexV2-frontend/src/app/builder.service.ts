@@ -3,7 +3,9 @@ import {Injectable, inject} from "@angular/core";
 import {Observable} from "rxjs";
 import { Ability, BuiltPokemon, Item, Learnset, Move, Pokemon, Trainer } from "./models";
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+  })
 export class BuilderService{
 
     private http = inject(HttpClient);
@@ -24,7 +26,7 @@ export class BuilderService{
         return this.http.get<Learnset>(`/api/learnset/${id}`)
     }
     getTrainer(id: string): Observable<Trainer> {
-        return this.http.get<Trainer>(`/api/Trainer/${id}`)
+        return this.http.get<Trainer>(`/api/trainer/${id}`)
     }
 
     getPokemonAnalysis(pokemon: string): Observable<string> {

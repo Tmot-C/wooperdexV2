@@ -1,0 +1,44 @@
+/* You can add global styles to this file, and also import other style files */
+
+// src/styles.scss
+
+// Import Material pre-built theme
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+/* Custom Pokémon font definition */
+@font-face {
+  font-family: 'MyFont';
+  src: url('assets/fonts/pkmn_rbygsc-webfont.woff2') format('woff2'),
+       url('assets/fonts/pkmn_rbygsc-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Global styles */
+body {
+  margin: 0;
+  font-family: 'MyFont', sans-serif;
+  background-image: url('/assets/images/wooperdex.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Custom Pokémon-themed color variables */
+:root {
+  --primary-color: #4A90E2;       /* Medium blue */
+  --primary-light-color: #82B1FF; /* Light blue */
+  --primary-dark-color: #2962FF;  /* Dark blue */
+  --accent-color: #FF7E87;        /* Coral pink */
+  --background-color: #F8FDFF;    /* Very light blue */
+  --text-color: #333333;          /* Dark text */
+  --light-text: #FFFFFF;          /* Light text */
+}
+
+/* Material overrides to use your custom font */
+.mat-typography {
+  font-family: 'MyFont', sans-serif;
+}
+
+/* Additional custom styles can go here */

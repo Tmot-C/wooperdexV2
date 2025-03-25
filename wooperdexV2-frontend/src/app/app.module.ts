@@ -3,8 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { provideHttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-
-
+import { MaterialModule } from './material.module'; // Import our custom Material module
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -18,6 +18,7 @@ import { ItemselectComponent } from './components/teambuilder/itemselect/itemsel
 import { MoveselectComponent } from './components/teambuilder/moveselect/moveselect.component';
 import { StatselectComponent } from './components/teambuilder/statselect/statselect.component';
 import { DexAIComponent } from './components/teambuilder/dex-ai/dex-ai.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -36,8 +37,11 @@ import { DexAIComponent } from './components/teambuilder/dex-ai/dex-ai.component
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    RouterModule, // Add this line
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MaterialModule
   ],
   providers: [provideHttpClient()],
   bootstrap: [AppComponent]

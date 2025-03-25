@@ -1,1 +1,143 @@
-<p>pokemonselect works!</p>
+<!-- pokemonselect.component.html -->
+<div class="pokemon-select-container">
+    <mat-card class="search-filter-card">
+      <mat-card-content>
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Search Pokémon</mat-label>
+          <input matInput [formControl]="searchControl" placeholder="Search by name or number...">
+          <button *ngIf="searchControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="searchControl.setValue('')">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+        
+        <div class="filter-section">
+          <div class="filter-group">
+            <h3 class="filter-title">Type Filter</h3>
+            <div class="filter-chips">
+              <mat-chip-listbox multiple>
+                <mat-chip-option 
+                  *ngFor="let type of types"
+                  [selected]="selectedType === type"
+                  [ngClass]="getTypeClass(type)"
+                  (click)="selectedType === type ? setTypeFilter(null) : setTypeFilter(type)">
+                  {{ type }}
+                </mat-chip-option>
+              </mat-chip-listbox>
+            </div>
+          </div>
+          
+          <div class="filter-group">
+            <h3 class="filter-title">Tier Filter</h3>
+            <div class="filter-chips">
+              <mat-chip-listbox multiple>
+                <mat-chip-option 
+                  *ngFor="let tier of tiers"
+                  [selected]="selectedTier === tier"
+                  (click)="selectedTier === tier ? setTierFilter(null) : setTierFilter(tier)">
+                  {{ tier }}
+                </mat-chip-option>
+              </mat-chip-listbox>
+            </div>
+          </div>
+          
+          <button mat-raised-button color="warn" (click)="clearFilters()" class="clear-button">
+            <mat-icon>filter_alt_off</mat-icon>
+            Clear Filters
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="pokemon-list-card">
+      <mat-card-content class="pokemon-list-content">
+        <div *ngIf="filteredPokemonList.length === 0" class="no-results">
+          <mat-icon>search_off</mat-icon>
+          <p>No Pokémon found matching your filters.</p>
+        </div>
+        
+        <mat-table [dataSource]="filteredPokemonList" class="pokemon-table" *ngIf="filteredPokemonList.length > 0">
+          <!-- Tier Column -->
+          <ng-container matColumnDef="tier">
+            <mat-header-cell *matHeaderCellDef>Tier</mat-header-cell>
+            <mat-cell *matCellDef="let pokemon">
+              <span class="tier-badge">{{ pokemon.tier }}</span>
+            </mat-cell>
+          </ng-container>
+          
+          <!-- Pokémon Column -->
+          <ng-container matColumnDef="pokemon">
+            <mat-header-cell *matHeaderCellDef>Pokémon</mat-header-cell>
+            <mat-cell *matCellDef="let pokemon">
+              <div class="pokemon-cell">
+                <div class="sprite-placeholder">{{ pokemon.name.charAt(0) }}</div>
+                <div class="pokemon-name-number">
+                  <span class="pokemon-name">{{ pokemon.name }}</span>
+                  <span class="pokemon-number">#{{ pokemon.num }}</span>
+                </div>
+              </div>
+            </mat-cell>
+          </ng-container>
+          
+          <!-- Type Column -->
+          <ng-container matColumnDef="type">
+            <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+            <mat-cell *matCellDef="let pokemon">
+              <div class="types-container">
+                <div *ngFor="let type of pokemon.types" class="type-badge" [ngClass]="getTypeClass(type)">
+                  {{ type }}
+                </div>
+              </div>
+            </mat-cell>
+          </ng-container>
+          
+          <!-- Abilities Column -->
+          <ng-container matColumnDef="abilities">
+            <mat-header-cell *matHeaderCellDef>Abilities</mat-header-cell>
+            <mat-cell *matCellDef="let pokemon">
+              <div class="abilities-list">{{ pokemon.abilities.join(', ') }}</div>
+            </mat-cell>
+          </ng-container>
+          
+          <!-- Stats Columns -->
+          <ng-container matColumnDef="hp">
+            <mat-header-cell *matHeaderCellDef>HP</mat-header-cell>
+            <mat-cell *matCellDef="let pokemon" class="stat-cell hp-stat">{{ pokemon.baseStats.hp }}</mat-cell>
+          </ng-container>
+          
+          <ng-container matColumnDef="atk">
+            <mat-header-cell *matHeaderCellDef>Atk</mat-header-cell>
+            <mat-cell *matCellDef="let pokemon" class="stat-cell atk-stat">{{ pokemon.baseStats.atk }}</mat-cell>
+          </ng-container>
+          
+          <ng-container matColumnDef="def">
+            <mat-header-cell *matHeaderCellDef>Def</mat-header-cell>
+            <mat-cell *matCellDef="let pokemon" class="stat-cell def-stat">{{ pokemon.baseStats.def }}</mat-cell>
+          </ng-container>
+          
+          <ng-container matColumnDef="spa">
+            <mat-header-cell *matHeaderCellDef>SpA</mat-header-cell>
+            <mat-cell *matCellDef="let pokemon" class="stat-cell spa-stat">{{ pokemon.baseStats.spa }}</mat-cell>
+          </ng-container>
+          
+          <ng-container matColumnDef="spd">
+            <mat-header-cell *matHeaderCellDef>SpD</mat-header-cell>
+            <mat-cell *matCellDef="let pokemon" class="stat-cell spd-stat">{{ pokemon.baseStats.spd }}</mat-cell>
+          </ng-container>
+          
+          <ng-container matColumnDef="spe">
+            <mat-header-cell *matHeaderCellDef>Spe</mat-header-cell>
+            <mat-cell *matCellDef="let pokemon" class="stat-cell spe-stat">{{ pokemon.baseStats.spe }}</mat-cell>
+          </ng-container>
+          
+          <ng-container matColumnDef="bst">
+            <mat-header-cell *matHeaderCellDef>BST</mat-header-cell>
+            <mat-cell *matCellDef="let pokemon" class="stat-cell bst-stat">{{ calculateBST(pokemon.baseStats) }}</mat-cell>
+          </ng-container>
+          
+          <!-- Header and Row Definitions -->
+          <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectPokemon(row)" class="pokemon-row"></mat-row>
+        </mat-table>
+      </mat-card-content>
+    </mat-card>
+  </div>

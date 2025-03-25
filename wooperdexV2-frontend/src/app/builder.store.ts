@@ -1,28 +1,28 @@
 import { Injectable } from "@angular/core";
 import { ComponentStore } from "@ngrx/component-store";
-import { BuiltPokemon, Item, Learnset, Pokemon, Trainer } from "./models";
+import { Ability, BuiltPokemon, Item, Learnset, Move, Pokemon, Trainer } from "./models";
 
 export interface Pokedex {
     pokedex: Pokemon[];  
 }
 
-export interface Itemlist{
-    items: Item[];
+export interface Itemlist {
+    itemlist: Item[];
 }
 
-export interface Moveslist{
-    items: Item[];
+export interface Movelist {
+    movelist: Move[];
 }
 
-export interface Abilitieslist{
-    items: Item[];
+export interface Abilitieslist {
+    abilitylist: Ability[];
 }
 
 export interface BuilderState {
     pokedex: Pokemon[];
-    items: Item[];
-    moves: Item[];
-    abilities: Item[];
+    itemlist: Item[];
+    movelist: Move[];
+    abilitylist: Ability[];
     currentPokemon: BuiltPokemon | null;
     currentLearnset: Learnset | null;
     currentTrainer: Trainer | null;
@@ -36,25 +36,53 @@ export class BuilderStore extends ComponentStore<BuilderState> {
     constructor() {
         super({
             pokedex: [],
-            items: [],
-            moves: [],
-            abilities: [],
+            itemlist: [],
+            movelist: [],
+            abilitylist: [],
             currentPokemon: null,
             currentLearnset: null,
             currentTrainer: null 
         });
     }
 
-    //selectors
+    // selectors
     readonly pokedex$ = this.select(state => state.pokedex);
-    readonly items$ = this.select(state => state.items);
-    readonly moves$ = this.select(state => state.moves);
-    readonly abilities$ = this.select(state => state.abilities);
+    readonly itemlist$ = this.select(state => state.itemlist);
+    readonly movelist$ = this.select(state => state.movelist);
+    readonly abilitylist$ = this.select(state => state.abilitylist);
     readonly currentPokemon$ = this.select(state => state.currentPokemon);
     readonly currentLearnset$ = this.select(state => state.currentLearnset);
     readonly currentTrainer$ = this.select(state => state.currentTrainer);
 
-    //updaters
+    // updaters
+    readonly setPokedex = this.updater((state, pokedex: Pokemon[]) => {
+        return { 
+            ...state,
+            pokedex: pokedex
+        };
+    });
+
+    readonly setMoves = this.updater((state, moves: Move[]) => {
+        return { 
+            ...state,
+            movelist: moves
+        };
+    });
+
+    readonly setItems = this.updater((state, items: Item[]) => {
+        return { 
+            ...state,
+            itemlist: items
+        };
+    });
+
+    readonly setAbilities = this.updater((state, abilities: Ability[]) => {
+        return { 
+            ...state,
+            abilitylist: abilities
+        };
+    });
+
     readonly updateCurrentPokemon = this.updater((state, pokemon: BuiltPokemon) => {
         return {
             ...state,
@@ -75,5 +103,4 @@ export class BuilderStore extends ComponentStore<BuilderState> {
             currentTrainer: trainer
         };
     });
-    
 }

@@ -1,0 +1,38 @@
+// src/custom-theme.scss
+
+// 1. Import the pre-built theme first (as a base)
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+// 2. Define your custom colors 
+:root {
+  --primary-color: #4A90E2;       // Medium blue
+  --primary-light-color: #82B1FF; // Light blue
+  --primary-dark-color: #2962FF;  // Dark blue
+  --accent-color: #FF7E87;        // Coral pink
+  --background-color: #F8FDFF;    // Very light blue
+  --text-color: #333333;          // Dark text
+  --light-text: #FFFFFF;          // Light text
+}
+
+// 3. Apply custom styling overrides for specific components
+.mat-card {
+  background-color: var(--background-color);
+}
+
+.pokemon-card {
+  background-color: var(--primary-dark-color) !important;
+  color: var(--light-text) !important;
+}
+
+.type-badge {
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+// 4. Add background image to the app
+body {
+  background-image: url('/assets/images/manaphy-background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}

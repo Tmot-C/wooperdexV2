@@ -1,0 +1,213 @@
+/* statusbar.component.scss */
+.teambuilder-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: var(--background-color, #f5f5f5);
+  overflow: hidden;
+}
+
+.status-bar-container {
+  display: flex;
+  width: 75%;
+  margin: 0 auto;
+  padding: 16px 0;
+  flex-shrink: 0;
+  gap: 16px;
+}
+
+.pokemon-card {
+  width: 250px;
+  background-color: var(--primary-dark-color, #2962FF);
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.pokemon-content {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+
+.sprite-container {
+  margin-right: 16px;
+}
+
+.sprite-placeholder {
+  width: 60px;
+  height: 60px;
+  background-color: #4f535c;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  
+  &.empty {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+.pokemon-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.pokemon-name {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.types-container {
+  display: flex;
+  gap: 8px;
+}
+
+.type-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: white;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.details-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.top-row {
+  display: flex;
+  gap: 16px;
+}
+
+.item-card, .ability-card {
+  flex: 1;
+  background-color: var(--primary-color, #4A90E2);
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .mat-mdc-card-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 4px;
+  }
+  
+  .mat-mdc-card-content {
+    font-weight: 500;
+    padding-bottom: 8px !important;
+  }
+}
+
+.stats-card {
+  background-color: var(--primary-light-color, #82B1FF);
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .mat-mdc-card-content {
+    padding: 8px 16px !important;
+  }
+}
+
+.stats-grid {
+  display: flex;
+  gap: 16px;
+}
+
+.stats-column {
+  flex: 1;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  width: 36px;
+  font-size: 14px;
+  margin-right: 8px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.moves-card {
+  background-color: var(--primary-color, #4A90E2);
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.moves-content {
+  padding: 0 !important;
+}
+
+::ng-deep .moves-card .mat-grid-tile {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-size: 14px;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.content-area {
+  flex-grow: 1;
+  overflow-y: auto;
+  width: 75%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Type colors */
+.type-normal { background-color: #A8A878; }
+.type-fire { background-color: #F08030; }
+.type-water { background-color: #6890F0; }
+.type-electric { background-color: #F8D030; }
+.type-grass { background-color: #78C850; }
+.type-ice { background-color: #98D8D8; }
+.type-fighting { background-color: #C03028; }
+.type-poison { background-color: #A040A0; }
+.type-ground { background-color: #E0C068; }
+.type-flying { background-color: #A890F0; }
+.type-psychic { background-color: #F85888; }
+.type-bug { background-color: #A8B820; }
+.type-rock { background-color: #B8A038; }
+.type-ghost { background-color: #705898; }
+.type-dragon { background-color: #7038F8; }
+.type-dark { background-color: #705848; }
+.type-steel { background-color: #B8B8D0; }
+.type-fairy { background-color: #EE99AC; }

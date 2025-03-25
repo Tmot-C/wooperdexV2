@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-itemselect',
   standalone: false,
   templateUrl: './itemselect.component.html',
-  styleUrl: './itemselect.component.css'
+  styleUrl: './itemselect.component.scss'
 })
 export class ItemselectComponent {
 

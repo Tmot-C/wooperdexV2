@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-teamviewer',
   standalone: false,
   templateUrl: './teamviewer.component.html',
-  styleUrl: './teamviewer.component.css'
+  styleUrl: './teamviewer.component.scss'
 })
 export class TeamviewerComponent {
 
