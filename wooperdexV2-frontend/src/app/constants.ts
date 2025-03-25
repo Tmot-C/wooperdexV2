@@ -1,34 +1,35 @@
 export const POKEMON_NATURES: string[] = [
-    'Adamant',
-    'Bashful',
-    'Bold',
-    'Brave',
-    'Calm',
-    'Careful',
-    'Docile',
-    'Gentle',
-    'Hardy',
-    'Hasty',
-    'Impish',
-    'Jolly',
-    'Lax',
-    'Lonely',
-    'Mild',
-    'Modest',
-    'Naive',
-    'Naughty',
-    'Quiet',
-    'Quirky',
-    'Rash',
-    'Relaxed',
-    'Sassy',
-    'Serious',
-    'Timid'
+    'Adamant (+Atk, -SpA)',
+    'Bashful (Neutral)',
+    'Bold (+Def, -Atk)',
+    'Brave (+Atk, -Spe)',
+    'Calm (+SpD, -Atk)',
+    'Careful (+SpD, -SpA)',
+    'Docile (Neutral)',
+    'Gentle (+SpD, -Def)',
+    'Hardy (Neutral)',
+    'Hasty (+Spe, -Def)',
+    'Impish (+Def, -SpA)',
+    'Jolly (+Spe, -SpA)',
+    'Lax (+Def, -SpD)',
+    'Lonely (+Atk, -Def)',
+    'Mild (+SpA, -Def)',
+    'Modest (+SpA, -Atk)',
+    'Naive (+Spe, -SpD)',
+    'Naughty (+Atk, -SpD)',
+    'Quiet (+SpA, -Spe)',
+    'Quirky (Neutral)',
+    'Rash (+SpA, -SpD)',
+    'Relaxed (+Def, -Spe)',
+    'Sassy (+SpD, -Spe)',
+    'Serious (Neutral)',
+    'Timid (+Spe, -Atk)'
 ];
 
 export const EV_TOTAL_MAX: number = 510;
 export const EV_MAX: number = 252;
 export const IV_MAX: number = 31;
+export const IV_MIN: number = 0;
 
 
 export const POKEMON_TYPES: string[] = [

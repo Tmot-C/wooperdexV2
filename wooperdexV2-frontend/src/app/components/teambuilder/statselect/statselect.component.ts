@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { BuilderStore } from '../../../builder.store';
 import { BuiltPokemon, BaseStats } from '../../../models';
-import { POKEMON_NATURES, EV_TOTAL_MAX, EV_MAX, IV_MAX } from '../../../constants';
+import { POKEMON_NATURES, EV_TOTAL_MAX, EV_MAX, IV_MAX, IV_MIN } from '../../../constants';
 
 @Component({
   selector: 'app-statselect',
@@ -23,18 +23,20 @@ export class StatselectComponent implements OnInit {
   evTotalMax: number = EV_TOTAL_MAX;
   evMax: number = EV_MAX;
   ivMax: number = IV_MAX;
+  ivMin: number = IV_MIN;
   
   // Stat keys in a specific order
   statKeys: Array<keyof BaseStats> = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
   
-  // Form for EVs
+  // Form for EVs and IVs
   evForm!: FormGroup;
+  ivForm!: FormGroup;
   
-  // Nature
-  nature: string = 'Serious';
+  // Nature (just the name part without the effect description)
+  nature: string = 'Serious (Neutral)';
   
   ngOnInit(): void {
-    // Create form with strongly typed controls
+    // Create form with strongly typed controls for EVs
     this.evForm = this.fb.group({
       hp: [0],
       atk: [0],
@@ -42,6 +44,16 @@ export class StatselectComponent implements OnInit {
       spa: [0],
       spd: [0],
       spe: [0]
+    });
+    
+    // Create form with strongly typed controls for IVs
+    this.ivForm = this.fb.group({
+      hp: [31],  // Default to perfect IVs
+      atk: [31],
+      def: [31],
+      spa: [31],
+      spd: [31],
+      spe: [31]
     });
     
     // Get the current Pokémon from the store
@@ -53,7 +65,7 @@ export class StatselectComponent implements OnInit {
         return;
       }
       
-      // Initialize EVs if not already set
+      // Initialize EVs if already set
       if (pokemon.evs) {
         this.statKeys.forEach(stat => {
           const control = this.evForm.get(stat);
@@ -63,18 +75,38 @@ export class StatselectComponent implements OnInit {
         });
       }
       
-      // Initialize nature if not already set
+      // Initialize IVs if already set
+      if (pokemon.ivs) {
+        this.statKeys.forEach(stat => {
+          const control = this.ivForm.get(stat);
+          if (control) {
+            control.setValue(pokemon.ivs?.[stat] || 31);
+          }
+        });
+      }
+      
+      // Initialize nature if already set
       if (pokemon.nature) {
-        this.nature = pokemon.nature;
+        // Find the full nature string (with effect) that matches the saved value
+        const fullNature = this.natures.find(n => n.startsWith(pokemon.nature as string));
+        if (fullNature) {
+          this.nature = fullNature;
+        }
       }
     });
   }
   
-  // Round to nearest multiple of 4
+  // Round to nearest multiple of 4 for EVs
   private roundToNearestEv(value: number): number {
     return Math.round(value / 4) * 4;
   }
   
+  // Get just the nature name without the effect
+  private getNatureName(fullNature: string): string {
+    return fullNature.split(' (')[0];
+  }
+  
+  // EV Methods
   // Check if a stat can receive more EVs
   canIncreaseEv(stat: keyof BaseStats): boolean {
     // Calculate current total EVs
@@ -156,6 +188,51 @@ export class StatselectComponent implements OnInit {
     return this.evTotalMax - Object.values(currentEvs).reduce((a, b) => a + b, 0);
   }
   
+  // IV Methods
+  // Increase IV for a specific stat
+  increaseIv(stat: keyof BaseStats): void {
+    const control = this.ivForm.get(stat);
+    if (!control) return;
+    
+    // Get current value
+    const currentValue = control.value || 0;
+    
+    // Increase by 1, but not above max
+    const newValue = Math.min(this.ivMax, currentValue + 1);
+    control.setValue(newValue);
+  }
+  
+  // Decrease IV for a specific stat
+  decreaseIv(stat: keyof BaseStats): void {
+    const control = this.ivForm.get(stat);
+    if (!control) return;
+    
+    // Get current value
+    const currentValue = control.value || 0;
+    
+    // Decrease by 1, but not below min
+    const newValue = Math.max(this.ivMin, currentValue - 1);
+    control.setValue(newValue);
+  }
+  
+  // Handle manual IV input
+  onIvInput(stat: keyof BaseStats, event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    const inputValue = parseInt(inputElement.value, 10) || 0;
+    
+    // Ensure value is within bounds
+    let finalValue = Math.max(this.ivMin, Math.min(this.ivMax, inputValue));
+    
+    // Set the value
+    const control = this.ivForm.get(stat);
+    if (control) {
+      control.setValue(finalValue);
+      
+      // Update input to show final value
+      inputElement.value = finalValue.toString();
+    }
+  }
+  
   // Retrieves the current base stat value for a given stat key
   getBaseStat(stat: keyof BaseStats): number {
     return this.currentPokemon?.baseStats?.[stat] || 0;
@@ -168,7 +245,8 @@ export class StatselectComponent implements OnInit {
     const updatedPokemon: BuiltPokemon = {
       ...this.currentPokemon,
       evs: this.evForm.value as BaseStats,
-      nature: this.nature
+      ivs: this.ivForm.value as BaseStats,
+      nature: this.getNatureName(this.nature) // Store only the name part
     };
     
     this.store.updateCurrentPokemon(updatedPokemon);
@@ -192,5 +270,25 @@ export class StatselectComponent implements OnInit {
       case 'spe': return 'Spe';
       default: return '';
     }
+  }
+  
+  // Reset EVs to zero
+  resetEvs(): void {
+    this.statKeys.forEach(stat => {
+      const control = this.evForm.get(stat);
+      if (control) {
+        control.setValue(0);
+      }
+    });
+  }
+  
+  // Set IVs to max (perfect)
+  perfectIvs(): void {
+    this.statKeys.forEach(stat => {
+      const control = this.ivForm.get(stat);
+      if (control) {
+        control.setValue(this.ivMax);
+      }
+    });
   }
 }

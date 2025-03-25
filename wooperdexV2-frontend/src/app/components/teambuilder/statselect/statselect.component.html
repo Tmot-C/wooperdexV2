@@ -16,8 +16,10 @@
     </div>
     
     <div class="ev-section">
-      <h3>EVs 
+      <h3>
+        EVs 
         <span class="ev-remaining">(Remaining: {{ getRemainingEvs() }})</span>
+        <button mat-button color="warn" class="reset-button" (click)="resetEvs()">Reset</button>
       </h3>
       
       <div class="ev-grid">
@@ -51,16 +53,57 @@
       </div>
     </div>
     
+    <div class="iv-section">
+      <h3>
+        IVs
+        <button mat-button color="primary" class="perfect-button" (click)="perfectIvs()">Max All</button>
+      </h3>
+      
+      <div class="iv-grid">
+        <div *ngFor="let stat of statKeys" class="iv-row">
+          <div class="stat-label">{{ getStatLabel(stat) }}</div>
+          
+          <div class="iv-controls">
+            <button 
+              mat-mini-fab 
+              color="accent" 
+              (click)="decreaseIv(stat)"
+              [disabled]="(ivForm.get(stat)?.value || 0) <= ivMin">
+              <mat-icon>remove</mat-icon>
+            </button>
+            
+            <input 
+              type="number" 
+              [value]="ivForm.get(stat)?.value || 31"
+              (input)="onIvInput(stat, $event)"
+              class="iv-input"
+              min="0"
+              max="31">
+            
+            <button 
+              mat-mini-fab 
+              color="accent" 
+              (click)="increaseIv(stat)"
+              [disabled]="(ivForm.get(stat)?.value || 0) >= ivMax">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
     <div class="nature-section">
       <h3>Nature</h3>
-      <mat-form-field appearance="outline">
-        <mat-label>Select Nature</mat-label>
-        <mat-select [(ngModel)]="nature">
-          <mat-option *ngFor="let natureName of natures" [value]="natureName">
-            {{ natureName }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div class="nature-content">
+        <mat-form-field appearance="outline">
+          <mat-label>Select Nature</mat-label>
+          <mat-select [(ngModel)]="nature">
+            <mat-option *ngFor="let natureOption of natures" [value]="natureOption">
+              {{ natureOption }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
     
     <div class="button-row">
