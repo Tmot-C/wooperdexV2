@@ -1,6 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
-
-// src/styles.scss
+/* src/styles.scss */
 
 // Import Material pre-built theme
 @import '@angular/material/prebuilt-themes/deeppurple-amber.css';
@@ -15,17 +13,36 @@
 }
 
 /* Global styles */
-body {
+html, body {
+  height: 100%;
   margin: 0;
-  font-family: 'MyFont', sans-serif;
-  background-image: url('/assets/images/wooperdex.jpeg');
+}
+
+body {
+  font-family: 'MyFont', sans-serif !important;
+  background-image: url('assets/images/wooperdex.jpeg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
 
-/* Custom Pokémon-themed color variables */
+/* Force Material components to use our custom font */
+.mat-typography, 
+.mat-mdc-button, 
+.mat-mdc-card-title, 
+.mat-mdc-card-subtitle,
+.mat-mdc-card-content,
+.mat-mdc-form-field,
+.mat-mdc-menu-item,
+.mat-mdc-tab-header,
+.mat-mdc-tab,
+.mat-mdc-table,
+.mdc-list-item__primary-text {
+  font-family: 'MyFont', sans-serif !important;
+}
+
+/* Material theming variables */
 :root {
   --primary-color: #4A90E2;       /* Medium blue */
   --primary-light-color: #82B1FF; /* Light blue */
@@ -36,9 +53,37 @@ body {
   --light-text: #FFFFFF;          /* Light text */
 }
 
-/* Material overrides to use your custom font */
-.mat-typography {
-  font-family: 'MyFont', sans-serif;
+/* Type colors */
+.type-normal { background-color: #A8A878; }
+.type-fire { background-color: #F08030; }
+.type-water { background-color: #6890F0; }
+.type-electric { background-color: #F8D030; }
+.type-grass { background-color: #78C850; }
+.type-ice { background-color: #98D8D8; }
+.type-fighting { background-color: #C03028; }
+.type-poison { background-color: #A040A0; }
+.type-ground { background-color: #E0C068; }
+.type-flying { background-color: #A890F0; }
+.type-psychic { background-color: #F85888; }
+.type-bug { background-color: #A8B820; }
+.type-rock { background-color: #B8A038; }
+.type-ghost { background-color: #705898; }
+.type-dragon { background-color: #7038F8; }
+.type-dark { background-color: #705848; }
+.type-steel { background-color: #B8B8D0; }
+.type-fairy { background-color: #EE99AC; }
+
+/* Make sure Material overrides don't break our styling */
+.mat-mdc-card {
+  border-radius: 8px !important;
 }
 
-/* Additional custom styles can go here */
+/* Fix for Material tables */
+.mat-mdc-table .mdc-data-table__header-row {
+  height: 48px;
+}
+
+/* Fix for Material buttons */
+.mat-mdc-raised-button {
+  text-transform: none !important;
+}
