@@ -130,19 +130,19 @@ export class MoveselectComponent implements OnInit {
       ...this.currentPokemon
     };
     
-    // Update the appropriate move slot with the move ID
+    // Update the appropriate move slot with the move name
     switch (this.moveSlot) {
       case 1:
-        updatedPokemon.move1 = move.id;
+        updatedPokemon.move1 = move.name;
         break;
       case 2:
-        updatedPokemon.move2 = move.id;
+        updatedPokemon.move2 = move.name;
         break;
       case 3:
-        updatedPokemon.move3 = move.id;
+        updatedPokemon.move3 = move.name;
         break;
       case 4:
-        updatedPokemon.move4 = move.id;
+        updatedPokemon.move4 = move.name;
         break;
     }
     

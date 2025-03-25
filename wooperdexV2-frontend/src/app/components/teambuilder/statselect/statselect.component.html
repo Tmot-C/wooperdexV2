@@ -1,1 +1,77 @@
-<p>statselect works!</p>
+<div class="stats-container" *ngIf="currentPokemon">
+    <div class="base-stats-section">
+      <h3>Base Stats</h3>
+      <div class="base-stats-grid">
+        <div *ngFor="let stat of statKeys" class="base-stat-row">
+          <div class="stat-label">{{ getStatLabel(stat) }}</div>
+          <div class="base-stat-value">{{ getBaseStat(stat) }}</div>
+          <div class="base-stat-bar">
+            <mat-progress-bar 
+              [value]="(getBaseStat(stat) / 255) * 100" 
+              color="primary">
+            </mat-progress-bar>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="ev-section">
+      <h3>EVs 
+        <span class="ev-remaining">(Remaining: {{ getRemainingEvs() }})</span>
+      </h3>
+      
+      <div class="ev-grid">
+        <div *ngFor="let stat of statKeys" class="ev-row">
+          <div class="stat-label">{{ getStatLabel(stat) }}</div>
+          
+          <div class="ev-controls">
+            <button 
+              mat-mini-fab 
+              color="primary" 
+              (click)="decreaseEv(stat)"
+              [disabled]="(evForm.get(stat)?.value || 0) <= 0">
+              <mat-icon>remove</mat-icon>
+            </button>
+            
+            <input 
+              type="number" 
+              [value]="evForm.get(stat)?.value || 0"
+              (input)="onEvInput(stat, $event)"
+              class="ev-input">
+            
+            <button 
+              mat-mini-fab 
+              color="primary" 
+              (click)="increaseEv(stat)"
+              [disabled]="!canIncreaseEv(stat)">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="nature-section">
+      <h3>Nature</h3>
+      <mat-form-field appearance="outline">
+        <mat-label>Select Nature</mat-label>
+        <mat-select [(ngModel)]="nature">
+          <mat-option *ngFor="let natureName of natures" [value]="natureName">
+            {{ natureName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    
+    <div class="button-row">
+      <button mat-button (click)="goBack()">Back</button>
+      <button mat-raised-button color="primary" (click)="saveStatsAndContinue()">
+        Save and Continue
+      </button>
+    </div>
+  </div>
+  
+  <div class="no-pokemon" *ngIf="!currentPokemon">
+    <p>Please select a Pokémon first</p>
+    <button mat-button (click)="goBack()">Back to Item Selection</button>
+  </div>

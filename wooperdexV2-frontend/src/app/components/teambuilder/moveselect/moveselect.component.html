@@ -1,14 +1,4 @@
 <div class="move-container" *ngIf="currentPokemon">
-    <div class="move-header">
-      <h3>Move {{ moveSlot }}</h3>
-      <span class="selected-moves">
-        <span *ngIf="currentPokemon.move1">1: {{ currentPokemon.move1 }}</span>
-        <span *ngIf="currentPokemon.move2">2: {{ currentPokemon.move2 }}</span>
-        <span *ngIf="currentPokemon.move3">3: {{ currentPokemon.move3 }}</span>
-        <span *ngIf="currentPokemon.move4">4: {{ currentPokemon.move4 }}</span>
-      </span>
-    </div>
-    
     <div class="search-filter-card">
       <mat-form-field appearance="outline" class="search-field">
         <mat-label>Search Moves</mat-label>

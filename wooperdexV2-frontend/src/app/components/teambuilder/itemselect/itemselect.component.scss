@@ -1,0 +1,247 @@
+.item-container {
+    padding: 16px;
+  }
+  
+  .search-filter-card {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 16px;
+    
+    .search-field {
+      width: 100%;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+  }
+  
+  .filter-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    
+    .filter-group {
+      flex: 1;
+      min-width: 200px;
+      
+      .filter-title {
+        margin-top: 0;
+        margin-bottom: 5px;
+        font-size: 14px;
+      }
+      
+      .category-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+      }
+    }
+    
+    .clear-button {
+      align-self: flex-end;
+    }
+  }
+  
+  .category-button {
+    min-width: auto;
+    line-height: 20px;
+    padding: 0 5px;
+    margin: 2px;
+    font-size: 11px;
+    
+    &.selected {
+      background-color: #3f51b5;
+      color: white;
+    }
+  }
+  
+  .items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+  
+  .item-card {
+    cursor: pointer;
+    transition: background-color 0.2s;
+    
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+    
+    .item-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .item-sprite-placeholder {
+      width: 48px;
+      height: 48px;
+      background-color: #f0f0f0;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: #555;
+      flex-shrink: 0;
+    }
+    
+    .item-details {
+      flex-grow: 1;
+    }
+    
+    .item-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      
+      .item-name {
+        font-weight: bold;
+        font-size: 16px;
+      }
+    }
+    
+    .item-description {
+      font-size: 13px;
+      color: rgba(0, 0, 0, 0.7);
+    }
+  }
+  
+  .button-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+  }
+  
+  .no-results, .no-pokemon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+    }
+  }.item-container {
+    padding: 16px;
+  }
+  
+  .search-filter-card {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 16px;
+    
+    .search-field {
+      width: 100%;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+  }
+  
+  .filter-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    
+    .filter-group {
+      flex: 1;
+      min-width: 200px;
+      
+      .filter-title {
+        margin-top: 0;
+        margin-bottom: 5px;
+        font-size: 14px;
+      }
+      
+      .category-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+      }
+    }
+    
+    .clear-button {
+      align-self: flex-end;
+    }
+  }
+  
+  .category-button {
+    min-width: auto;
+    line-height: 20px;
+    padding: 0 5px;
+    margin: 2px;
+    font-size: 11px;
+    
+    &.selected {
+      background-color: #3f51b5;
+      color: white;
+    }
+  }
+  
+  .items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+  
+  .item-card {
+    cursor: pointer;
+    transition: background-color 0.2s;
+    
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+    
+    .item-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      
+      .item-name {
+        font-weight: bold;
+        font-size: 16px;
+      }
+    }
+    
+    .item-description {
+      font-size: 13px;
+      color: rgba(0, 0, 0, 0.7);
+    }
+  }
+  
+  .button-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+  }
+  
+  .no-results, .no-pokemon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+    }
+  }

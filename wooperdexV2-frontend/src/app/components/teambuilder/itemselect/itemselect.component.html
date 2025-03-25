@@ -1,1 +1,118 @@
-<p>itemselect works!</p>
+<div class="item-container" *ngIf="currentPokemon">
+    <div class="search-filter-card">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search Items</mat-label>
+        <input matInput [formControl]="searchControl" placeholder="Search by name or description...">
+        <button *ngIf="searchControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="searchControl.setValue('')">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      
+      <div class="filter-section">
+        <div class="filter-group">
+          <h3 class="filter-title">Category Filter</h3>
+          <div class="category-buttons">
+            <button 
+              *ngFor="let category of categories"
+              mat-raised-button
+              [ngClass]="['category-button', selectedCategory === category ? 'selected' : '']"
+              (click)="selectedCategory === category ? setCategoryFilter(null) : setCategoryFilter(category)">
+              {{ category }}
+            </button>
+          </div>
+        </div>
+        
+        <button mat-raised-button color="warn" (click)="clearFilters()" class="clear-button">
+          Clear Filters
+        </button>
+      </div>
+    </div>
+    
+    <div class="items-list">
+      <div *ngIf="filteredItems.length === 0" class="no-results">
+        <mat-icon>search_off</mat-icon>
+        <p>No items found matching your filters.</p>
+      </div>
+      
+      <mat-card *ngFor="let item of filteredItems" class="item-card" (click)="selectItem(item)">
+        <div class="item-content">
+          <div class="item-sprite-placeholder">
+            {{ item.name.charAt(0) }}
+          </div>
+          <div class="item-details">
+            <div class="item-card-header">
+              <div class="item-name">{{ item.name }}</div>
+            </div>
+            
+            <div class="item-description">
+              <p>{{ item.shortDesc }}</p>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+    
+    <div class="button-row">
+      <button mat-button (click)="goBack()">Back</button>
+    </div>
+  </div>
+  
+  <div class="no-pokemon" *ngIf="!currentPokemon">
+    <p>Please select a Pokémon first</p>
+    <button mat-button (click)="goBack()">Back to Move Selection</button>
+  </div><div class="item-container" *ngIf="currentPokemon">
+    <div class="search-filter-card">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search Items</mat-label>
+        <input matInput [formControl]="searchControl" placeholder="Search by name or description...">
+        <button *ngIf="searchControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="searchControl.setValue('')">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      
+      <div class="filter-section">
+        <div class="filter-group">
+          <h3 class="filter-title">Category Filter</h3>
+          <div class="category-buttons">
+            <button 
+              *ngFor="let category of categories"
+              mat-raised-button
+              [ngClass]="['category-button', selectedCategory === category ? 'selected' : '']"
+              (click)="selectedCategory === category ? setCategoryFilter(null) : setCategoryFilter(category)">
+              {{ category }}
+            </button>
+          </div>
+        </div>
+        
+        <button mat-raised-button color="warn" (click)="clearFilters()" class="clear-button">
+          Clear Filters
+        </button>
+      </div>
+    </div>
+    
+    <div class="items-list">
+      <div *ngIf="filteredItems.length === 0" class="no-results">
+        <mat-icon>search_off</mat-icon>
+        <p>No items found matching your filters.</p>
+      </div>
+      
+      <mat-card *ngFor="let item of filteredItems" class="item-card" (click)="selectItem(item)">
+        <div class="item-card-header">
+          <div class="item-name">{{ item.name }}</div>
+        </div>
+        
+        <div class="item-description">
+          <p>{{ item.shortDesc }}</p>
+        </div>
+      </mat-card>
+    </div>
+    
+    <div class="button-row">
+      <button mat-button (click)="goBack()">Back</button>
+    </div>
+  </div>
+  
+  <div class="no-pokemon" *ngIf="!currentPokemon">
+    <p>Please select a Pokémon first</p>
+    <button mat-button (click)="goBack()">Back to Move Selection</button>
+  </div>

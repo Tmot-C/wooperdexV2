@@ -8,6 +8,7 @@ import { PokemonselectComponent } from './components/teambuilder/pokemonselect/p
 import { AbilityselectComponent } from './components/teambuilder/abilityselect/abilityselect.component';
 import { MoveselectComponent } from './components/teambuilder/moveselect/moveselect.component';
 import { StatselectComponent } from './components/teambuilder/statselect/statselect.component';
+import { ItemselectComponent } from './components/teambuilder/itemselect/itemselect.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,7 @@ const routes: Routes = [
     component: StatusbarComponent,
     children: [
       { path: 'pokemon', component: PokemonselectComponent},
+      { path: 'item', component: ItemselectComponent},
       { path: 'ability', component: AbilityselectComponent},
       { path: 'move/1', component: MoveselectComponent},
       { path: 'move/2', component: MoveselectComponent},

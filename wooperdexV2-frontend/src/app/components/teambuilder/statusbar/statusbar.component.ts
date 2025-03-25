@@ -19,7 +19,7 @@ export class StatusbarComponent implements OnInit {
   currentPokemon: BuiltPokemon | null = null;
   
   // Track which tab is active for navigation
-  activeTab: 'pokemon' | 'ability' | 'moves' | 'stats' = 'pokemon';
+  activeTab: 'pokemon' | 'item' | 'ability' | 'moves' | 'stats' = 'pokemon';
   
   constructor() {}
   
@@ -39,6 +39,8 @@ export class StatusbarComponent implements OnInit {
       this.activeTab = 'moves';
     } else if (currentUrl.includes('/stats')) {
       this.activeTab = 'stats';
+    } else if (currentUrl.includes('/item')) {
+      this.activeTab = 'item';
     }
   }
   
@@ -68,10 +70,8 @@ export class StatusbarComponent implements OnInit {
   
   navigateToItemSelect(): void {
     if (!this.currentPokemon) return;
-    // You'll need to add a route for item selection in your routing module
-    // For now, this redirects to the pokemon selection as a placeholder
-    this.router.navigate(['/teambuilder/pokemon']);
-    this.activeTab = 'pokemon';
+    this.router.navigate(['/teambuilder/item']);
+    this.activeTab = 'item';
   }
   
   // Gets the correct stat value from BaseStats object

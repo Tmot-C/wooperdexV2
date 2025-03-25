@@ -1,0 +1,247 @@
+.stats-container {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .base-stats-section, .ev-section, .nature-section {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  
+  h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    
+    .ev-remaining {
+      margin-left: 8px;
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
+  
+  .base-stats-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    
+    .base-stat-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      
+      .stat-label {
+        width: 40px;
+        font-weight: 500;
+      }
+      
+      .base-stat-value {
+        width: 30px;
+        text-align: right;
+        font-weight: 600;
+      }
+      
+      .base-stat-bar {
+        flex-grow: 1;
+      }
+    }
+  }
+  
+  .ev-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    
+    .ev-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      
+      .stat-label {
+        width: 40px;
+        font-weight: 500;
+      }
+      
+      .ev-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        
+        .ev-input {
+          width: 60px;
+          text-align: center;
+          appearance: none;
+          -moz-appearance: textfield;
+          border: 1px solid rgba(0, 0, 0, 0.3);
+          border-radius: 4px;
+          padding: 4px;
+          font-weight: bold;
+        }
+        
+        // Remove spinner arrows
+        .ev-input::-webkit-outer-spin-button,
+        .ev-input::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        
+        // Adjust mini fab button size
+        .mat-mdc-mini-fab {
+          width: 36px;
+          height: 36px;
+          
+          .mat-icon {
+            font-size: 18px;
+          }
+        }
+      }
+    }
+  }
+  
+  .nature-section {
+    .mat-form-field {
+      width: 100%;
+    }
+  }
+  
+  .button-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+  }
+  
+  .no-pokemon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+    }
+  }.stats-container {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .base-stats-section, .ev-section, .nature-section {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  
+  h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    
+    .ev-remaining {
+      margin-left: 8px;
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
+  
+  .base-stats-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    
+    .base-stat-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      
+      .stat-label {
+        width: 40px;
+        font-weight: 500;
+      }
+      
+      .base-stat-value {
+        width: 30px;
+        text-align: right;
+        font-weight: 600;
+      }
+      
+      .base-stat-bar {
+        flex-grow: 1;
+      }
+    }
+  }
+  
+  .ev-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    
+    .ev-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      
+      .stat-label {
+        width: 40px;
+        font-weight: 500;
+      }
+      
+      .mat-slider {
+        flex-grow: 1;
+        margin: 0 16px;
+      }
+      
+      .ev-input {
+        width: 60px;
+        text-align: center;
+        appearance: none;
+        -moz-appearance: textfield;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        border-radius: 4px;
+        padding: 4px;
+      }
+      
+      // Remove spinner arrows
+      .ev-input::-webkit-outer-spin-button,
+      .ev-input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    }
+  }
+  
+  .nature-section {
+    .mat-form-field {
+      width: 100%;
+    }
+  }
+  
+  .button-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+  }
+  
+  .no-pokemon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+    }
+  }
