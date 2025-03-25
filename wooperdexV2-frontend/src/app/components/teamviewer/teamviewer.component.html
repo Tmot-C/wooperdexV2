@@ -2,49 +2,35 @@
     <app-navbar></app-navbar>
     
     <div class="team-header">
-      <div class="team-title">
-        <h1>Your Team</h1>
-        <!-- Simple form for team name -->
-        <form [formGroup]="teamForm" (ngSubmit)="saveTeam()">
-          <div class="input-row">
-            <mat-form-field appearance="outline">
-              <mat-label>Team Name</mat-label>
-              <input matInput formControlName="teamName" placeholder="Enter team name">
-            </mat-form-field>
-            
-            <button 
-              mat-raised-button 
-              color="accent" 
-              type="submit"
-              [disabled]="!currentTeam || currentTeam.length === 0"
-              class="save-button">
-              <mat-icon>save</mat-icon>
-              Save Team
-            </button>
-          </div>
-        </form>
+      <h1>Your Team</h1>
+      <div class="team-actions">
+        <button 
+          mat-raised-button
+          color="primary" 
+          [disabled]="teamCount >= 6" 
+          (click)="addNewPokemon()"
+          class="add-button">
+          Add Pokémon
+        </button>
+        
+        <button 
+          mat-raised-button
+          color="accent" 
+          [disabled]="!currentTeam || currentTeam.length === 0" 
+          (click)="saveTeam()"
+          class="save-button">
+          Save Team
+        </button>
       </div>
-      
-      <button 
-        mat-raised-button 
-        color="primary" 
-        [disabled]="teamCount >= 6" 
-        (click)="addNewPokemon()"
-        class="add-button">
-        <mat-icon>add</mat-icon>
-        Add Pokémon
-      </button>
     </div>
     
     <div class="empty-team" *ngIf="!currentTeam || currentTeam.length === 0">
-      <mat-icon>catching_pokemon</mat-icon>
       <p>Your team is empty. Click "Add Pokémon" to get started!</p>
     </div>
     
     <div class="team-list" *ngIf="currentTeam && currentTeam.length > 0">
-      <!-- Rest of your team display code remains the same -->
+      <!-- Improved Pokémon Card Display -->
       <div class="team-member" *ngFor="let pokemon of currentTeam; let i = index">
-        <!-- Pokemon Card -->
         <mat-card class="pokemon-card">
           <div class="card-content">
             <!-- Pokemon Info Section -->
@@ -136,17 +122,17 @@
                 </div>
               </div>
             </div>
-          </div>
-          
-          <!-- Action buttons -->
-          <div class="card-actions">
-            <button mat-icon-button color="primary" (click)="editPokemon(i)" class="edit-button">
-              <mat-icon>edit</mat-icon>
-            </button>
             
-            <button mat-icon-button color="warn" (click)="removePokemon(i)" class="remove-button">
-              <mat-icon>delete</mat-icon>
-            </button>
+            <!-- Action buttons -->
+            <div class="card-actions">
+              <button mat-button color="primary" (click)="editPokemon(i)" class="edit-button">
+                Edit
+              </button>
+              
+              <button mat-button color="warn" (click)="removePokemon(i)" class="remove-button">
+                Remove
+              </button>
+            </div>
           </div>
         </mat-card>
       </div>

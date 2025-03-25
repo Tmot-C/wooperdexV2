@@ -69,7 +69,6 @@ export interface BuiltPokemon {
 }
 
 export interface Team {
-    teamName: string;
     team: BuiltPokemon[];
 }
 

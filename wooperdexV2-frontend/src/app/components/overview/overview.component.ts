@@ -32,7 +32,6 @@ export class OverviewComponent implements OnInit {
     // Subscribe to the authenticated user
     this.authService.currentUser$.subscribe(user => {
       if (user) {
-        console.log(user.id)
         this.loadTrainerData(user.id);
       } else {
         this.isLoading = false;
@@ -53,10 +52,8 @@ export class OverviewComponent implements OnInit {
   loadTrainerData(userId: string): void {
     this.builderService.getTrainer(userId).subscribe({
       next: (trainerData) => {
-        console.log("Trainer data loaded:", trainerData);
         // Update the store with the trainer data
         this.store.updateCurrentTrainer(trainerData);
-        // No need to directly set this.trainer as we're getting it from the store
         this.isLoading = false;
       },
       error: (error) => {
@@ -68,11 +65,22 @@ export class OverviewComponent implements OnInit {
   }
   
   navigateToTeamBuilder(): void {
+    // For a new team, use index 0
+    this.store.setCurrentTeamIndex(0);
+    
+    // Initialize an empty team
+    this.store.loadTeam([]);
+    
+    // Navigate to the team builder for creating a new Pokémon
     this.router.navigate(['/teambuilder/pokemon']);
   }
   
   viewTeam(index: number): void {
-    // We'll use the index in the array as the identifier for now
-    this.router.navigate(['/teams', index]);
+    // Calculate the team index for the router
+    // Index in UI is 0-based, but in routing we use 1-based for existing teams
+    const teamIndex = index + 1;
+    
+    // Navigate to the team viewer with the correct index
+    this.router.navigate(['/teams', teamIndex]);
   }
 }

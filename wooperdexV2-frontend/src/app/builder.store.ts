@@ -164,23 +164,18 @@ export class BuilderStore extends ComponentStore<BuilderState> {
     });
 
     
-    readonly saveTeamToTrainer = this.updater((state, teamName?: string) => {
+    readonly saveTeamToTrainer = this.updater((state) => {
         // If there's no current team or trainer, return state unchanged
         if (!state.currentTeam || !state.currentTrainer) {
             return state;
         }
     
-        // Create a new Team object with provided name or default name
+        // Create a new Team object without team name (this assumes Team interface has been updated)
         const newTeam: Team = {
-            teamName: teamName || `Team ${state.currentTeamIndex || (state.currentTrainer.teams?.length || 0) + 1}`,
             team: state.currentTeam
         };
-        
-        if (!state.currentTeam || !state.currentTrainer) {
-            return state;
-        }
-
-
+    
+        // Copy the trainer's teams array or initialize if it doesn't exist
         const existingTeams = state.currentTrainer.teams || [];
         
         let updatedTeams: Team[];
@@ -194,14 +189,14 @@ export class BuilderStore extends ComponentStore<BuilderState> {
             // Add new team
             updatedTeams = [...existingTeams, newTeam];
         }
-
+    
         // Create a new trainer object with the updated teams
         const updatedTrainer: Trainer = {
             ...state.currentTrainer,
             teams: updatedTeams
         };
-
-        
+    
+        // Return the updated state with the new trainer
         return {
             ...state,
             currentTrainer: updatedTrainer

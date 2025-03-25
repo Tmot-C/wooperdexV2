@@ -1,4 +1,3 @@
-<!-- overview.component.html -->
 <div class="overview-container">
     <app-navbar></app-navbar>
     
@@ -18,7 +17,8 @@
       <!-- No teams state -->
       <div *ngIf="!isLoading && !loadError && (!teams || teams.length === 0)" class="no-teams-container">
         <p>You don't have any teams yet!</p>
-        <button class="create-team-btn" (click)="navigateToTeamBuilder()">
+        <button mat-raised-button color="primary" class="create-team-btn" (click)="navigateToTeamBuilder()">
+          <mat-icon>add</mat-icon>
           Create Your First Team
         </button>
       </div>
@@ -26,18 +26,31 @@
       <!-- Teams list -->
       <div *ngIf="!isLoading && !loadError && teams && teams.length > 0" class="teams-list">
         <div *ngFor="let team of teams; let i = index" class="team-card" (click)="viewTeam(i)">
-          <h2 class="team-name">{{ team.teamName || 'Unnamed Team' }}</h2>
-          <div class="team-preview">
-            <div *ngFor="let pokemon of team.team" class="pokemon-icon">
-              <!-- In a real implementation, you might add Pokémon icons here -->
-              <span>{{ pokemon.name }}</span>
-            </div>
-          </div>
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Team {{ i + 1 }}</mat-card-title>
+              <mat-card-subtitle>{{ team.team.length }} Pokémon</mat-card-subtitle>
+            </mat-card-header>
+            
+            <mat-card-content>
+              <div class="team-preview">
+                <div *ngFor="let pokemon of team.team" class="pokemon-preview">
+                  <div class="sprite-placeholder">
+                    {{ pokemon.name?.charAt(0) || '?' }}
+                  </div>
+                  <span class="pokemon-name">{{ pokemon.name }}</span>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
         </div>
         
-        <button class="create-team-btn" (click)="navigateToTeamBuilder()">
-          Create New Team
-        </button>
+        <div class="add-team-container" *ngIf="teams.length < 6">
+          <button mat-raised-button color="primary" class="create-team-btn" (click)="navigateToTeamBuilder()">
+            <mat-icon>add</mat-icon>
+            Create New Team
+          </button>
+        </div>
       </div>
     </div>
   </div>
