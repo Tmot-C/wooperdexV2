@@ -16,7 +16,7 @@ export class StatselectComponent implements OnInit {
   private store = inject(BuilderStore);
   private router = inject(Router);
   private fb = inject(FormBuilder);
-  private statsService = inject(StatsService);
+  protected statsService = inject(StatsService);
   
   currentPokemon: BuiltPokemon | null = null;
   

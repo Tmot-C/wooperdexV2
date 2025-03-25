@@ -8,21 +8,32 @@
 }
 
 .status-bar-container {
-  display: flex;
   width: 75%;
   margin: 0 auto;
-  padding: 16px 0;
-  flex-shrink: 0;
-  gap: 16px;
+  padding: 16px; /* match the content-area’s horizontal padding */
+  box-sizing: border-box;
+  display: flex;
+  /* no fixed height, let content define it */
   background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(5px);
   border-radius: 8px;
 }
+.status-sections {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+  padding: 0 8px;
+}
 
-.pokemon-card {
-  width: 250px;
+.pokemon-section {
+  width: 600px;
+  height: 80px;
   background-color: var(--primary-dark-color, #4A90E2);
   color: white;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: 4px;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   
@@ -30,16 +41,6 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
-}
-
-.pokemon-content {
-  display: flex;
-  align-items: center;
-  padding: 8px;
-}
-
-.sprite-container {
-  margin-right: 16px;
 }
 
 .sprite-placeholder {
@@ -53,23 +54,25 @@
   font-size: 24px;
   font-weight: bold;
   color: white;
-  
-  &.empty {
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 2px dashed rgba(255, 255, 255, 0.3);
-    color: rgba(255, 255, 255, 0.5);
-  }
+  margin-right: 16px;
+  flex-shrink: 0;
 }
 
 .pokemon-info {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .pokemon-name {
   font-size: 18px;
   font-weight: 500;
   margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
 }
 
 .types-container {
@@ -78,117 +81,91 @@
 }
 
 .type-badge {
-  padding: 2px 8px;
+  padding: 2px 6px;
   border-radius: 4px;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 500;
   text-transform: uppercase;
   color: white;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
 }
 
-.details-container {
-  flex: 1;
+.details-section {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  flex-grow: 1;
+  gap: 8px;
 }
 
-.top-row {
+.item-ability-section {
   display: flex;
-  gap: 16px;
+  flex-direction: column;
+  gap: 8px;
+  width: 300px;
 }
 
 .item-card, .ability-card {
-  flex: 1;
+  height: 36px;
   background-color: var(--primary-color, #6890F0);
   color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  .mat-mdc-card-subtitle {
-    color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 4px;
-    font-family: 'MyFont', sans-serif !important;
-  }
-  
-  .mat-mdc-card-content {
-    font-weight: 500;
-    padding-bottom: 8px !important;
-    font-family: 'MyFont', sans-serif !important;
-  }
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.stats-card {
+.moves-section {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: var(--primary-color, #6890F0);
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.move-slot {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stats-section {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   background-color: var(--primary-light-color, #82B1FF);
   color: white;
+  padding: 8px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  .mat-mdc-card-content {
-    padding: 8px 16px !important;
-    font-family: 'MyFont', sans-serif !important;
-  }
-}
-
-.stats-grid {
-  display: flex;
-  gap: 16px;
-}
-
-.stats-column {
-  flex: 1;
 }
 
 .stat-row {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
+  gap: 8px;
+  height: 24px;
 }
 
 .stat-label {
   width: 36px;
   font-size: 14px;
-  margin-right: 8px;
   color: rgba(255, 255, 255, 0.9);
-  font-family: 'MyFont', sans-serif !important;
-}
-
-.moves-card {
-  background-color: var(--primary-color, #6890F0);
-  color: white;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-}
-
-.moves-content {
-  padding: 0 !important;
-}
-
-::ng-deep .moves-card .mat-grid-tile {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  font-size: 14px;
-  font-family: 'MyFont', sans-serif !important;
-  
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
 }
 
 .content-area {

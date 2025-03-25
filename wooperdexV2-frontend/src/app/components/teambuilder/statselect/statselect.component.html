@@ -26,8 +26,8 @@
       <div class="stats-row header-row">
         <div class="column-stat">Stat</div>
         <div class="column-base">Base</div>
-        <div class="column-evs">EVs</div>
-        <div class="column-ivs">IVs</div>
+        <div class="column-evs text-center">EVs</div>
+        <div class="column-ivs text-center">IVs</div>
         <div class="column-final">Final</div>
       </div>
       
@@ -83,7 +83,7 @@
               color="accent" 
               class="mini-control-button"
               (click)="decreaseIv(stat)"
-              [disabled]="(ivForm.get(stat)?.value || 0) <= ivMin">
+              [disabled]="(ivForm.get(stat)?.value || 0) <= statsService.ivMin">
               <mat-icon class="mini-icon">remove</mat-icon>
             </button>
             
@@ -92,15 +92,15 @@
               [value]="ivForm.get(stat)?.value || 31"
               (input)="onIvInput(stat, $event)"
               class="stat-input"
-              min="0"
-              max="31">
+              [min]="statsService.ivMin"
+              [max]="statsService.ivMax">
             
             <button 
               mat-mini-fab 
               color="accent" 
               class="mini-control-button"
               (click)="increaseIv(stat)"
-              [disabled]="(ivForm.get(stat)?.value || 0) >= ivMax">
+              [disabled]="(ivForm.get(stat)?.value || 0) >= statsService.ivMax">
               <mat-icon class="mini-icon">add</mat-icon>
             </button>
           </div>
