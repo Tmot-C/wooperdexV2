@@ -20,7 +20,7 @@ const routes: Routes = [
     component: OverviewComponent
   },
   {
-    path: 'teams/:id',
+    path: 'teams/:id', //team array index
     component: TeamviewerComponent
   },
   {

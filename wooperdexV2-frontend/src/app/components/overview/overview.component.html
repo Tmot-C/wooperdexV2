@@ -34,11 +34,21 @@
             
             <mat-card-content>
               <div class="team-preview">
+                <!-- Pokémon with sprites -->
                 <div *ngFor="let pokemon of team.team" class="pokemon-preview">
-                  <div class="sprite-placeholder">
-                    {{ pokemon.name?.charAt(0) || '?' }}
+                  <div class="sprite-container">
+                    <img 
+                      [src]="getPokemonSpritePath(pokemon.id)" 
+                      [alt]="pokemon.name"
+                      (error)="handleImageError($event)"
+                      class="pokemon-sprite">
                   </div>
                   <span class="pokemon-name">{{ pokemon.name }}</span>
+                </div>
+                
+                <!-- Empty slots -->
+                <div *ngFor="let empty of getEmptySlots(team.team)" class="empty-slot">
+                  <div class="empty-placeholder">+</div>
                 </div>
               </div>
             </mat-card-content>
@@ -47,7 +57,6 @@
         
         <div class="add-team-container" *ngIf="teams.length < 6">
           <button mat-raised-button color="primary" class="create-team-btn" (click)="navigateToTeamBuilder()">
-            <mat-icon>add</mat-icon>
             Create New Team
           </button>
         </div>

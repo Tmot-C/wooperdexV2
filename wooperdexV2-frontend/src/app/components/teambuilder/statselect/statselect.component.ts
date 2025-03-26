@@ -254,7 +254,7 @@ export class StatselectComponent implements OnInit {
   }
   
   goBack(): void {
-    this.router.navigate(['/teambuilder/item']);
+    this.router.navigate(['/teambuilder/move4']);
   }
   
   // Use shared service for stat-related functionality

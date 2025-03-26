@@ -69,7 +69,7 @@ export class NavbarComponent implements OnInit {
       this.router.navigate(['/']);
     }).catch(error => {
       console.error('Logout error:', error);
-      // Still try to navigate away and reset store even if there's an error
+      
       this.store.resetCurrents();
       this.router.navigate(['/']);
     });
@@ -89,7 +89,7 @@ export class NavbarComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error fetching Pokémon analysis:', error);
-          // Optionally show an error message
+    
         }
       });
   }

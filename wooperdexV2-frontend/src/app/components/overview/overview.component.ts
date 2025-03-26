@@ -4,9 +4,11 @@ import { Router } from '@angular/router';
 import { FirebaseAuthService } from '../../firebase-auth.service';
 import { BuilderService } from '../../builder.service';
 import { BuilderStore } from '../../builder.store';
-import { Trainer, Team } from '../../models';
+import { Trainer, Team, BuiltPokemon } from '../../models';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { ImagePathService } from '../../image-path.service';
+
+
 
 @Component({
   selector: 'app-overview',
@@ -20,6 +22,7 @@ export class OverviewComponent implements OnInit {
   private builderService = inject(BuilderService);
   private store = inject(BuilderStore);
   private router = inject(Router);
+  private imageService = inject(ImagePathService);
   
   trainer$: Observable<Trainer | null> = this.store.currentTrainer$;
   teams: Team[] = [];
@@ -27,9 +30,10 @@ export class OverviewComponent implements OnInit {
   loadError: string | null = null;
   
   ngOnInit(): void {
+    this.store.resetCurrents();
     this.isLoading = true;
     
-    // Subscribe to the authenticated user
+    // Subscribe to the authenticated user and store as current trainer
     this.authService.currentUser$.subscribe(user => {
       if (user) {
         this.loadTrainerData(user.id);
@@ -83,4 +87,20 @@ export class OverviewComponent implements OnInit {
     // Navigate to the team viewer with the correct index
     this.router.navigate(['/teams', teamIndex]);
   }
+
+    // Get the Pokémon sprite path
+    getPokemonSpritePath(pokemonId: string | null): string {
+      return this.imageService.getPokemonSpritePath(pokemonId);
+    }
+    
+    // Handle image loading errors
+    handleImageError(event: any): void {
+      this.imageService.handleImageError(event);
+    }
+    
+    // Calculate empty slots to display placeholders
+    getEmptySlots(teamPokemon: BuiltPokemon[]): number[] {
+      const emptyCount = 6 - (teamPokemon?.length || 0);
+      return emptyCount > 0 ? Array(emptyCount).fill(0) : [];
+    }
 }

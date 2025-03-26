@@ -7,6 +7,7 @@ import { StatsService } from '../../stats.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { switchMap, take } from 'rxjs/operators';
 import { ImagePathService } from '../../image-path.service';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-teamviewer',
@@ -31,29 +32,49 @@ export class TeamviewerComponent implements OnInit {
   
   ngOnInit(): void {
     // Get the team index from the route parameter
-    this.route.params.pipe(
-      switchMap(params => {
-        this.teamIndex = parseInt(params['id']) || 0;
-        this.store.setCurrentTeamIndex(this.teamIndex);
-        this.isNewTeam = this.teamIndex === 0;
-        
-        // Return the trainer observable to continue the chain
-        return this.store.currentTrainer$;
-      }),
-      switchMap(trainer => {
+    this.route.params.subscribe(params => {
+      this.teamIndex = parseInt(params['id']) || 0;
+      this.store.setCurrentTeamIndex(this.teamIndex);
+      this.isNewTeam = this.teamIndex === 0;
+      
+      // Load trainer data
+      this.store.currentTrainer$.pipe(take(1)).subscribe(trainer => {
         this.currentTrainer = trainer;
         
         // If we're editing an existing team and we have trainer data
         if (!this.isNewTeam && trainer && trainer.teams && trainer.teams.length > this.teamIndex - 1) {
           // Load the team from trainer data
           const teamToLoad = trainer.teams[this.teamIndex - 1].team;
-          this.store.loadTeam(teamToLoad);
+          
+          // Check if we're coming back from editing a specific Pokémon
+          this.store.editingPokemonIndex$.pipe(take(1)).subscribe(editIndex => {
+            this.store.currentPokemon$.pipe(take(1)).subscribe(editedPokemon => {
+              // If we have both an edited Pokémon and a valid index
+              if (editedPokemon && editIndex >= 0 && editIndex < teamToLoad.length) {
+                // Replace the Pokémon at the specified index
+                const updatedTeam = [...teamToLoad];
+                updatedTeam[editIndex] = editedPokemon;
+                
+                // Load the updated team
+                this.store.loadTeam(updatedTeam);
+                
+                // Save the changes to the trainer
+                this.store.saveTeamToTrainer();
+                
+                // Reset the editing state
+                this.store.setEditingPokemonIndex(-1);
+              } else {
+                // Just load the team as is
+                this.store.loadTeam(teamToLoad);
+              }
+            });
+          });
         }
-        
-        // Return the team observable
-        return this.store.currentTeam$;
-      })
-    ).subscribe(team => {
+      });
+    });
+    
+    // Simple subscription to current team changes
+    this.store.currentTeam$.subscribe(team => {
       this.currentTeam = team;
       this.teamCount = team ? team.length : 0;
     });
@@ -81,8 +102,8 @@ export class TeamviewerComponent implements OnInit {
     const pokemonToEdit = this.currentTeam[index];
     this.store.updateCurrentPokemon(pokemonToEdit);
     
-    // Remove it from the team
-    this.removePokemon(index);
+    // Store the index of the Pokémon being edited
+    this.store.setEditingPokemonIndex(index);
     
     // Navigate to team builder
     this.router.navigate(['/teambuilder/pokemon']);

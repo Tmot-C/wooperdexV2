@@ -20,8 +20,13 @@ public class UserRepository {
           email = VALUES(email)
     """;
 
+    final String SQL_EXISTS_USER = "SELECT EXISTS(SELECT 1 FROM users WHERE id = ?)";
+
     public void save(User user){
         jdbcTemplate.update(SQL_UPSERT_USER, user.getId(), user.getEmail(), user.getName());
     }
     
+    public boolean exists(String id){
+        return jdbcTemplate.queryForObject(SQL_EXISTS_USER, Boolean.class, id);
+    }
 }

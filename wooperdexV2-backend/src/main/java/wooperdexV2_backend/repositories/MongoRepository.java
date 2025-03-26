@@ -86,4 +86,8 @@ public class MongoRepository {
         mongoTemplate.upsert(query, update, "trainers");
     }
     
+    public boolean exists(String id) {
+        Query query = new Query(Criteria.where("firebaseId").is(id));
+        return mongoTemplate.exists(query, "trainers");
+    }
 }

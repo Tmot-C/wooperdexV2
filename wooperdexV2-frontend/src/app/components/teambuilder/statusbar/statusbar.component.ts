@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { BuilderStore } from '../../../builder.store';
 import { BuiltPokemon, BaseStats } from '../../../models';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { StatsService } from '../../../stats.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ImagePathService } from '../../../image-path.service';
@@ -69,14 +69,18 @@ export class StatusbarComponent implements OnInit {
     // Add the current Pokemon to the team in the store
     this.store.addPokemonToTeam();
     
+    // Save team changes to the trainer object
+    this.store.saveTeamToTrainer();
+    
     // Show success message
     this.snackBar.open(`${this.currentPokemon.name} added to team!`, 'Close', {
       duration: 3000,
     });
     
-    // Navigate to team viewer with the correct team index
+    // Navigate to team viewer
     this.router.navigate(['/teams', this.currentTeamIndex]);
   }
+  
   
   // Navigation methods
   navigateToPokemonSelect(): void {

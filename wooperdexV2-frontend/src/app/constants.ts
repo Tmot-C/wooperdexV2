@@ -74,3 +74,6 @@ export const TIER_DISPLAY_NAMES: { [key: string]: string } = {
     'LC': 'Little Cup',
     'NFE': 'Not Fully Evolved'
 };
+
+export const ITEM_CATEGORIES: string[] = [
+    'Hold Items', 'Consumables', 'Battle Items', 'Miscellaneous']

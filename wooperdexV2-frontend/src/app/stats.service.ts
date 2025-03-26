@@ -6,7 +6,7 @@ import { EV_TOTAL_MAX, EV_MAX, IV_MAX, IV_MIN } from './constants';
   providedIn: 'root'
 })
 export class StatsService {
-  // Constants
+  
   readonly evTotalMax: number = EV_TOTAL_MAX;
   readonly evMax: number = EV_MAX;
   readonly ivMax: number = IV_MAX;
@@ -14,7 +14,7 @@ export class StatsService {
   
   constructor() { }
   
-  // Get color for a specific stat (for mat-progress-bar)
+  // Get color
   getStatColor(stat: keyof BaseStats): string {
     switch(stat) {
       case 'hp': return 'warn';
@@ -27,7 +27,7 @@ export class StatsService {
     }
   }
   
-  // Get stat display label
+  // Hardcoded display label
   getStatLabel(stat: keyof BaseStats): string {
     switch (stat) {
       case 'hp': return 'HP';
@@ -40,26 +40,22 @@ export class StatsService {
     }
   }
   
-  // Calculate stat percentage for progress bars (out of 255 max)
+  // Calculate stat percentage for progress bars (255 max)
   getStatPercentage(value: number): number {
     return Math.min((value / 255) * 100, 100);
   }
   
-  // Round to nearest multiple of 4 for EVs
+  
   roundToNearestEv(value: number): number {
     return Math.round(value / 4) * 4;
   }
   
-  // Calculate the final stat value based on base stat, EVs, IVs, and nature
+  // Final stat total calculation
   calculateFinalStat(baseStat: number, ev: number, iv: number, natureEffect: number, isHpStat: boolean): number {
-    // HP calculation is different from other stats
+
     if (isHpStat) {
-      // HP = ((2 * Base + IV + (EV/4)) * Level/100) + Level + 10
-      // For level 100:
       return Math.floor(((2 * baseStat + iv + Math.floor(ev/4)) * 100/100) + 100 + 10);
     } else {
-      // Other stats = (((2 * Base + IV + (EV/4)) * Level/100) + 5) * Nature
-      // For level 100:
       return Math.floor((((2 * baseStat + iv + Math.floor(ev/4)) * 100/100) + 5) * natureEffect);
     }
   }

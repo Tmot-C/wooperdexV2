@@ -33,7 +33,7 @@ export class PokemonselectComponent implements OnInit {
   selectedType: string | null = null;
   selectedTier: string | null = null;
   
-  // Get constants from constants.ts
+  
   types: string[] = POKEMON_TYPES;
   tiers: string[] = POKEMON_TIERS;
   allTiers: string[] = ALL_POKEMON_TIERS;
@@ -42,9 +42,9 @@ export class PokemonselectComponent implements OnInit {
   ngOnInit(): void {
     // Load Pokemon list from store
     this.store.pokedex$.subscribe(pokedex => {
-      // Sort the Pokemon list by tier first, then alphabetically by name
+      
       this.pokemonList = this.sortPokemonList(pokedex);
-      this.filteredPokemonList = [...this.pokemonList]; // Initialize with full list
+      this.filteredPokemonList = [...this.pokemonList]; // Copy the list to avoid modifying the original
     });
     
     // Set up search with debounce
@@ -98,7 +98,7 @@ export class PokemonselectComponent implements OnInit {
     });
     
     // Navigate to ability selection
-    this.router.navigate(['/teambuilder/ability']);
+    this.router.navigate(['/teambuilder/item']);
   }
   
   applyFilters(): void {

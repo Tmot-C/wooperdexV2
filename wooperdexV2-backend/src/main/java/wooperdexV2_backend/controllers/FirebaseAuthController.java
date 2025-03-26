@@ -33,7 +33,6 @@ public class FirebaseAuthController {
         String firebaseId = payload.get("firebaseId");
         String email = payload.get("email");
         String name = payload.get("name");
-        String idToken = payload.get("idToken");
 
         // Debug logs for incoming request data
         System.out.println("==== Firebase Auth Request ====");
@@ -50,24 +49,27 @@ public class FirebaseAuthController {
             return ResponseEntity.badRequest().body("Firebase ID and email are required");
         }
 
-        User newUser = new User();
+        if(!userRepo.exists(firebaseId) || !mongoRepo.exists(firebaseId)){
 
-        newUser.setId(firebaseId);
-        newUser.setEmail(email);
-        newUser.setName(name);
-        userRepo.save(newUser);
+            User newUser = new User();
 
-        Trainer newTrainer = new Trainer();
-        newTrainer.setFirebaseId(firebaseId);
-        newTrainer.setEmail(email);
-        newTrainer.setName(name);
-        mongoRepo.saveTrainer(newTrainer);
+            newUser.setId(firebaseId);
+            newUser.setEmail(email);
+            newUser.setName(name);
+            userRepo.save(newUser);
+    
+            Trainer newTrainer = new Trainer();
+            newTrainer.setFirebaseId(firebaseId);
+            newTrainer.setEmail(email);
+            newTrainer.setName(name);
+            mongoRepo.saveTrainer(newTrainer);
 
+        }
 
         Map<String, Object> response = new HashMap<>();
-        response.put("id", newUser.getId());
-        response.put("name", newUser.getName());
-        response.put("email", newUser.getEmail());
+        response.put("id", firebaseId);
+        response.put("name", name);
+        response.put("email", email);
         
         return ResponseEntity.ok(response);
 

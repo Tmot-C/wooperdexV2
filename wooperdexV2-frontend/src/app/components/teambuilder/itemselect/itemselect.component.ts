@@ -38,12 +38,13 @@ export class ItemselectComponent implements OnInit {
       }
     });
     
-    // Load all items from store
+    
     this.store.itemlist$.subscribe(items => {
       this.allItems = items;
       
       // Extract unique categories
       this.categories = [...new Set(items.map(item => item.category).filter(Boolean))];
+      console.log('Categories:', this.categories);
       
       this.applyFilters();
     });
@@ -88,7 +89,7 @@ export class ItemselectComponent implements OnInit {
     };
     
     this.store.updateCurrentPokemon(updatedPokemon);
-    this.router.navigate(['/teambuilder/stats']);
+    this.router.navigate(['/teambuilder/ability']);
   }
   
   setCategoryFilter(category: string | null): void {
@@ -103,6 +104,6 @@ export class ItemselectComponent implements OnInit {
   }
   
   goBack(): void {
-    this.router.navigate(['/teambuilder/move/4']);
+    this.router.navigate(['/teambuilder/pokemon']);
   }
 }

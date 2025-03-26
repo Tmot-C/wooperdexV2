@@ -37,6 +37,8 @@ export interface BuilderState {
   currentTeamIndex: number;
   currentLearnset: Learnset | null;
   currentTrainer: Trainer | null;
+  addToExistingTeam: boolean;
+  editingPokemonIndex: number;
 }
 
 @Injectable({
@@ -54,6 +56,8 @@ export class BuilderStore extends ComponentStore<BuilderState> {
       currentTeam: null,
       currentTeamIndex: 0,
       currentTrainer: null,
+      addToExistingTeam: false,
+      editingPokemonIndex: 0,
     });
   }
 
@@ -67,6 +71,8 @@ export class BuilderStore extends ComponentStore<BuilderState> {
   readonly currentTeamIndex$ = this.select((state) => state.currentTeamIndex);
   readonly currentLearnset$ = this.select((state) => state.currentLearnset);
   readonly currentTrainer$ = this.select((state) => state.currentTrainer);
+  readonly addToExistingTeam$ = this.select((state) => state.addToExistingTeam);
+  readonly editingPokemonIndex$ = this.select((state) => state.editingPokemonIndex);
 
   // updaters
   readonly setPokedex = this.updater((state, pokedex: Pokemon[]) => {
@@ -130,6 +136,17 @@ export class BuilderStore extends ComponentStore<BuilderState> {
     return {
       ...state,
       currentTrainer: trainer,
+    };
+  });
+
+  readonly setAddToExistingTeam = this.updater((state, value: boolean) => {
+    return { ...state, addToExistingTeam: value };
+  });
+
+  readonly setEditingPokemonIndex = this.updater((state, index: number) => {
+    return {
+      ...state,
+      editingPokemonIndex: index
     };
   });
 
@@ -221,7 +238,9 @@ export class BuilderStore extends ComponentStore<BuilderState> {
       currentTeam: null,
       currentTeamIndex: 0,
       currentLearnset: null,
-      currentTrainer: null
+      currentTrainer: null,
+      editingPokemonIndex: -1, // Reset this as well
+      addToExistingTeam: false, // Reset this flag too
     };
   });
 }

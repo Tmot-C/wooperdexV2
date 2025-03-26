@@ -53,6 +53,6 @@ export class AbilityselectComponent implements OnInit {
   }
   
   goBack(): void {
-    this.router.navigate(['/teambuilder/pokemon']);
+    this.router.navigate(['/teambuilder/item']);
   }
 }
