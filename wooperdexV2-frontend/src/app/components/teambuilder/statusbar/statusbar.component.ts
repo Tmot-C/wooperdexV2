@@ -23,6 +23,7 @@ export class StatusbarComponent implements OnInit {
   currentPokemon$: Observable<BuiltPokemon | null> = this.store.currentPokemon$;
   currentPokemon: BuiltPokemon | null = null;
   currentTeamIndex: number = 0;
+  editExistingTeam: boolean = false;
 
   // Tab tracker
   activeTab: 'pokemon' | 'item' | 'ability' | 'moves' | 'stats' = 'pokemon';
@@ -37,6 +38,12 @@ export class StatusbarComponent implements OnInit {
 
     this.store.currentTeamIndex$.subscribe((index) => {
       this.currentTeamIndex = index;
+      console.log('Current team index in statusbar:', index);
+    });
+
+    this.store.editExistingTeam$.subscribe((value) => {
+      this.editExistingTeam = value;
+      console.log('Editing existing team:', value);
     });
 
     const currentUrl = this.router.url;
@@ -62,18 +69,42 @@ export class StatusbarComponent implements OnInit {
       return;
     }
 
-    // Add the current Pokemon to the team in the store WITHOUT saving to trainer
+    console.log('Saving Pokémon to team');
+    console.log('Current context - Team index:', this.currentTeamIndex);
+    console.log(
+      'Current context - Editing existing team:',
+      this.editExistingTeam
+    );
+
     this.store.addPokemonToTeam();
 
     this.snackBar.open(`${this.currentPokemon.name} added to team!`, 'Close', {
       duration: 3000,
     });
 
-    // Navigate to team viewer without saving to the trainer yet
-    this.router.navigate(['/teams', this.currentTeamIndex]);
+    if (this.editExistingTeam && this.currentTeamIndex > 0) {
+      console.log('Updating existing team in trainer data');
+
+      // Save the updated team to the trainer state
+      this.store.currentTeam$.pipe(take(1)).subscribe((currentTeam) => {
+        if (currentTeam && currentTeam.length > 0) {
+          // Create an updated version of the trainer's team
+          this.store.saveTeamToTrainer();
+
+          console.log('Team saved to trainer, returning to team view');
+        }
+      });
+    }
+
+    if (this.editExistingTeam && this.currentTeamIndex > 0) {
+      console.log('Returning to existing team:', this.currentTeamIndex);
+      this.router.navigate(['/teams', this.currentTeamIndex]);
+    } else {
+      console.log('Returning to new team view');
+      this.router.navigate(['/teams', this.currentTeamIndex || 0]);
+    }
   }
 
-  // Extra navigation methods for clicking
   navigateToPokemonSelect(): void {
     this.router.navigate(['/teambuilder/pokemon']);
     this.activeTab = 'pokemon';

@@ -2,7 +2,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
 import { BuilderStore } from '../../../builder.store';
 import { BuilderService } from '../../../builder.service';
 import { Pokemon, BaseStats } from '../../../models';
@@ -54,9 +54,18 @@ export class PokemonselectComponent implements OnInit {
   tierGroups: { [key: string]: string[] } = TIER_GROUPS;
 
   ngOnInit(): void {
+    // Log the current navigation context
+    this.store.currentTeamIndex$.pipe(take(1)).subscribe((index) => {
+      console.log('Team builder context - Current team index:', index);
+    });
+
+    this.store.editExistingTeam$.pipe(take(1)).subscribe((isEditing) => {
+      console.log('Team builder context - Editing existing team:', isEditing);
+    });
+
     this.store.pokedex$.subscribe((pokedex) => {
       this.pokemonList = this.sortPokemonList(pokedex);
-      this.filteredPokemonList = [...this.pokemonList]; // Copy the list to avoid modifying the original
+      this.filteredPokemonList = [...this.pokemonList];
     });
 
     this.searchControl.valueChanges

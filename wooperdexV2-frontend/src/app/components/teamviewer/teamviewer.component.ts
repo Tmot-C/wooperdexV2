@@ -32,20 +32,27 @@ export class TeamviewerComponent implements OnInit {
 
   //WARNING:  Fucked spaghetti logic in this file. Result of my own gross incompetence and planning
   ngOnInit(): void {
-    // Get the team index from the route parameter
+    console.log('TeamviewerComponent initialized');
+
     this.route.params.subscribe((params) => {
       this.teamIndex = parseInt(params['id']) || 0;
+      console.log('Team index from route:', this.teamIndex);
 
-      // Set the current team index in the store
       this.store.setCurrentTeamIndex(this.teamIndex);
 
-      // Flag to check if we're editing a new team (index 0) or an existing one
       this.isNewTeam = this.teamIndex === 0;
+      console.log('Is new team:', this.isNewTeam);
+
+      if (!this.isNewTeam) {
+        this.store.setEditExistingTeam(true);
+      } else {
+        this.store.setEditExistingTeam(false);
+      }
 
       this.store.currentTrainer$.pipe(take(1)).subscribe((trainer) => {
         this.currentTrainer = trainer;
+        console.log('Current trainer loaded:', trainer?.name);
 
-        // If we're editing an existing team and we have trainer data
         if (
           !this.isNewTeam &&
           trainer &&
@@ -54,25 +61,63 @@ export class TeamviewerComponent implements OnInit {
         ) {
           // Load the team from trainer data
           const teamToLoad = trainer.teams[this.teamIndex - 1].team;
+          console.log(
+            'Loading existing team with',
+            teamToLoad.length,
+            'Pokémon'
+          );
 
-          console.log('Loading existing team:', this.teamIndex);
-          console.log('Team data:', teamToLoad);
+          // Check if we're coming back from editing a specific Pokémon
+          this.store.editingPokemonIndex$
+            .pipe(take(1))
+            .subscribe((editIndex) => {
+              this.store.currentPokemon$
+                .pipe(take(1))
+                .subscribe((editedPokemon) => {
+                  // If we have both an edited Pokémon and a valid index
+                  if (
+                    editedPokemon &&
+                    editIndex >= 0 &&
+                    editIndex < teamToLoad.length
+                  ) {
+                    // Replace the Pokémon at the specified index
+                    console.log('Updating Pokémon at index', editIndex);
+                    const updatedTeam = [...teamToLoad];
+                    updatedTeam[editIndex] = editedPokemon;
 
-          this.store.loadTeam(teamToLoad);
+                    this.store.loadTeam(updatedTeam);
+
+                    // Reset the editing state
+                    this.store.setEditingPokemonIndex(-1);
+                  } else {
+                    // Just load the team as is
+                    console.log('Loading team without editing');
+                    this.store.loadTeam(teamToLoad);
+                  }
+                });
+            });
         } else if (this.isNewTeam) {
-          // For new teams, initialize an empty array if needed
-          // This ensures we don't accidentally load old data
-          console.log('Creating new team');
-
-          // Check if there's already a current team in the store (from teambuilder)
+          // For new teams, check if there's already a team in progress
           this.store.currentTeam$.pipe(take(1)).subscribe((currentTeam) => {
             if (!currentTeam || currentTeam.length === 0) {
-              // Only initialize an empty team if there isn't one already
+              console.log('Initializing new empty team');
               this.store.loadTeam([]);
+            } else {
+              console.log(
+                'Using existing team in progress:',
+                currentTeam.length,
+                'Pokémon'
+              );
             }
           });
         }
       });
+    });
+
+    this.store.currentTeam$.subscribe((team) => {
+      this.currentTeam = team;
+      this.teamCount = team ? team.length : 0;
+      console.log('Current team updated, count:', this.teamCount);
     });
 
     this.store.currentTeam$.subscribe((team) => {
@@ -95,10 +140,23 @@ export class TeamviewerComponent implements OnInit {
       return;
     }
 
+    // Before navigating to the teambuilder, ensure we preserve the current team context
+
+    // Make sure currentTeamIndex is set correctly in the store
+    this.store.setCurrentTeamIndex(this.teamIndex);
+
+    // Set a flag to indicate we're editing an existing team
+    if (!this.isNewTeam) {
+      this.store.setEditExistingTeam(true);
+    }
+
+    console.log('Adding new Pokémon to team index:', this.teamIndex);
+    console.log('Current team size:', this.teamCount);
+
     this.router.navigate(['/teambuilder/pokemon']);
   }
 
-  // Edit an existing Pokemon - Mutually exclusive as mentioned above for reasons I can't debug
+  // Edit an existing Pokemon - Bugged and not working as intended
   editPokemon(index: number): void {
     if (!this.currentTeam || index < 0 || index >= this.currentTeam.length) {
       return;
@@ -112,7 +170,6 @@ export class TeamviewerComponent implements OnInit {
     this.router.navigate(['/teambuilder/pokemon']);
   }
 
-  // Remove a Pokemon from the team
   removePokemon(index: number): void {
     if (!this.currentTeam || index < 0 || index >= this.currentTeam.length) {
       return;
@@ -127,7 +184,6 @@ export class TeamviewerComponent implements OnInit {
     });
   }
 
-  // Save the team
   saveTeam(): void {
     if (!this.currentTeam || this.currentTeam.length === 0) {
       this.snackBar.open('Cannot save an empty team', 'Close', {
@@ -144,14 +200,11 @@ export class TeamviewerComponent implements OnInit {
       return;
     }
 
-    // This is the ONLY place where we should save the team to the trainer state
     this.store.saveTeamToTrainer();
 
-    // Debug log to verify the team is saved properly
     console.log('Saving team at index:', this.teamIndex);
     console.log('Team data:', this.currentTeam);
 
-    // Save to backend
     this.store.currentTrainer$.pipe(take(1)).subscribe((updatedTrainer) => {
       if (!updatedTrainer) {
         this.snackBar.open(

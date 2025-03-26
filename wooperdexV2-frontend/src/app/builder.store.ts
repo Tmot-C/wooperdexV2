@@ -39,6 +39,7 @@ export interface BuilderState {
   currentTrainer: Trainer | null;
   addToExistingTeam: boolean;
   editingPokemonIndex: number;
+  editExistingTeam: boolean;
 }
 
 @Injectable({
@@ -57,7 +58,9 @@ export class BuilderStore extends ComponentStore<BuilderState> {
       currentTeamIndex: 0,
       currentTrainer: null,
       addToExistingTeam: false,
-      editingPokemonIndex: 0,
+      editingPokemonIndex: -1,
+      // Initialize the new flag
+      editExistingTeam: false,
     });
   }
 
@@ -75,6 +78,7 @@ export class BuilderStore extends ComponentStore<BuilderState> {
   readonly editingPokemonIndex$ = this.select(
     (state) => state.editingPokemonIndex
   );
+  readonly editExistingTeam$ = this.select((state) => state.editExistingTeam);
 
   // updaters
   readonly setPokedex = this.updater((state, pokedex: Pokemon[]) => {
@@ -156,13 +160,46 @@ export class BuilderStore extends ComponentStore<BuilderState> {
   readonly addPokemonToTeam = this.updater((state) => {
     // If there's no current Pokémon, return state unchanged
     if (!state.currentPokemon) {
+      console.warn('Cannot add Pokémon to team: No current Pokémon');
       return state;
     }
 
-    // Create a new team array, initializing it if it's null
-    const updatedTeam = state.currentTeam
-      ? [...state.currentTeam, state.currentPokemon]
-      : [state.currentPokemon];
+    console.log('Adding Pokémon to team:', state.currentPokemon.name);
+    console.log('Current team index:', state.currentTeamIndex);
+    console.log('Editing existing team:', state.editExistingTeam);
+
+    let updatedTeam: BuiltPokemon[];
+
+    if (
+      state.editExistingTeam &&
+      state.currentTeamIndex > 0 &&
+      state.currentTrainer?.teams
+    ) {
+      // Get the current team from the trainer's teams
+      const existingTeamIndex = state.currentTeamIndex - 1;
+
+      if (
+        existingTeamIndex >= 0 &&
+        existingTeamIndex < state.currentTrainer.teams.length
+      ) {
+        const existingTeam = state.currentTrainer.teams[existingTeamIndex].team;
+        console.log('Found existing team with', existingTeam.length, 'Pokémon');
+
+        updatedTeam = [...existingTeam, state.currentPokemon];
+      } else {
+        console.warn('Team index out of bounds, creating new team');
+        updatedTeam = state.currentTeam
+          ? [...state.currentTeam, state.currentPokemon]
+          : [state.currentPokemon];
+      }
+    } else {
+      console.log('Creating or updating current team');
+      updatedTeam = state.currentTeam
+        ? [...state.currentTeam, state.currentPokemon]
+        : [state.currentPokemon];
+    }
+
+    console.log('Updated team size:', updatedTeam.length);
 
     return {
       ...state,
@@ -170,14 +207,11 @@ export class BuilderStore extends ComponentStore<BuilderState> {
     };
   });
 
-  // Optional: Remove a Pokémon from the team at a specific index
   readonly removePokemonFromTeam = this.updater((state, index: number) => {
-    // If there's no team, return state unchanged
     if (!state.currentTeam) {
       return state;
     }
 
-    // Ensure index is within bounds
     if (index < 0 || index >= state.currentTeam.length) {
       return state;
     }
@@ -244,6 +278,13 @@ export class BuilderStore extends ComponentStore<BuilderState> {
     };
   });
 
+  readonly setEditExistingTeam = this.updater((state, value: boolean) => {
+    return {
+      ...state,
+      editExistingTeam: value,
+    };
+  });
+
   readonly resetCurrents = this.updater((state) => {
     return {
       ...state,
@@ -252,8 +293,9 @@ export class BuilderStore extends ComponentStore<BuilderState> {
       currentTeamIndex: 0,
       currentLearnset: null,
       currentTrainer: null,
-      editingPokemonIndex: -1, // Reset this as well
-      addToExistingTeam: false, // Reset this flag too
+      editingPokemonIndex: -1,
+      addToExistingTeam: false,
+      editExistingTeam: false,
     };
   });
 
@@ -271,7 +313,7 @@ export class BuilderStore extends ComponentStore<BuilderState> {
     }
 
     const updatedTeams = [...state.currentTrainer.teams];
-    updatedTeams.splice(teamIndex - 1, 1); // Adjust index for 0-based array
+    updatedTeams.splice(teamIndex - 1, 1);
 
     console.log('Deleted team at index:', teamIndex - 1);
     console.log('Updated teams count:', updatedTeams.length);
