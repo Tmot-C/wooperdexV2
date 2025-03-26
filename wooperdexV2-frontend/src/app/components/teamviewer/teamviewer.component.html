@@ -23,6 +23,17 @@
       >
         Save Team
       </button>
+
+      
+      <button
+        mat-raised-button
+        color="warn"
+        [disabled]="!currentTeam || currentTeam.length === 0 || isNewTeam"
+        (click)="deleteTeam()"
+        class="delete-button"
+      >
+        Delete Team
+      </button>
     </div>
   </div>
 

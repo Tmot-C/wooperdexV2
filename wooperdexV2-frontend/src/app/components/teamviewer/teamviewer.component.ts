@@ -35,7 +35,11 @@ export class TeamviewerComponent implements OnInit {
     // Get the team index from the route parameter
     this.route.params.subscribe((params) => {
       this.teamIndex = parseInt(params['id']) || 0;
+
+      // Set the current team index in the store
       this.store.setCurrentTeamIndex(this.teamIndex);
+
+      // Flag to check if we're editing a new team (index 0) or an existing one
       this.isNewTeam = this.teamIndex === 0;
 
       this.store.currentTrainer$.pipe(take(1)).subscribe((trainer) => {
@@ -51,35 +55,22 @@ export class TeamviewerComponent implements OnInit {
           // Load the team from trainer data
           const teamToLoad = trainer.teams[this.teamIndex - 1].team;
 
-          // Check if we're coming back from editing a specific Pokémon
-          this.store.editingPokemonIndex$
-            .pipe(take(1))
-            .subscribe((editIndex) => {
-              this.store.currentPokemon$
-                .pipe(take(1))
-                .subscribe((editedPokemon) => {
-                  // If we have both an edited Pokémon and a valid index
-                  if (
-                    editedPokemon &&
-                    editIndex >= 0 &&
-                    editIndex < teamToLoad.length
-                  ) {
-                    // Replace the Pokémon at the specified index
-                    const updatedTeam = [...teamToLoad];
-                    updatedTeam[editIndex] = editedPokemon;
+          console.log('Loading existing team:', this.teamIndex);
+          console.log('Team data:', teamToLoad);
 
-                    this.store.loadTeam(updatedTeam);
+          this.store.loadTeam(teamToLoad);
+        } else if (this.isNewTeam) {
+          // For new teams, initialize an empty array if needed
+          // This ensures we don't accidentally load old data
+          console.log('Creating new team');
 
-                    // Save the changes to the trainer
-                    this.store.saveTeamToTrainer();
-
-                    // Reset the editing state
-                    this.store.setEditingPokemonIndex(-1);
-                  } else {
-                    this.store.loadTeam(teamToLoad);
-                  }
-                });
-            });
+          // Check if there's already a current team in the store (from teambuilder)
+          this.store.currentTeam$.pipe(take(1)).subscribe((currentTeam) => {
+            if (!currentTeam || currentTeam.length === 0) {
+              // Only initialize an empty team if there isn't one already
+              this.store.loadTeam([]);
+            }
+          });
         }
       });
     });
@@ -87,6 +78,7 @@ export class TeamviewerComponent implements OnInit {
     this.store.currentTeam$.subscribe((team) => {
       this.currentTeam = team;
       this.teamCount = team ? team.length : 0;
+      console.log('Current team updated:', team);
     });
   }
 
@@ -152,8 +144,12 @@ export class TeamviewerComponent implements OnInit {
       return;
     }
 
-    // Update trainer in store
+    // This is the ONLY place where we should save the team to the trainer state
     this.store.saveTeamToTrainer();
+
+    // Debug log to verify the team is saved properly
+    console.log('Saving team at index:', this.teamIndex);
+    console.log('Team data:', this.currentTeam);
 
     // Save to backend
     this.store.currentTrainer$.pipe(take(1)).subscribe((updatedTrainer) => {
@@ -167,6 +163,9 @@ export class TeamviewerComponent implements OnInit {
         );
         return;
       }
+
+      // Verify the teams in the trainer before saving
+      console.log('Trainer teams before save:', updatedTrainer.teams);
 
       this.builderService.saveTrainer(updatedTrainer).subscribe({
         next: () => {
@@ -216,5 +215,53 @@ export class TeamviewerComponent implements OnInit {
 
   getTypeClass(type: string): string {
     return `type-${type.toLowerCase()}`;
+  }
+  deleteTeam(): void {
+    if (!this.currentTeam || !this.currentTrainer) {
+      return;
+    }
+
+    const confirmDelete = window.confirm(
+      'Are you sure you want to delete this entire team?'
+    );
+    if (!confirmDelete) {
+      return;
+    }
+
+    this.store.deleteTeamFromTrainer(this.teamIndex);
+
+    this.store.currentTrainer$.pipe(take(1)).subscribe((updatedTrainer) => {
+      if (!updatedTrainer) {
+        this.snackBar.open(
+          'Error deleting team: Trainer data not found',
+          'Close',
+          {
+            duration: 3000,
+          }
+        );
+        return;
+      }
+
+      this.builderService.saveTrainer(updatedTrainer).subscribe({
+        next: () => {
+          this.snackBar.open('Team deleted successfully!', 'Close', {
+            duration: 3000,
+          });
+
+          this.store.resetCurrents();
+          this.router.navigate(['/teams']);
+        },
+        error: (error) => {
+          console.error('Error saving changes to backend:', error);
+          this.snackBar.open(
+            'Error deleting team. Please try again.',
+            'Close',
+            {
+              duration: 3000,
+            }
+          );
+        },
+      });
+    });
   }
 }

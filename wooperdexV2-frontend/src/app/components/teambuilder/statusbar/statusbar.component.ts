@@ -62,16 +62,14 @@ export class StatusbarComponent implements OnInit {
       return;
     }
 
-    // Add the current Pokemon to the team in the store
+    // Add the current Pokemon to the team in the store WITHOUT saving to trainer
     this.store.addPokemonToTeam();
-
-    // Save team changes to the trainer object
-    this.store.saveTeamToTrainer();
 
     this.snackBar.open(`${this.currentPokemon.name} added to team!`, 'Close', {
       duration: 3000,
     });
 
+    // Navigate to team viewer without saving to the trainer yet
     this.router.navigate(['/teams', this.currentTeamIndex]);
   }
 

@@ -337,4 +337,43 @@
       flex-direction: column;
     }
   }
+
+  .team-actions {
+    display: flex;
+    gap: 16px;
+
+    .add-button,
+    .save-button,
+    .delete-button {
+      min-width: 120px;
+    }
+  }
+
+  /* For responsive layout */
+  @media (max-width: 768px) {
+    .team-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+
+      .team-actions {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+      }
+    }
+  }
+
+  @media (max-width: 576px) {
+    .team-actions {
+      flex-direction: column;
+      width: 100%;
+
+      .add-button,
+      .save-button,
+      .delete-button {
+        width: 100%;
+      }
+    }
+  }
 }

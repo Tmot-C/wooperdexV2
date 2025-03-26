@@ -72,7 +72,9 @@ export class BuilderStore extends ComponentStore<BuilderState> {
   readonly currentLearnset$ = this.select((state) => state.currentLearnset);
   readonly currentTrainer$ = this.select((state) => state.currentTrainer);
   readonly addToExistingTeam$ = this.select((state) => state.addToExistingTeam);
-  readonly editingPokemonIndex$ = this.select((state) => state.editingPokemonIndex);
+  readonly editingPokemonIndex$ = this.select(
+    (state) => state.editingPokemonIndex
+  );
 
   // updaters
   readonly setPokedex = this.updater((state, pokedex: Pokemon[]) => {
@@ -146,7 +148,7 @@ export class BuilderStore extends ComponentStore<BuilderState> {
   readonly setEditingPokemonIndex = this.updater((state, index: number) => {
     return {
       ...state,
-      editingPokemonIndex: index
+      editingPokemonIndex: index,
     };
   });
 
@@ -192,16 +194,20 @@ export class BuilderStore extends ComponentStore<BuilderState> {
   readonly saveTeamToTrainer = this.updater((state) => {
     // If there's no current team or trainer, return state unchanged
     if (!state.currentTeam || !state.currentTrainer) {
+      console.warn('Cannot save team: No current team or trainer found');
       return state;
     }
 
-    // Create a new Team object without team name (this assumes Team interface has been updated)
+    // Create a new Team object
     const newTeam: Team = {
       team: state.currentTeam,
     };
 
     // Copy the trainer's teams array or initialize if it doesn't exist
     const existingTeams = state.currentTrainer.teams || [];
+
+    console.log('Current team index:', state.currentTeamIndex);
+    console.log('Existing teams length:', existingTeams.length);
 
     let updatedTeams: Team[];
 
@@ -211,10 +217,15 @@ export class BuilderStore extends ComponentStore<BuilderState> {
       state.currentTeamIndex <= existingTeams.length
     ) {
       // Update existing team
+      console.log(
+        'Updating existing team at index:',
+        state.currentTeamIndex - 1
+      );
       updatedTeams = [...existingTeams];
       updatedTeams[state.currentTeamIndex - 1] = newTeam;
     } else {
       // Add new team
+      console.log('Adding new team');
       updatedTeams = [...existingTeams, newTeam];
     }
 
@@ -223,6 +234,8 @@ export class BuilderStore extends ComponentStore<BuilderState> {
       ...state.currentTrainer,
       teams: updatedTeams,
     };
+
+    console.log('Updated trainer teams count:', updatedTrainer!.teams!.length);
 
     // Return the updated state with the new trainer
     return {
@@ -241,6 +254,36 @@ export class BuilderStore extends ComponentStore<BuilderState> {
       currentTrainer: null,
       editingPokemonIndex: -1, // Reset this as well
       addToExistingTeam: false, // Reset this flag too
+    };
+  });
+
+  readonly deleteTeamFromTrainer = this.updater((state, teamIndex: number) => {
+    if (!state.currentTrainer || !state.currentTrainer.teams) {
+      console.warn(
+        'Cannot delete team: No trainer data found or no teams exist'
+      );
+      return state;
+    }
+
+    if (teamIndex <= 0 || teamIndex > state.currentTrainer.teams.length) {
+      console.warn('Cannot delete team: Invalid team index:', teamIndex);
+      return state;
+    }
+
+    const updatedTeams = [...state.currentTrainer.teams];
+    updatedTeams.splice(teamIndex - 1, 1); // Adjust index for 0-based array
+
+    console.log('Deleted team at index:', teamIndex - 1);
+    console.log('Updated teams count:', updatedTeams.length);
+
+    const updatedTrainer: Trainer = {
+      ...state.currentTrainer,
+      teams: updatedTeams,
+    };
+
+    return {
+      ...state,
+      currentTrainer: updatedTrainer,
     };
   });
 }
