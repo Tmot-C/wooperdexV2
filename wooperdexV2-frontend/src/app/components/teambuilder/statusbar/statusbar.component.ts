@@ -5,6 +5,7 @@ import { BuiltPokemon, BaseStats } from '../../../models';
 import { Observable } from 'rxjs';
 import { StatsService } from '../../../stats.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ImagePathService } from '../../../image-path.service';
 
 @Component({
   selector: 'app-statusbar',
@@ -18,6 +19,7 @@ export class StatusbarComponent implements OnInit {
   private router = inject(Router);
   private statsService = inject(StatsService);
   private snackBar = inject(MatSnackBar);
+  public imageService = inject(ImagePathService);
   
   currentPokemon$: Observable<BuiltPokemon | null> = this.store.currentPokemon$;
   currentPokemon: BuiltPokemon | null = null;
@@ -32,6 +34,7 @@ export class StatusbarComponent implements OnInit {
     // Subscribe to the current Pokémon from the store
     this.currentPokemon$.subscribe(pokemon => {
       this.currentPokemon = pokemon;
+      console.log('Current Pokemon:', pokemon?.id);
     });
     
     // Subscribe to the current team index

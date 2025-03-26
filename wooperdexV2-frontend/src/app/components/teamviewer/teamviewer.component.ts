@@ -6,6 +6,7 @@ import { BuiltPokemon, BaseStats, Team, Trainer } from '../../models';
 import { StatsService } from '../../stats.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { switchMap, take } from 'rxjs/operators';
+import { ImagePathService } from '../../image-path.service';
 
 @Component({
   selector: 'app-teamviewer',
@@ -20,6 +21,7 @@ export class TeamviewerComponent implements OnInit {
   private statsService = inject(StatsService);
   private snackBar = inject(MatSnackBar);
   private builderService = inject(BuilderService);
+  protected imageService = inject(ImagePathService);
   
   currentTeam: BuiltPokemon[] | null = null;
   currentTrainer: Trainer | null = null;
@@ -137,6 +139,7 @@ export class TeamviewerComponent implements OnInit {
           this.snackBar.open('Team saved successfully!', 'Close', {
             duration: 3000
           });
+          this.store.resetCurrents();
           this.router.navigate(['/teams']);
         },
         error: (error) => {

@@ -30,7 +30,7 @@ export class BuilderService{
     }
 
     getPokemonAnalysis(pokemon: string): Observable<string> {
-        return this.http.post(`/pokemon-analysis/${pokemon}`, { pokemon }, { responseType: 'text' });
+        return this.http.post(`/api/analysis/${pokemon}`, { pokemon }, { responseType: 'text' });
     }
 
     saveTrainer(trainer: Trainer): Observable<any> {

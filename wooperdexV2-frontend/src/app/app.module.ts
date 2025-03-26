@@ -20,6 +20,7 @@ import { StatselectComponent } from './components/teambuilder/statselect/statsel
 import { DexAIComponent } from './components/teambuilder/dex-ai/dex-ai.component';
 import { RouterModule } from '@angular/router';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,7 +43,8 @@ import { RouterModule } from '@angular/router';
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    MaterialModule
+    MaterialModule,
+    
   ],
   providers: [provideHttpClient()],
   bootstrap: [AppComponent]

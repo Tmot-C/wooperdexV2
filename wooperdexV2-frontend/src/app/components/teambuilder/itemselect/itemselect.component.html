@@ -10,7 +10,7 @@
       
       <div class="filter-section">
         <div class="filter-group">
-          <h3 class="filter-title">Category Filter</h3>
+          <div class="filter-title">Category Filter</div>
           <div class="category-buttons">
             <button 
               *ngFor="let category of categories"
@@ -35,20 +35,21 @@
       </div>
       
       <mat-card *ngFor="let item of filteredItems" class="item-card" (click)="selectItem(item)">
-        <div class="item-content">
-          <div class="item-sprite-placeholder">
-            {{ item.name.charAt(0) }}
-          </div>
-          <div class="item-details">
-            <div class="item-card-header">
+        <mat-card-content>
+          <div class="item-content">
+            <div class="item-sprite-container">
+              <img 
+                [src]="imageService.getItemSpritePath(item.id)" 
+                [alt]="item.name"
+                (error)="imageService.handleImageError($event)"
+                class="item-sprite">
+            </div>
+            <div class="item-details">
               <div class="item-name">{{ item.name }}</div>
-            </div>
-            
-            <div class="item-description">
-              <p>{{ item.shortDesc }}</p>
+              <div class="item-description">{{ item.shortDesc }}</div>
             </div>
           </div>
-        </div>
+        </mat-card-content>
       </mat-card>
     </div>
     

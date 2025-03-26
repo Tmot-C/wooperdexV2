@@ -10,7 +10,7 @@
       
       <div class="filter-section">
         <div class="filter-group">
-          <h3 class="filter-title">Type Filter</h3>
+          <div class="filter-title">Type Filter</div>
           <div class="type-buttons">
             <button 
               *ngFor="let type of currentPokemon.types"
@@ -23,7 +23,7 @@
         </div>
         
         <div class="filter-group">
-          <h3 class="filter-title">Category Filter</h3>
+          <div class="filter-title">Category Filter</div>
           <div class="category-buttons">
             <button 
               *ngFor="let category of categories"
@@ -48,20 +48,22 @@
       </div>
       
       <mat-card *ngFor="let move of filteredMoves" class="move-card" (click)="selectMove(move)">
-        <div class="move-card-header">
-          <div class="move-name">{{ move.name }}</div>
-          <div class="move-type" [ngClass]="'type-' + move.type.toLowerCase()">{{ move.type }}</div>
-        </div>
-        
-        <div class="move-details">
-          <div class="move-category" [ngClass]="'category-' + move.category.toLowerCase()">{{ move.category }}</div>
-          <div class="move-power" *ngIf="move.category !== 'Status'">Power: {{ move.basePower }}</div>
-          <div class="move-accuracy">Accuracy: {{ move.accuracy }}</div>
-          <div class="move-pp">PP: {{ move.pp }}</div>
-        </div>
-        
-        <div class="move-description">
-          <p>{{ move.shortDesc }}</p>
+        <div class="move-card-content">
+          <div class="move-header">
+            <span class="move-name">{{ move.name }}</span>
+          </div>
+          
+          <div class="move-details">
+            <span class="move-category" [ngClass]="'category-' + move.category.toLowerCase()">{{ move.category }}</span>
+            <span class="move-type" [ngClass]="'type-' + move.type.toLowerCase()">{{ move.type }}</span>
+            <span class="move-stat" *ngIf="move.category !== 'Status'">Power: {{ move.basePower }}</span>
+            <span class="move-stat">Accuracy: {{ move.accuracy }}</span>
+            <span class="move-stat">PP: {{ move.pp }}</span>
+          </div>
+          
+          <div class="move-description">
+            {{ move.shortDesc }}
+          </div>
         </div>
       </mat-card>
     </div>

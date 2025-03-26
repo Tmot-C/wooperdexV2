@@ -5,9 +5,20 @@
       <div class="status-sections">
         <!-- Pokemon Section -->
         <div class="pokemon-section" (click)="navigateToPokemonSelect()">
-          <div class="sprite-placeholder">
-            {{ currentPokemon?.name ? currentPokemon!.name!.charAt(0) : '?' }}
-          </div>
+            <div class="sprite-container">
+                <img 
+                  *ngIf="currentPokemon?.id;"
+                  [src]="imageService.getPokemonSpritePath(currentPokemon!.id)" 
+                  [alt]="currentPokemon?.name || 'Pokemon'"
+                  (error)="imageService.handleImageError($event)"
+                  class="pokemon-sprite">
+                
+                <ng-template #placeholderTpl>
+                  <div class="sprite-placeholder">
+                    {{ currentPokemon?.name ? currentPokemon!.name!.charAt(0) : '?' }}
+                  </div>
+                </ng-template>
+              </div>
           
           <div class="pokemon-info">
             <div class="pokemon-name">{{ currentPokemon?.name || 'Select a Pokémon' }}</div>

@@ -133,6 +133,22 @@
     align-items: center;
     gap: 8px;
     
+    .sprite-container {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin-right: 8px;
+      
+      .pokemon-sprite {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+      }
+    }
+    
     .sprite-placeholder {
       width: 32px;
       height: 32px;

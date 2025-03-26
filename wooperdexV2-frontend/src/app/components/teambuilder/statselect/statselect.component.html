@@ -2,7 +2,7 @@
 <div class="stats-container" *ngIf="currentPokemon">
     <div class="stats-header-section">
       <div class="stats-title">
-        <h3>Stats Configuration</h3>
+        <div>Stats Configuration</div>
         <div class="stats-actions">
           <span class="ev-remaining">(EVs Remaining: {{ getRemainingEvs() }})</span>
           <button mat-button color="warn" class="action-button" (click)="resetEvs()">Reset EVs</button>

@@ -1,1 +1,35 @@
-<p>navbar works!</p>
+<div class="navbar-container">
+    <div class="logo-section">
+      <div class="logo-wrapper">
+        <img src="favicon.ico" alt="WooperDex Logo" class="logo-image" />
+      </div>
+      <h1 class="app-title">WooperDex</h1>
+    </div>
+    
+    <div class="nav-links">
+      <button 
+        mat-button 
+        class="nav-link" 
+        (click)="navigateToTeams()" 
+        *ngIf="!isTeamsPage">
+        My Teams
+      </button>
+      
+      <!-- Analysis button - only shown in teambuilder when a Pokémon is selected -->
+      <button 
+        mat-raised-button 
+        color="accent"
+        class="analysis-button" 
+        *ngIf="isTeambuilderPage && currentPokemon?.name"
+        (click)="showPokemonAnalysis()">
+        Analyze {{ currentPokemon?.name }}
+      </button>
+    </div>
+    
+    <div class="user-section">
+      <span class="user-name" *ngIf="currentUser">{{ currentUser.name }}</span>
+      <button mat-raised-button class="logout-button" color="warn" (click)="logout()">
+        Logout
+      </button>
+    </div>
+  </div>

@@ -1,0 +1,23 @@
+::ng-deep .mat-mdc-dialog-container {
+    --mdc-dialog-container-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  mat-dialog-content {
+    max-height: 60vh;
+    padding: 16px;
+  }
+  
+  .analysis-content {
+    p {
+      white-space: pre-line;
+      line-height: 1.6;
+      margin: 0;
+      font-size: 16px;
+    }
+  }
+  
+  mat-dialog-actions {
+    padding: 8px 16px 16px;
+  }

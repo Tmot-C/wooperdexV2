@@ -7,6 +7,7 @@ import { BuilderStore } from '../../../builder.store';
 import { BuilderService } from '../../../builder.service';
 import { Pokemon, BaseStats } from '../../../models';
 import { POKEMON_TYPES, POKEMON_TIERS, ALL_POKEMON_TIERS, TIER_GROUPS } from '../../../constants';
+import { ImagePathService } from '../../../image-path.service';
 
 @Component({
   selector: 'app-pokemonselect',
@@ -19,6 +20,7 @@ export class PokemonselectComponent implements OnInit {
   private store = inject(BuilderStore);
   private builderService = inject(BuilderService);
   private router = inject(Router);
+  public imageService = inject(ImagePathService);
   
   searchControl = new FormControl('');
   pokemonList: Pokemon[] = [];

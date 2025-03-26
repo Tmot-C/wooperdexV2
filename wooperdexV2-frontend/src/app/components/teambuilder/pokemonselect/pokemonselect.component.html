@@ -11,7 +11,7 @@
       
       <div class="filter-section">
         <div class="filter-group">
-          <h3 class="filter-title">Type Filter</h3>
+          <div class="filter-title">Type Filter</div>
           <div class="type-buttons">
             <button 
               *ngFor="let type of types"
@@ -24,7 +24,7 @@
         </div>
         
         <div class="filter-group">
-          <h3 class="filter-title">Tier Filter</h3>
+          <div class="filter-title">Tier Filter</div>
           <div class="tier-buttons">
             <button 
               *ngFor="let tier of tiers"
@@ -62,8 +62,14 @@
           <th mat-header-cell *matHeaderCellDef>Pokémon</th>
           <td mat-cell *matCellDef="let pokemon">
             <div class="pokemon-cell">
-              <div class="sprite-placeholder">{{ pokemon.name.charAt(0) }}</div>
-              <div class="pokemon-name-number">
+                <div class="sprite-container">
+                    <img 
+                      [src]="imageService.getPokemonSpritePath(pokemon.id)" 
+                      [alt]="pokemon.name"
+                      (error)="imageService.handleImageError($event)"
+                      class="pokemon-sprite">
+                </div>
+                <div class="pokemon-name-number">
                 <span class="pokemon-name">{{ pokemon.name }}</span>
                 <span class="pokemon-number">#{{ pokemon.num }}</span>
               </div>

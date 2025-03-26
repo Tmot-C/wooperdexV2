@@ -2,7 +2,7 @@
     <app-navbar></app-navbar>
     
     <div class="team-header">
-      <h1>Your Team</h1>
+      <div>Your Team</div>
       <div class="team-actions">
         <button 
           mat-raised-button
@@ -35,9 +35,13 @@
           <div class="card-content">
             <!-- Pokemon Info Section -->
             <div class="pokemon-section" (click)="editPokemon(i)">
-              <div class="sprite-placeholder">
-                {{ pokemon.name?.charAt(0) || '?' }}
-              </div>
+                <div class="sprite-container">
+                    <img 
+                      [src]="imageService.getPokemonSpritePath(pokemon.id)" 
+                      [alt]="pokemon.name || 'Pokemon'"
+                      (error)="imageService.handleImageError($event)"
+                      class="pokemon-sprite">
+                  </div>
               
               <div class="pokemon-info">
                 <div class="pokemon-name">{{ pokemon.name || 'Unknown' }}</div>

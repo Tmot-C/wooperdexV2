@@ -12,7 +12,7 @@ import {
   signInWithPopup,
   signInWithRedirect,
   signOut,
-  updateProfile
+  updateProfile,
 } from 'firebase/auth';
 import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
 import { firebaseConfig } from '../firebase-config';
@@ -27,19 +27,19 @@ interface UserData {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FirebaseAuthService {
   private app = initializeApp(firebaseConfig);
   private auth = getAuth(this.app);
-  private currentUserSubject = new BehaviorSubject<UserData | null>(this.loadStoredUser());
-  public currentUser$: Observable<UserData | null> = this.currentUserSubject.asObservable();
+  private currentUserSubject = new BehaviorSubject<UserData | null>(
+    this.loadStoredUser()
+  );
+  public currentUser$: Observable<UserData | null> =
+    this.currentUserSubject.asObservable();
   private isProcessingRedirect = false;
 
-  constructor(
-    private router: Router,
-    private http: HttpClient
-  ) {
+  constructor(private router: Router, private http: HttpClient) {
     this.setupAuthStateListener();
     this.handleRedirectResult();
   }
@@ -62,13 +62,15 @@ export class FirebaseAuthService {
 
   /** Listens for Firebase auth state changes */
   private setupAuthStateListener(): void {
-    this.auth.onAuthStateChanged(user => user ? this.syncUserWithBackend(user) : this.saveUser(null));
+    this.auth.onAuthStateChanged((user) =>
+      user ? this.syncUserWithBackend(user) : this.saveUser(null)
+    );
   }
 
   async getIdToken(): Promise<string | null> {
     const user = this.auth.currentUser;
     if (!user) return null;
-    
+
     try {
       return await user.getIdToken();
     } catch (error) {
@@ -96,15 +98,25 @@ export class FirebaseAuthService {
   }
 
   /** Sign in with email/password */
-  async signInWithEmailandPassword(email: string, password: string): Promise<UserData> {
-    const credential = await signInWithEmailAndPassword(this.auth, email, password);
+  async signInWithEmailandPassword(
+    email: string,
+    password: string
+  ): Promise<UserData> {
+    const credential = await signInWithEmailAndPassword(
+      this.auth,
+      email,
+      password
+    );
     return this.syncUserWithBackend(credential.user);
   }
 
   /** Sign in with Google */
   async signInWithGoogle(): Promise<UserData | null> {
     const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: 'select_account', display: 'popup' });
+    provider.setCustomParameters({
+      prompt: 'select_account',
+      display: 'popup',
+    });
 
     try {
       const result = await signInWithPopup(this.auth, provider);
@@ -112,7 +124,10 @@ export class FirebaseAuthService {
     } catch (error: any) {
       console.error('Google Sign-In Error:', error);
 
-      if (error.code === 'auth/popup-blocked' || error.message?.includes('Cross-Origin-Opener-Policy')) {
+      if (
+        error.code === 'auth/popup-blocked' ||
+        error.message?.includes('Cross-Origin-Opener-Policy')
+      ) {
         await signInWithRedirect(this.auth, provider);
       }
       return null;
@@ -134,10 +149,18 @@ export class FirebaseAuthService {
     return !!this.currentUserSubject.value;
   }
 
-    /** Sign up with email/password */
-  async signUpWithEmailandPassword(email: string, password: string, displayName?: string): Promise<UserData> {
+  /** Sign up with email/password */
+  async signUpWithEmailandPassword(
+    email: string,
+    password: string,
+    displayName?: string
+  ): Promise<UserData> {
     try {
-      const credential = await createUserWithEmailAndPassword(this.auth, email, password);
+      const credential = await createUserWithEmailAndPassword(
+        this.auth,
+        email,
+        password
+      );
       if (displayName) {
         await updateProfile(credential.user, { displayName });
       }
@@ -148,20 +171,23 @@ export class FirebaseAuthService {
     }
   }
 
-  private async syncUserWithBackend(firebaseUser: FirebaseUser, displayName?: string): Promise<UserData> {
+  private async syncUserWithBackend(
+    firebaseUser: FirebaseUser,
+    displayName?: string
+  ): Promise<UserData> {
     if (!firebaseUser) throw new Error('No Firebase user');
-  
+
     const idToken = await firebaseUser.getIdToken();
-    
+
     const userData: UserData = {
       id: firebaseUser.uid,
       name: displayName || firebaseUser.displayName || 'User',
       email: firebaseUser.email,
       photoURL: firebaseUser.photoURL,
       emailVerified: firebaseUser.emailVerified,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
-  
+
     try {
       const response = await firstValueFrom(
         //post to save data
@@ -169,10 +195,10 @@ export class FirebaseAuthService {
           firebaseId: userData.id,
           email: userData.email,
           name: userData.name,
-          idToken: idToken // Send the ID token to the backend
+          idToken: idToken, // Send the ID token to the backend
         })
       );
-  
+
       this.saveUser(userData);
       return userData;
     } catch (error) {
@@ -181,6 +207,4 @@ export class FirebaseAuthService {
       return userData;
     }
   }
-
-
 }

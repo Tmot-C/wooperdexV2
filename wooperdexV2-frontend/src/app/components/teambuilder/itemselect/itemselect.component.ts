@@ -5,6 +5,7 @@ import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { BuilderStore } from '../../../builder.store';
 import { Item, BuiltPokemon } from '../../../models';
+import { ImagePathService } from '../../../image-path.service';
 
 @Component({
   selector: 'app-itemselect',
@@ -15,6 +16,7 @@ import { Item, BuiltPokemon } from '../../../models';
 export class ItemselectComponent implements OnInit {
   private store = inject(BuilderStore);
   private router = inject(Router);
+  public imageService = inject(ImagePathService);
   
   searchControl = new FormControl('');
   currentPokemon: BuiltPokemon | null = null;
