@@ -8,33 +8,29 @@ import { Trainer, Team, BuiltPokemon } from '../../models';
 import { Observable } from 'rxjs';
 import { ImagePathService } from '../../image-path.service';
 
-
-
 @Component({
   selector: 'app-overview',
   standalone: false,
   templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.scss']
+  styleUrls: ['./overview.component.scss'],
 })
 export class OverviewComponent implements OnInit {
-  
   private authService = inject(FirebaseAuthService);
   private builderService = inject(BuilderService);
   private store = inject(BuilderStore);
   private router = inject(Router);
   private imageService = inject(ImagePathService);
-  
+
   trainer$: Observable<Trainer | null> = this.store.currentTrainer$;
   teams: Team[] = [];
   isLoading: boolean = true;
   loadError: string | null = null;
-  
+
   ngOnInit(): void {
     this.store.resetCurrents();
     this.isLoading = true;
-    
-    // Subscribe to the authenticated user and store as current trainer
-    this.authService.currentUser$.subscribe(user => {
+
+    this.authService.currentUser$.subscribe((user) => {
       if (user) {
         this.loadTrainerData(user.id);
       } else {
@@ -44,19 +40,17 @@ export class OverviewComponent implements OnInit {
       }
     });
 
-    // Subscribe to the store to get the current trainer
-    this.trainer$.subscribe(trainer => {
+    this.trainer$.subscribe((trainer) => {
       if (trainer) {
         this.teams = trainer.teams || [];
         this.isLoading = false;
       }
     });
   }
-  
+
   loadTrainerData(userId: string): void {
     this.builderService.getTrainer(userId).subscribe({
       next: (trainerData) => {
-        // Update the store with the trainer data
         this.store.updateCurrentTrainer(trainerData);
         this.isLoading = false;
       },
@@ -64,43 +58,36 @@ export class OverviewComponent implements OnInit {
         console.error('Error loading trainer data:', error);
         this.loadError = 'Failed to load your teams. Please try again later.';
         this.isLoading = false;
-      }
+      },
     });
   }
-  
+
   navigateToTeamBuilder(): void {
-    // For a new team, use index 0
     this.store.setCurrentTeamIndex(0);
-    
-    // Initialize an empty team
+
     this.store.loadTeam([]);
-    
-    // Navigate to the team builder for creating a new Pokémon
+
     this.router.navigate(['/teambuilder/pokemon']);
   }
-  
+
   viewTeam(index: number): void {
-    // Calculate the team index for the router
-    // Index in UI is 0-based, but in routing we use 1-based for existing teams
     const teamIndex = index + 1;
-    
-    // Navigate to the team viewer with the correct index
+
+    // Navigate to the team viewer with the team index
     this.router.navigate(['/teams', teamIndex]);
   }
 
-    // Get the Pokémon sprite path
-    getPokemonSpritePath(pokemonId: string | null): string {
-      return this.imageService.getPokemonSpritePath(pokemonId);
-    }
-    
-    // Handle image loading errors
-    handleImageError(event: any): void {
-      this.imageService.handleImageError(event);
-    }
-    
-    // Calculate empty slots to display placeholders
-    getEmptySlots(teamPokemon: BuiltPokemon[]): number[] {
-      const emptyCount = 6 - (teamPokemon?.length || 0);
-      return emptyCount > 0 ? Array(emptyCount).fill(0) : [];
-    }
+  getPokemonSpritePath(pokemonId: string | null): string {
+    return this.imageService.getPokemonSpritePath(pokemonId);
+  }
+
+  handleImageError(event: any): void {
+    this.imageService.handleImageError(event);
+  }
+
+  // Calculate empty slots to display placeholders
+  getEmptySlots(teamPokemon: BuiltPokemon[]): number[] {
+    const emptyCount = 6 - (teamPokemon?.length || 0);
+    return emptyCount > 0 ? Array(emptyCount).fill(0) : [];
+  }
 }

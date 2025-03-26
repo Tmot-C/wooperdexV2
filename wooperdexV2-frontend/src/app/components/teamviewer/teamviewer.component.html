@@ -1,144 +1,181 @@
 <div class="teamviewer-container">
-    <app-navbar></app-navbar>
-    
-    <div class="team-header">
-      <div>Your Team</div>
-      <div class="team-actions">
-        <button 
-          mat-raised-button
-          color="primary" 
-          [disabled]="teamCount >= 6" 
-          (click)="addNewPokemon()"
-          class="add-button">
-          Add Pokémon
-        </button>
-        
-        <button 
-          mat-raised-button
-          color="accent" 
-          [disabled]="!currentTeam || currentTeam.length === 0" 
-          (click)="saveTeam()"
-          class="save-button">
-          Save Team
-        </button>
-      </div>
-    </div>
-    
-    <div class="empty-team" *ngIf="!currentTeam || currentTeam.length === 0">
-      <p>Your team is empty. Click "Add Pokémon" to get started!</p>
-    </div>
-    
-    <div class="team-list" *ngIf="currentTeam && currentTeam.length > 0">
-      <!-- Improved Pokémon Card Display -->
-      <div class="team-member" *ngFor="let pokemon of currentTeam; let i = index">
-        <mat-card class="pokemon-card">
-          <div class="card-content">
-            <!-- Pokemon Info Section -->
-            <div class="pokemon-section" (click)="editPokemon(i)">
-                <div class="sprite-container">
-                    <img 
-                      [src]="imageService.getPokemonSpritePath(pokemon.id)" 
-                      [alt]="pokemon.name || 'Pokemon'"
-                      (error)="imageService.handleImageError($event)"
-                      class="pokemon-sprite">
-                  </div>
-              
-              <div class="pokemon-info">
-                <div class="pokemon-name">{{ pokemon.name || 'Unknown' }}</div>
-                
-                <!-- Type badges -->
-                <div *ngIf="pokemon.types" class="types-container">
-                  <div *ngFor="let type of pokemon.types" class="type-badge" [ngClass]="getTypeClass(type)">
-                    {{ type }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Details Section -->
-            <div class="details-section">
-              <!-- Item and Ability Section -->
-              <div class="item-ability-section">
-                <div class="info-card">
-                  Item: {{ pokemon.item || 'None' }}
-                </div>
-                <div class="info-card">
-                  Ability: {{ pokemon.chosenAbility || 'None' }}
-                </div>
-              </div>
-              
-              <!-- Moves Section -->
-              <div class="moves-section">
-                <div class="move-slot">{{ pokemon.move1 || 'Move 1' }}</div>
-                <div class="move-slot">{{ pokemon.move2 || 'Move 2' }}</div>
-                <div class="move-slot">{{ pokemon.move3 || 'Move 3' }}</div>
-                <div class="move-slot">{{ pokemon.move4 || 'Move 4' }}</div>
-              </div>
-              
-              <!-- Stats Section -->
-              <div class="stats-section">
-                <div class="stat-row">
-                  <div class="stat-label">HP</div>
-                  <mat-progress-bar 
-                    [value]="pokemon.baseStats ? getStatPercentage(getStat(pokemon.baseStats, 'hp')) : 0" 
-                    color="warn">
-                  </mat-progress-bar>
-                </div>
-                
-                <div class="stat-row">
-                  <div class="stat-label">Atk</div>
-                  <mat-progress-bar 
-                    [value]="pokemon.baseStats ? getStatPercentage(getStat(pokemon.baseStats, 'atk')) : 0" 
-                    color="accent">
-                  </mat-progress-bar>
-                </div>
-                
-                <div class="stat-row">
-                  <div class="stat-label">Def</div>
-                  <mat-progress-bar 
-                    [value]="pokemon.baseStats ? getStatPercentage(getStat(pokemon.baseStats, 'def')) : 0" 
-                    color="primary">
-                  </mat-progress-bar>
-                </div>
-                
-                <div class="stat-row">
-                  <div class="stat-label">SpA</div>
-                  <mat-progress-bar 
-                    [value]="pokemon.baseStats ? getStatPercentage(getStat(pokemon.baseStats, 'spa')) : 0" 
-                    color="accent">
-                  </mat-progress-bar>
-                </div>
-                
-                <div class="stat-row">
-                  <div class="stat-label">SpD</div>
-                  <mat-progress-bar 
-                    [value]="pokemon.baseStats ? getStatPercentage(getStat(pokemon.baseStats, 'spd')) : 0" 
-                    color="primary">
-                  </mat-progress-bar>
-                </div>
-                
-                <div class="stat-row">
-                  <div class="stat-label">Spe</div>
-                  <mat-progress-bar 
-                    [value]="pokemon.baseStats ? getStatPercentage(getStat(pokemon.baseStats, 'spe')) : 0" 
-                    color="warn">
-                  </mat-progress-bar>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Action buttons -->
-            <div class="card-actions">
-              <button mat-button color="primary" (click)="editPokemon(i)" class="edit-button">
-                Edit
-              </button>
-              
-              <button mat-button color="warn" (click)="removePokemon(i)" class="remove-button">
-                Remove
-              </button>
-            </div>
-          </div>
-        </mat-card>
-      </div>
+  <app-navbar></app-navbar>
+
+  <div class="team-header">
+    <div>Your Team</div>
+    <div class="team-actions">
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="teamCount >= 6"
+        (click)="addNewPokemon()"
+        class="add-button"
+      >
+        Add Pokémon
+      </button>
+
+      <button
+        mat-raised-button
+        color="accent"
+        [disabled]="!currentTeam || currentTeam.length === 0"
+        (click)="saveTeam()"
+        class="save-button"
+      >
+        Save Team
+      </button>
     </div>
   </div>
+
+  <div class="empty-team" *ngIf="!currentTeam || currentTeam.length === 0">
+    <p>Your team is empty. Click "Add Pokémon" to get started!</p>
+  </div>
+
+  <div class="team-list" *ngIf="currentTeam && currentTeam.length > 0">
+    <div class="team-member" *ngFor="let pokemon of currentTeam; let i = index">
+      <mat-card class="pokemon-card">
+        <div class="card-content">
+          <div class="pokemon-section" (click)="editPokemon(i)">
+            <div class="sprite-container">
+              <img
+                [src]="imageService.getPokemonSpritePath(pokemon.id)"
+                [alt]="pokemon.name || 'Pokemon'"
+                (error)="imageService.handleImageError($event)"
+                class="pokemon-sprite"
+              />
+            </div>
+
+            <div class="pokemon-info">
+              <div class="pokemon-name">{{ pokemon.name || "Unknown" }}</div>
+
+              <div *ngIf="pokemon.types" class="types-container">
+                <div
+                  *ngFor="let type of pokemon.types"
+                  class="type-badge"
+                  [ngClass]="getTypeClass(type)"
+                >
+                  {{ type }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="details-section">
+            <div class="item-ability-section">
+              <div class="info-card">Item: {{ pokemon.item || "None" }}</div>
+              <div class="info-card">
+                Ability: {{ pokemon.chosenAbility || "None" }}
+              </div>
+            </div>
+
+            <div class="moves-section">
+              <div class="move-slot">{{ pokemon.move1 || "Move 1" }}</div>
+              <div class="move-slot">{{ pokemon.move2 || "Move 2" }}</div>
+              <div class="move-slot">{{ pokemon.move3 || "Move 3" }}</div>
+              <div class="move-slot">{{ pokemon.move4 || "Move 4" }}</div>
+            </div>
+
+            <div class="stats-section">
+              <div class="stat-row">
+                <div class="stat-label">HP</div>
+                <mat-progress-bar
+                  [value]="
+                    pokemon.baseStats
+                      ? getStatPercentage(getStat(pokemon.baseStats, 'hp'))
+                      : 0
+                  "
+                  color="warn"
+                >
+                </mat-progress-bar>
+              </div>
+
+              <div class="stat-row">
+                <div class="stat-label">Atk</div>
+                <mat-progress-bar
+                  [value]="
+                    pokemon.baseStats
+                      ? getStatPercentage(getStat(pokemon.baseStats, 'atk'))
+                      : 0
+                  "
+                  color="accent"
+                >
+                </mat-progress-bar>
+              </div>
+
+              <div class="stat-row">
+                <div class="stat-label">Def</div>
+                <mat-progress-bar
+                  [value]="
+                    pokemon.baseStats
+                      ? getStatPercentage(getStat(pokemon.baseStats, 'def'))
+                      : 0
+                  "
+                  color="primary"
+                >
+                </mat-progress-bar>
+              </div>
+
+              <div class="stat-row">
+                <div class="stat-label">SpA</div>
+                <mat-progress-bar
+                  [value]="
+                    pokemon.baseStats
+                      ? getStatPercentage(getStat(pokemon.baseStats, 'spa'))
+                      : 0
+                  "
+                  color="accent"
+                >
+                </mat-progress-bar>
+              </div>
+
+              <div class="stat-row">
+                <div class="stat-label">SpD</div>
+                <mat-progress-bar
+                  [value]="
+                    pokemon.baseStats
+                      ? getStatPercentage(getStat(pokemon.baseStats, 'spd'))
+                      : 0
+                  "
+                  color="primary"
+                >
+                </mat-progress-bar>
+              </div>
+
+              <div class="stat-row">
+                <div class="stat-label">Spe</div>
+                <mat-progress-bar
+                  [value]="
+                    pokemon.baseStats
+                      ? getStatPercentage(getStat(pokemon.baseStats, 'spe'))
+                      : 0
+                  "
+                  color="warn"
+                >
+                </mat-progress-bar>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button
+              mat-button
+              color="primary"
+              (click)="editPokemon(i)"
+              class="edit-button"
+            >
+              Edit
+            </button>
+
+            <button
+              mat-button
+              color="warn"
+              (click)="removePokemon(i)"
+              class="remove-button"
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</div>

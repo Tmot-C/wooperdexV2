@@ -1,23 +1,24 @@
 <div class="ability-container" *ngIf="currentPokemon">
-    
-    <div class="abilities-list">
-      <mat-card *ngFor="let ability of availableAbilities" 
-                class="ability-card"
-                (click)="selectAbility(ability)">
-        <mat-card-content>
-          <div>{{ ability.name }}</div>
-          <p>{{ ability.shortDesc }}</p>
-          <span class="rating">Rating: {{ ability.rating }}</span>
-        </mat-card-content>
-      </mat-card>
-    </div>
-    
-    <div class="button-row">
-      <button mat-button (click)="goBack()">Back</button>
-    </div>
+  <div class="abilities-list">
+    <mat-card
+      *ngFor="let ability of availableAbilities"
+      class="ability-card"
+      (click)="selectAbility(ability)"
+    >
+      <mat-card-content>
+        <div>{{ ability.name }}</div>
+        <p>{{ ability.shortDesc }}</p>
+        <span class="rating">Rating: {{ ability.rating }}</span>
+      </mat-card-content>
+    </mat-card>
   </div>
-  
-  <div class="no-pokemon" *ngIf="!currentPokemon">
-    <p>Please select a Pokémon first</p>
-    <button mat-button (click)="goBack()">Back to Pokémon Selection</button>
+
+  <div class="button-row">
+    <button mat-button (click)="goBack()">Back</button>
   </div>
+</div>
+
+<div class="no-pokemon" *ngIf="!currentPokemon">
+  <p>Please select a Pokémon first</p>
+  <button mat-button (click)="goBack()">Back to Pokémon Selection</button>
+</div>

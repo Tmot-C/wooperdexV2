@@ -1,138 +1,139 @@
 .item-container {
-    padding: 16px;
+  padding: 16px;
+}
+
+.search-filter-card {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 16px;
+
+  .search-field {
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 14px;
   }
-  
-  .search-filter-card {
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 16px;
-    
-    .search-field {
-      width: 100%;
-      margin-bottom: 10px;
+}
+
+.filter-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  .filter-group {
+    flex: 1;
+    min-width: 200px;
+
+    .filter-title {
+      margin-top: 0;
+      margin-bottom: 5px;
       font-size: 14px;
     }
-  }
-  
-  .filter-section {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    
-    .filter-group {
-      flex: 1;
-      min-width: 200px;
-      
-      .filter-title {
-        margin-top: 0;
-        margin-bottom: 5px;
-        font-size: 14px;
-      }
-      
-      .category-buttons {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 2px;
-      }
-    }
-    
-    .clear-button {
-      align-self: flex-end;
-    }
-  }
-  
-  .category-button {
-    min-width: auto;
-    line-height: 20px;
-    padding: 0 5px;
-    margin: 2px;
-    font-size: 11px;
-    
-    &.selected {
-      background-color: #3f51b5;
-      color: white;
-    }
-  }
-  
-  .items-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 16px;
-    max-height: 500px;
-    overflow-y: auto;
-  }
-  
-  .item-card {
-    cursor: pointer;
-    transition: background-color 0.2s;
-    
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.04);
-    }
-    
-    mat-card-content {
-      padding: 8px 8px 8px 12px !important;
-    }
-    
-    .item-content {
+
+    .category-buttons {
       display: flex;
-      align-items: flex-start;
-      width: 100%;
-    }
-    
-    .item-sprite-container {
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-right: 16px;
-      
-      .item-sprite {
-        width: 36px;
-        height: 36px;
-        object-fit: contain;
-      }
-    }
-    
-    .item-details {
-      flex: 1;
-      padding-top: 2px;
-    }
-    
-    .item-name {
-      font-weight: bold;
-      font-size: 16px;
-      margin-bottom: 4px;
-    }
-    
-    .item-description {
-      font-size: 14px;
-      color: rgba(0, 0, 0, 0.7);
-      line-height: 1.4;
+      flex-wrap: wrap;
+      gap: 2px;
     }
   }
-  
-  .button-row {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 16px;
+
+  .clear-button {
+    align-self: flex-end;
   }
-  
-  .no-results, .no-pokemon {
+}
+
+.category-button {
+  min-width: auto;
+  line-height: 20px;
+  padding: 0 5px;
+  margin: 2px;
+  font-size: 11px;
+
+  &.selected {
+    background-color: #3f51b5;
+    color: white;
+  }
+}
+
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.item-card {
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+
+  mat-card-content {
+    padding: 8px 8px 8px 12px !important;
+  }
+
+  .item-content {
     display: flex;
-    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .item-sprite-container {
+    width: 40px;
+    height: 40px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px;
-    
-    mat-icon {
-      font-size: 48px;
-      width: 48px;
-      height: 48px;
-      margin-bottom: 16px;
+    flex-shrink: 0;
+    margin-right: 16px;
+
+    .item-sprite {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
     }
   }
+
+  .item-details {
+    flex: 1;
+    padding-top: 2px;
+  }
+
+  .item-name {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .item-description {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.7);
+    line-height: 1.4;
+  }
+}
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.no-results,
+.no-pokemon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+}

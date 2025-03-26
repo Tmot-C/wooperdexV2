@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   selector: 'app-dex-ai',
   standalone: false,
   templateUrl: './dex-ai.component.html',
-  styleUrl: './dex-ai.component.scss'
+  styleUrl: './dex-ai.component.scss',
 })
 export class DexAIComponent {
   constructor(

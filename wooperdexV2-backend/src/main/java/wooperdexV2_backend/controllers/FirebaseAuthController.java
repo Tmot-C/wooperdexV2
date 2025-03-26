@@ -2,8 +2,6 @@ package wooperdexV2_backend.controllers;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +32,7 @@ public class FirebaseAuthController {
         String email = payload.get("email");
         String name = payload.get("name");
 
-        // Debug logs for incoming request data
+        // Debugging logs
         System.out.println("==== Firebase Auth Request ====");
         System.out.println("firebaseId: " + firebaseId);
         System.out.println("email: " + email);
@@ -43,12 +41,13 @@ public class FirebaseAuthController {
         System.out.println("name is empty: " + (name != null && name.isEmpty()));
         System.out.println("===========================");
 
-        // Validate required fields
+        
         if (firebaseId == null || email == null) {
             System.out.println("ERROR: Firebase ID or email is missing");
             return ResponseEntity.badRequest().body("Firebase ID and email are required");
         }
-
+        
+        //Save if new
         if(!userRepo.exists(firebaseId) || !mongoRepo.exists(firebaseId)){
 
             User newUser = new User();

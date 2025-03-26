@@ -11,38 +11,34 @@ import { ImagePathService } from '../../../image-path.service';
   selector: 'app-statusbar',
   standalone: false,
   templateUrl: './statusbar.component.html',
-  styleUrl: './statusbar.component.scss'
+  styleUrl: './statusbar.component.scss',
 })
-
 export class StatusbarComponent implements OnInit {
   private store = inject(BuilderStore);
   private router = inject(Router);
   private statsService = inject(StatsService);
   private snackBar = inject(MatSnackBar);
   public imageService = inject(ImagePathService);
-  
+
   currentPokemon$: Observable<BuiltPokemon | null> = this.store.currentPokemon$;
   currentPokemon: BuiltPokemon | null = null;
   currentTeamIndex: number = 0;
-  
-  // Track which tab is active for navigation
+
+  // Tab tracker
   activeTab: 'pokemon' | 'item' | 'ability' | 'moves' | 'stats' = 'pokemon';
-  
+
   constructor() {}
-  
+
   ngOnInit(): void {
-    // Subscribe to the current Pokémon from the store
-    this.currentPokemon$.subscribe(pokemon => {
+    this.currentPokemon$.subscribe((pokemon) => {
       this.currentPokemon = pokemon;
       console.log('Current Pokemon:', pokemon?.id);
     });
-    
-    // Subscribe to the current team index
-    this.store.currentTeamIndex$.subscribe(index => {
+
+    this.store.currentTeamIndex$.subscribe((index) => {
       this.currentTeamIndex = index;
     });
-    
-    // Determine active tab based on the current route
+
     const currentUrl = this.router.url;
     if (currentUrl.includes('/pokemon')) {
       this.activeTab = 'pokemon';
@@ -56,7 +52,7 @@ export class StatusbarComponent implements OnInit {
       this.activeTab = 'item';
     }
   }
-  
+
   // Save Pokemon to team
   savePokemonToTeam(): void {
     if (!this.currentPokemon || !this.currentPokemon.name) {
@@ -65,77 +61,79 @@ export class StatusbarComponent implements OnInit {
       });
       return;
     }
-    
+
     // Add the current Pokemon to the team in the store
     this.store.addPokemonToTeam();
-    
+
     // Save team changes to the trainer object
     this.store.saveTeamToTrainer();
-    
-    // Show success message
+
     this.snackBar.open(`${this.currentPokemon.name} added to team!`, 'Close', {
       duration: 3000,
     });
-    
-    // Navigate to team viewer
+
     this.router.navigate(['/teams', this.currentTeamIndex]);
   }
-  
-  
-  // Navigation methods
+
+  // Extra navigation methods for clicking
   navigateToPokemonSelect(): void {
     this.router.navigate(['/teambuilder/pokemon']);
     this.activeTab = 'pokemon';
   }
-  
+
   navigateToAbilitySelect(): void {
     if (!this.currentPokemon) return;
     this.router.navigate(['/teambuilder/ability']);
     this.activeTab = 'ability';
   }
-  
+
   navigateToMoveSelect(slot: number): void {
     if (!this.currentPokemon) return;
     this.router.navigate([`/teambuilder/move/${slot}`]);
     this.activeTab = 'moves';
   }
-  
+
   navigateToStatsSelect(): void {
     if (!this.currentPokemon) return;
     this.router.navigate(['/teambuilder/stats']);
     this.activeTab = 'stats';
   }
-  
+
   navigateToItemSelect(): void {
     if (!this.currentPokemon) return;
     this.router.navigate(['/teambuilder/item']);
     this.activeTab = 'item';
   }
-  
-  // Gets the correct stat value from BaseStats object
+
   getStat(stats: BaseStats | null, statName: string): number {
     if (!stats) return 0;
-    
+
     switch (statName) {
-      case 'hp': return stats.hp;
-      case 'atk': return stats.atk;
-      case 'def': return stats.def;
-      case 'spa': return stats.spa;
-      case 'spd': return stats.spd;
-      case 'spe': return stats.spe;
-      default: return 0;
+      case 'hp':
+        return stats.hp;
+      case 'atk':
+        return stats.atk;
+      case 'def':
+        return stats.def;
+      case 'spa':
+        return stats.spa;
+      case 'spd':
+        return stats.spd;
+      case 'spe':
+        return stats.spe;
+      default:
+        return 0;
     }
   }
-  
-  // Use the shared service for stat-related functionality
+
   getStatPercentage(value: number): number {
     return this.statsService.getStatPercentage(value);
   }
-  
+
   getStatColor(stat: keyof BaseStats): string {
     return this.statsService.getStatColor(stat);
   }
-  
+
   getTypeClass(type: string): string {
     return `type-${type.toLowerCase()}`;
   }

@@ -23,7 +23,7 @@
         </button>
       </div>
       
-      <!-- Teams list -->
+      <
       <div *ngIf="!isLoading && !loadError && teams && teams.length > 0" class="teams-list">
         <div *ngFor="let team of teams; let i = index" class="team-card" (click)="viewTeam(i)">
           <mat-card>
@@ -34,7 +34,7 @@
             
             <mat-card-content>
               <div class="team-preview">
-                <!-- Pokémon with sprites -->
+                
                 <div *ngFor="let pokemon of team.team" class="pokemon-preview">
                   <div class="sprite-container">
                     <img 
@@ -46,7 +46,7 @@
                   <span class="pokemon-name">{{ pokemon.name }}</span>
                 </div>
                 
-                <!-- Empty slots -->
+                
                 <div *ngFor="let empty of getEmptySlots(team.team)" class="empty-slot">
                   <div class="empty-placeholder">+</div>
                 </div>

@@ -1,120 +1,158 @@
 <div class="teambuilder-layout">
-    <app-navbar></app-navbar>
-    
-    <div class="status-bar-container">
-      <div class="status-sections">
-        <!-- Pokemon Section -->
-        <div class="pokemon-section" (click)="navigateToPokemonSelect()">
-            <div class="sprite-container">
-                <img 
-                  *ngIf="currentPokemon?.id;"
-                  [src]="imageService.getPokemonSpritePath(currentPokemon!.id)" 
-                  [alt]="currentPokemon?.name || 'Pokemon'"
-                  (error)="imageService.handleImageError($event)"
-                  class="pokemon-sprite">
-                
-                <ng-template #placeholderTpl>
-                  <div class="sprite-placeholder">
-                    {{ currentPokemon?.name ? currentPokemon!.name!.charAt(0) : '?' }}
-                  </div>
-                </ng-template>
-              </div>
-          
-          <div class="pokemon-info">
-            <div class="pokemon-name">{{ currentPokemon?.name || 'Select a Pokémon' }}</div>
-            
-            <!-- Type badges -->
-            <div *ngIf="currentPokemon?.types" class="types-container">
-              <div *ngFor="let type of currentPokemon!.types" class="type-badge" [ngClass]="getTypeClass(type)">
-                {{ type }}
-              </div>
+  <app-navbar></app-navbar>
+
+  <div class="status-bar-container">
+    <div class="status-sections">
+      <div class="pokemon-section" (click)="navigateToPokemonSelect()">
+        <div class="sprite-container">
+          <img
+            *ngIf="currentPokemon?.id"
+            [src]="imageService.getPokemonSpritePath(currentPokemon!.id)"
+            [alt]="currentPokemon?.name || 'Pokemon'"
+            (error)="imageService.handleImageError($event)"
+            class="pokemon-sprite"
+          />
+
+          <ng-template #placeholderTpl>
+            <div class="sprite-placeholder">
+              {{ currentPokemon?.name ? currentPokemon!.name!.charAt(0) : "?" }}
             </div>
-          </div>
+          </ng-template>
         </div>
-        
-        <!-- Details Section -->
-        <div class="details-section">
-          <!-- Item and Ability Section -->
-          <div class="item-ability-section">
-            <div class="item-card" (click)="navigateToItemSelect()">
-              Item: {{ currentPokemon?.item || 'None' }}
-            </div>
-            <div class="ability-card" (click)="navigateToAbilitySelect()">
-              Ability: {{ currentPokemon?.chosenAbility || 'None' }}
-            </div>
-            <!-- Save Button -->
-            <div class="save-button-container" *ngIf="currentPokemon">
-              <button class="save-button" (click)="savePokemonToTeam()">
-                <mat-icon>save</mat-icon>
-                Save to Team
-              </button>
-            </div>
+
+        <div class="pokemon-info">
+          <div class="pokemon-name">
+            {{ currentPokemon?.name || "Select a Pokémon" }}
           </div>
-          
-          <!-- Moves Section -->
-          <div class="moves-section" (click)="navigateToMoveSelect(1)">
-            <div class="move-slot" (click)="navigateToMoveSelect(1)">{{ currentPokemon?.move1 || 'Move 1' }}</div>
-            <div class="move-slot" (click)="navigateToMoveSelect(2)">{{ currentPokemon?.move2 || 'Move 2' }}</div>
-            <div class="move-slot" (click)="navigateToMoveSelect(3)">{{ currentPokemon?.move3 || 'Move 3' }}</div>
-            <div class="move-slot" (click)="navigateToMoveSelect(4)">{{ currentPokemon?.move4 || 'Move 4' }}</div>
-          </div>
-          
-          <!-- Stats Section -->
-          <div class="stats-section" (click)="navigateToStatsSelect()">
-            <div class="stat-row">
-              <div class="stat-label">HP</div>
-              <mat-progress-bar 
-                [value]="currentPokemon?.baseStats ? getStatPercentage(getStat(currentPokemon!.baseStats, 'hp')) : 0" 
-                color="warn">
-              </mat-progress-bar>
-            </div>
-            
-            <div class="stat-row">
-              <div class="stat-label">Atk</div>
-              <mat-progress-bar 
-                [value]="currentPokemon?.baseStats ? getStatPercentage(getStat(currentPokemon!.baseStats, 'atk')) : 0" 
-                color="accent">
-              </mat-progress-bar>
-            </div>
-            
-            <div class="stat-row">
-              <div class="stat-label">Def</div>
-              <mat-progress-bar 
-                [value]="currentPokemon?.baseStats ? getStatPercentage(getStat(currentPokemon!.baseStats, 'def')) : 0" 
-                color="primary">
-              </mat-progress-bar>
-            </div>
-            
-            <div class="stat-row">
-              <div class="stat-label">SpA</div>
-              <mat-progress-bar 
-                [value]="currentPokemon?.baseStats ? getStatPercentage(getStat(currentPokemon!.baseStats, 'spa')) : 0" 
-                color="accent">
-              </mat-progress-bar>
-            </div>
-            
-            <div class="stat-row">
-              <div class="stat-label">SpD</div>
-              <mat-progress-bar 
-                [value]="currentPokemon?.baseStats ? getStatPercentage(getStat(currentPokemon!.baseStats, 'spd')) : 0" 
-                color="primary">
-              </mat-progress-bar>
-            </div>
-            
-            <div class="stat-row">
-              <div class="stat-label">Spe</div>
-              <mat-progress-bar 
-                [value]="currentPokemon?.baseStats ? getStatPercentage(getStat(currentPokemon!.baseStats, 'spe')) : 0" 
-                color="warn">
-              </mat-progress-bar>
+
+          <div *ngIf="currentPokemon?.types" class="types-container">
+            <div
+              *ngFor="let type of currentPokemon!.types"
+              class="type-badge"
+              [ngClass]="getTypeClass(type)"
+            >
+              {{ type }}
             </div>
           </div>
         </div>
       </div>
-    </div>
-    
-    <!-- Router outlet for the sub-components -->
-    <div class="content-area">
-      <router-outlet></router-outlet>
+
+      <div class="details-section">
+        <div class="item-ability-section">
+          <div class="item-card" (click)="navigateToItemSelect()">
+            Item: {{ currentPokemon?.item || "None" }}
+          </div>
+          <div class="ability-card" (click)="navigateToAbilitySelect()">
+            Ability: {{ currentPokemon?.chosenAbility || "None" }}
+          </div>
+          <!-- Save Button jammed in -->
+          <div class="save-button-container" *ngIf="currentPokemon">
+            <button class="save-button" (click)="savePokemonToTeam()">
+              <mat-icon>save</mat-icon>
+              Save to Team
+            </button>
+          </div>
+        </div>
+
+        <div class="moves-section" (click)="navigateToMoveSelect(1)">
+          <div class="move-slot" (click)="navigateToMoveSelect(1)">
+            {{ currentPokemon?.move1 || "Move 1" }}
+          </div>
+          <div class="move-slot" (click)="navigateToMoveSelect(2)">
+            {{ currentPokemon?.move2 || "Move 2" }}
+          </div>
+          <div class="move-slot" (click)="navigateToMoveSelect(3)">
+            {{ currentPokemon?.move3 || "Move 3" }}
+          </div>
+          <div class="move-slot" (click)="navigateToMoveSelect(4)">
+            {{ currentPokemon?.move4 || "Move 4" }}
+          </div>
+        </div>
+
+        <div class="stats-section" (click)="navigateToStatsSelect()">
+          <div class="stat-row">
+            <div class="stat-label">HP</div>
+            <mat-progress-bar
+              [value]="
+                currentPokemon?.baseStats
+                  ? getStatPercentage(getStat(currentPokemon!.baseStats, 'hp'))
+                  : 0
+              "
+              color="warn"
+            >
+            </mat-progress-bar>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-label">Atk</div>
+            <mat-progress-bar
+              [value]="
+                currentPokemon?.baseStats
+                  ? getStatPercentage(getStat(currentPokemon!.baseStats, 'atk'))
+                  : 0
+              "
+              color="accent"
+            >
+            </mat-progress-bar>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-label">Def</div>
+            <mat-progress-bar
+              [value]="
+                currentPokemon?.baseStats
+                  ? getStatPercentage(getStat(currentPokemon!.baseStats, 'def'))
+                  : 0
+              "
+              color="primary"
+            >
+            </mat-progress-bar>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-label">SpA</div>
+            <mat-progress-bar
+              [value]="
+                currentPokemon?.baseStats
+                  ? getStatPercentage(getStat(currentPokemon!.baseStats, 'spa'))
+                  : 0
+              "
+              color="accent"
+            >
+            </mat-progress-bar>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-label">SpD</div>
+            <mat-progress-bar
+              [value]="
+                currentPokemon?.baseStats
+                  ? getStatPercentage(getStat(currentPokemon!.baseStats, 'spd'))
+                  : 0
+              "
+              color="primary"
+            >
+            </mat-progress-bar>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-label">Spe</div>
+            <mat-progress-bar
+              [value]="
+                currentPokemon?.baseStats
+                  ? getStatPercentage(getStat(currentPokemon!.baseStats, 'spe'))
+                  : 0
+              "
+              color="warn"
+            >
+            </mat-progress-bar>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+
+  <div class="content-area">
+    <router-outlet></router-outlet>
+  </div>
+</div>

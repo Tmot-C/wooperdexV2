@@ -13,40 +13,39 @@ import { ItemselectComponent } from './components/teambuilder/itemselect/itemsel
 const routes: Routes = [
   {
     path: '',
-    component: LoginComponent
+    component: LoginComponent,
   },
   {
     path: 'teams',
-    component: OverviewComponent
+    component: OverviewComponent,
   },
   {
     path: 'teams/:id', //team array index
-    component: TeamviewerComponent
+    component: TeamviewerComponent,
   },
   {
     path: 'teambuilder',
     component: StatusbarComponent,
     children: [
-      { path: 'pokemon', component: PokemonselectComponent},
-      { path: 'item', component: ItemselectComponent},
-      { path: 'ability', component: AbilityselectComponent},
-      { path: 'move/1', component: MoveselectComponent},
-      { path: 'move/2', component: MoveselectComponent},
-      { path: 'move/3', component: MoveselectComponent},
-      { path: 'move/4', component: MoveselectComponent},
-      { path: 'stats', component: StatselectComponent}
-
-    ]
+      { path: 'pokemon', component: PokemonselectComponent },
+      { path: 'item', component: ItemselectComponent },
+      { path: 'ability', component: AbilityselectComponent },
+      { path: 'move/1', component: MoveselectComponent },
+      { path: 'move/2', component: MoveselectComponent },
+      { path: 'move/3', component: MoveselectComponent },
+      { path: 'move/4', component: MoveselectComponent },
+      { path: 'stats', component: StatselectComponent },
+    ],
   },
   {
     path: '**',
     redirectTo: '',
-    pathMatch: 'full'
-  }
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

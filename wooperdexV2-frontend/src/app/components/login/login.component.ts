@@ -7,21 +7,20 @@ import { FirebaseAuthService } from '../../firebase-auth.service';
   selector: 'app-login',
   standalone: false,
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnInit {
-  
   loginForm!: FormGroup;
   errorMessage: string = '';
 
   private fb = inject(FormBuilder);
   private authService = inject(FirebaseAuthService);
-  private router= inject(Router);
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
   }
 
@@ -65,5 +64,3 @@ export class LoginComponent implements OnInit {
     }
   }
 }
-
-

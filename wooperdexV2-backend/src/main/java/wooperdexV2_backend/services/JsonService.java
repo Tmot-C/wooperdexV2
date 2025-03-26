@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Service
 public class JsonService {
-
+    //Remnant file from when wrangling pokemon data
     public void readJson(){
         try {
             // Create ObjectMapper instance

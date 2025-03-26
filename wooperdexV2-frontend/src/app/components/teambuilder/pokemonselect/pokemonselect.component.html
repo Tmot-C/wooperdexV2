@@ -1,141 +1,194 @@
 <!-- pokemonselect.component.html -->
 <div class="pokemon-select-container">
-    <div class="search-filter-card">
-      <mat-form-field appearance="outline" class="search-field">
-        <mat-label>Search Pokémon</mat-label>
-        <input matInput [formControl]="searchControl" placeholder="Search by name or number...">
-        <button *ngIf="searchControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="searchControl.setValue('')">
-          <mat-icon>close</mat-icon>
-        </button>
-      </mat-form-field>
-      
-      <div class="filter-section">
-        <div class="filter-group">
-          <div class="filter-title">Type Filter</div>
-          <div class="type-buttons">
-            <button 
-              *ngFor="let type of types"
-              mat-raised-button
-              [ngClass]="['type-button', getTypeClass(type), selectedType === type ? 'selected' : '']"
-              (click)="selectedType === type ? setTypeFilter(null) : setTypeFilter(type)">
-              {{ type }}
-            </button>
-          </div>
+  <div class="search-filter-card">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search Pokémon</mat-label>
+      <input
+        matInput
+        [formControl]="searchControl"
+        placeholder="Search by name or number..."
+      />
+      <button
+        *ngIf="searchControl.value"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="searchControl.setValue('')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <div class="filter-section">
+      <div class="filter-group">
+        <div class="filter-title">Type Filter</div>
+        <div class="type-buttons">
+          <button
+            *ngFor="let type of types"
+            mat-raised-button
+            [ngClass]="[
+              'type-button',
+              getTypeClass(type),
+              selectedType === type ? 'selected' : ''
+            ]"
+            (click)="
+              selectedType === type ? setTypeFilter(null) : setTypeFilter(type)
+            "
+          >
+            {{ type }}
+          </button>
         </div>
-        
-        <div class="filter-group">
-          <div class="filter-title">Tier Filter</div>
-          <div class="tier-buttons">
-            <button 
-              *ngFor="let tier of tiers"
-              mat-raised-button
-              [ngClass]="['tier-button', selectedTier === tier ? 'selected' : '']"
-              (click)="selectedTier === tier ? setTierFilter(null) : setTierFilter(tier)">
-              {{ tier }}
-            </button>
-          </div>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-title">Tier Filter</div>
+        <div class="tier-buttons">
+          <button
+            *ngFor="let tier of tiers"
+            mat-raised-button
+            [ngClass]="['tier-button', selectedTier === tier ? 'selected' : '']"
+            (click)="
+              selectedTier === tier ? setTierFilter(null) : setTierFilter(tier)
+            "
+          >
+            {{ tier }}
+          </button>
         </div>
-        
-        <button mat-raised-button color="warn" (click)="clearFilters()" class="clear-button">
-          Clear Filters
-        </button>
       </div>
-    </div>
-    
-    <div class="pokemon-list-card">
-      <div *ngIf="filteredPokemonList.length === 0" class="no-results">
-        <mat-icon>search_off</mat-icon>
-        <p>No Pokémon found matching your filters.</p>
-      </div>
-      
-      <table mat-table [dataSource]="filteredPokemonList" class="pokemon-table" *ngIf="filteredPokemonList.length > 0">
-        <!-- Tier Column -->
-        <ng-container matColumnDef="tier">
-          <th mat-header-cell *matHeaderCellDef>Tier</th>
-          <td mat-cell *matCellDef="let pokemon">
-            <span class="tier-badge">{{ pokemon.tier }}</span>
-          </td>
-        </ng-container>
-        
-        <!-- Pokémon Column -->
-        <ng-container matColumnDef="pokemon">
-          <th mat-header-cell *matHeaderCellDef>Pokémon</th>
-          <td mat-cell *matCellDef="let pokemon">
-            <div class="pokemon-cell">
-                <div class="sprite-container">
-                    <img 
-                      [src]="imageService.getPokemonSpritePath(pokemon.id)" 
-                      [alt]="pokemon.name"
-                      (error)="imageService.handleImageError($event)"
-                      class="pokemon-sprite">
-                </div>
-                <div class="pokemon-name-number">
-                <span class="pokemon-name">{{ pokemon.name }}</span>
-                <span class="pokemon-number">#{{ pokemon.num }}</span>
-              </div>
-            </div>
-          </td>
-        </ng-container>
-        
-        <!-- Type Column -->
-        <ng-container matColumnDef="type">
-          <th mat-header-cell *matHeaderCellDef>Type</th>
-          <td mat-cell *matCellDef="let pokemon">
-            <div class="types-container">
-              <div *ngFor="let type of pokemon.types" class="type-badge" [ngClass]="getTypeClass(type)">
-                {{ type }}
-              </div>
-            </div>
-          </td>
-        </ng-container>
-        
-        <!-- Abilities Column -->
-        <ng-container matColumnDef="abilities">
-          <th mat-header-cell *matHeaderCellDef>Abilities</th>
-          <td mat-cell *matCellDef="let pokemon">
-            <div class="abilities-list">{{ pokemon.abilities.join(', ') }}</div>
-          </td>
-        </ng-container>
-        
-        <!-- Stats Columns - Compact Stats -->
-        <ng-container matColumnDef="hp">
-          <th mat-header-cell *matHeaderCellDef class="stat-header">HP</th>
-          <td mat-cell *matCellDef="let pokemon" class="stat-cell">{{ pokemon.baseStats.hp }}</td>
-        </ng-container>
-        
-        <ng-container matColumnDef="atk">
-          <th mat-header-cell *matHeaderCellDef class="stat-header">Atk</th>
-          <td mat-cell *matCellDef="let pokemon" class="stat-cell">{{ pokemon.baseStats.atk }}</td>
-        </ng-container>
-        
-        <ng-container matColumnDef="def">
-          <th mat-header-cell *matHeaderCellDef class="stat-header">Def</th>
-          <td mat-cell *matCellDef="let pokemon" class="stat-cell">{{ pokemon.baseStats.def }}</td>
-        </ng-container>
-        
-        <ng-container matColumnDef="spa">
-          <th mat-header-cell *matHeaderCellDef class="stat-header">SpA</th>
-          <td mat-cell *matCellDef="let pokemon" class="stat-cell">{{ pokemon.baseStats.spa }}</td>
-        </ng-container>
-        
-        <ng-container matColumnDef="spd">
-          <th mat-header-cell *matHeaderCellDef class="stat-header">SpD</th>
-          <td mat-cell *matCellDef="let pokemon" class="stat-cell">{{ pokemon.baseStats.spd }}</td>
-        </ng-container>
-        
-        <ng-container matColumnDef="spe">
-          <th mat-header-cell *matHeaderCellDef class="stat-header">Spe</th>
-          <td mat-cell *matCellDef="let pokemon" class="stat-cell">{{ pokemon.baseStats.spe }}</td>
-        </ng-container>
-        
-        <ng-container matColumnDef="bst">
-          <th mat-header-cell *matHeaderCellDef class="stat-header">BST</th>
-          <td mat-cell *matCellDef="let pokemon" class="stat-cell bst-value">{{ calculateBST(pokemon.baseStats) }}</td>
-        </ng-container>
-        
-        <!-- Header and Row Definitions -->
-        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectPokemon(row)" class="pokemon-row"></tr>
-      </table>
+
+      <button
+        mat-raised-button
+        color="warn"
+        (click)="clearFilters()"
+        class="clear-button"
+      >
+        Clear Filters
+      </button>
     </div>
   </div>
+
+  <div class="pokemon-list-card">
+    <div *ngIf="filteredPokemonList.length === 0" class="no-results">
+      <mat-icon>search_off</mat-icon>
+      <p>No Pokémon found matching your filters.</p>
+    </div>
+
+    <table
+      mat-table
+      [dataSource]="filteredPokemonList"
+      class="pokemon-table"
+      *ngIf="filteredPokemonList.length > 0"
+    >
+      <!-- Tier -->
+      <ng-container matColumnDef="tier">
+        <th mat-header-cell *matHeaderCellDef>Tier</th>
+        <td mat-cell *matCellDef="let pokemon">
+          <span class="tier-badge">{{ pokemon.tier }}</span>
+        </td>
+      </ng-container>
+
+      <!-- Pokémon -->
+      <ng-container matColumnDef="pokemon">
+        <th mat-header-cell *matHeaderCellDef>Pokémon</th>
+        <td mat-cell *matCellDef="let pokemon">
+          <div class="pokemon-cell">
+            <div class="sprite-container">
+              <img
+                [src]="imageService.getPokemonSpritePath(pokemon.id)"
+                [alt]="pokemon.name"
+                (error)="imageService.handleImageError($event)"
+                class="pokemon-sprite"
+              />
+            </div>
+            <div class="pokemon-name-number">
+              <span class="pokemon-name">{{ pokemon.name }}</span>
+              <span class="pokemon-number">#{{ pokemon.num }}</span>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Types -->
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>Type</th>
+        <td mat-cell *matCellDef="let pokemon">
+          <div class="types-container">
+            <div
+              *ngFor="let type of pokemon.types"
+              class="type-badge"
+              [ngClass]="getTypeClass(type)"
+            >
+              {{ type }}
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Abilities -->
+      <ng-container matColumnDef="abilities">
+        <th mat-header-cell *matHeaderCellDef>Abilities</th>
+        <td mat-cell *matCellDef="let pokemon">
+          <div class="abilities-list">{{ pokemon.abilities.join(", ") }}</div>
+        </td>
+      </ng-container>
+
+      <!-- Stats -->
+      <ng-container matColumnDef="hp">
+        <th mat-header-cell *matHeaderCellDef class="stat-header">HP</th>
+        <td mat-cell *matCellDef="let pokemon" class="stat-cell">
+          {{ pokemon.baseStats.hp }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="atk">
+        <th mat-header-cell *matHeaderCellDef class="stat-header">Atk</th>
+        <td mat-cell *matCellDef="let pokemon" class="stat-cell">
+          {{ pokemon.baseStats.atk }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="def">
+        <th mat-header-cell *matHeaderCellDef class="stat-header">Def</th>
+        <td mat-cell *matCellDef="let pokemon" class="stat-cell">
+          {{ pokemon.baseStats.def }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="spa">
+        <th mat-header-cell *matHeaderCellDef class="stat-header">SpA</th>
+        <td mat-cell *matCellDef="let pokemon" class="stat-cell">
+          {{ pokemon.baseStats.spa }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="spd">
+        <th mat-header-cell *matHeaderCellDef class="stat-header">SpD</th>
+        <td mat-cell *matCellDef="let pokemon" class="stat-cell">
+          {{ pokemon.baseStats.spd }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="spe">
+        <th mat-header-cell *matHeaderCellDef class="stat-header">Spe</th>
+        <td mat-cell *matCellDef="let pokemon" class="stat-cell">
+          {{ pokemon.baseStats.spe }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="bst">
+        <th mat-header-cell *matHeaderCellDef class="stat-header">BST</th>
+        <td mat-cell *matCellDef="let pokemon" class="stat-cell bst-value">
+          {{ calculateBST(pokemon.baseStats) }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        (click)="selectPokemon(row)"
+        class="pokemon-row"
+      ></tr>
+    </table>
+  </div>
+</div>

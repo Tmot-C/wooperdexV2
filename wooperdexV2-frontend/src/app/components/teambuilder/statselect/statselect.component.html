@@ -1,125 +1,150 @@
-<!-- statselect.component.html -->
 <div class="stats-container" *ngIf="currentPokemon">
-    <div class="stats-header-section">
-      <div class="stats-title">
-        <div>Stats Configuration</div>
-        <div class="stats-actions">
-          <span class="ev-remaining">(EVs Remaining: {{ getRemainingEvs() }})</span>
-          <button mat-button color="warn" class="action-button" (click)="resetEvs()">Reset EVs</button>
-          <button mat-button color="primary" class="action-button" (click)="perfectIvs()">Max IVs</button>
-        </div>
-      </div>
-      
-      <div class="nature-selector">
-        <span class="nature-label">Nature:</span>
-        <mat-form-field appearance="outline">
-          <mat-select [(ngModel)]="nature">
-            <mat-option *ngFor="let natureOption of natures" [value]="natureOption">
-              {{ natureOption }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-    
-    <div class="stats-table">
-      <div class="stats-row header-row">
-        <div class="column-stat">Stat</div>
-        <div class="column-base">Base</div>
-            <div class="column-evs text-center">EVs</div>
-        <div class="column-ivs text-center">IVs</div>
-        <div class="column-final">Final</div>
-      </div>
-      
-      <div *ngFor="let stat of statKeys" class="stats-row">
-        <!-- Stat Name with colored bar -->
-        <div class="column-stat">
-          <div class="stat-label" [ngClass]="stat + '-color'">{{ getStatLabel(stat) }}</div>
-          <div class="stat-bar-container">
-            <mat-progress-bar 
-              [value]="(getBaseStat(stat) / 255) * 100" 
-              [color]="getStatColor(stat)">
-            </mat-progress-bar>
-          </div>
-        </div>
-        
-        <!-- Base Stat Value -->
-        <div class="column-base">{{ getBaseStat(stat) }}</div>
-        
-        <!-- EV Controls -->
-        <div class="column-evs">
-          <div class="controls-container">
-            <button 
-              mat-mini-fab 
-              color="primary" 
-              class="mini-control-button"
-              (click)="decreaseEv(stat)"
-              [disabled]="(evForm.get(stat)?.value || 0) <= 0">
-              <mat-icon class="mini-icon">remove</mat-icon>
-            </button>
-            
-            <input 
-              type="number" 
-              [value]="evForm.get(stat)?.value || 0"
-              (input)="onEvInput(stat, $event)"
-              class="stat-input">
-            
-            <button 
-              mat-mini-fab 
-              color="primary" 
-              class="mini-control-button"
-              (click)="increaseEv(stat)"
-              [disabled]="!canIncreaseEv(stat)">
-              <mat-icon class="mini-icon">add</mat-icon>
-            </button>
-          </div>
-        </div>
-        
-        <!-- IV Controls -->
-        <div class="column-ivs">
-          <div class="controls-container">
-            <button 
-              mat-mini-fab 
-              color="accent" 
-              class="mini-control-button"
-              (click)="decreaseIv(stat)"
-              [disabled]="(ivForm.get(stat)?.value || 0) <= statsService.ivMin">
-              <mat-icon class="mini-icon">remove</mat-icon>
-            </button>
-            
-            <input 
-              type="number" 
-              [value]="ivForm.get(stat)?.value || 31"
-              (input)="onIvInput(stat, $event)"
-              class="stat-input"
-              [min]="statsService.ivMin"
-              [max]="statsService.ivMax">
-            
-            <button 
-              mat-mini-fab 
-              color="accent" 
-              class="mini-control-button"
-              (click)="increaseIv(stat)"
-              [disabled]="(ivForm.get(stat)?.value || 0) >= statsService.ivMax">
-              <mat-icon class="mini-icon">add</mat-icon>
-            </button>
-          </div>
-        </div>
-        
-        <!-- Final Calculated Stat -->
-        <div class="column-final">{{ calculateFinalStat(stat) }}</div>
+  <div class="stats-header-section">
+    <div class="stats-title">
+      <div>Stats Configuration</div>
+      <div class="stats-actions">
+        <span class="ev-remaining"
+          >(EVs Remaining: {{ getRemainingEvs() }})</span
+        >
+        <button
+          mat-button
+          color="warn"
+          class="action-button"
+          (click)="resetEvs()"
+        >
+          Reset EVs
+        </button>
+        <button
+          mat-button
+          color="primary"
+          class="action-button"
+          (click)="perfectIvs()"
+        >
+          Max IVs
+        </button>
       </div>
     </div>
-    
-    <div class="button-row">
-      <button mat-button (click)="goBack()">Back</button>
-      <button mat-raised-button color="primary" (click)="saveStatsAndContinue()">
-        Save
-      </button>
+
+    <div class="nature-selector">
+      <span class="nature-label">Nature:</span>
+      <mat-form-field appearance="outline">
+        <mat-select [(ngModel)]="nature">
+          <mat-option
+            *ngFor="let natureOption of natures"
+            [value]="natureOption"
+          >
+            {{ natureOption }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
-  
-  <div class="no-pokemon" *ngIf="!currentPokemon">
-    <p>Please select a Pokémon first</p>
-    <button mat-button (click)="goBack()">Back to Item Selection</button>
+
+  <div class="stats-table">
+    <div class="stats-row header-row">
+      <div class="column-stat">Stat</div>
+      <div class="column-base">Base</div>
+      <div class="column-evs text-center">EVs</div>
+      <div class="column-ivs text-center">IVs</div>
+      <div class="column-final">Final</div>
+    </div>
+
+    <div *ngFor="let stat of statKeys" class="stats-row">
+      <div class="column-stat">
+        <div class="stat-label" [ngClass]="stat + '-color'">
+          {{ getStatLabel(stat) }}
+        </div>
+        <div class="stat-bar-container">
+          <mat-progress-bar
+            [value]="(getBaseStat(stat) / 255) * 100"
+            [color]="getStatColor(stat)"
+          >
+          </mat-progress-bar>
+        </div>
+      </div>
+
+      <div class="column-base">{{ getBaseStat(stat) }}</div>
+
+      <!-- Ev Controls -->
+      <div class="column-evs">
+        <div class="controls-container">
+          <button
+            mat-mini-fab
+            color="primary"
+            class="mini-control-button"
+            (click)="decreaseEv(stat)"
+            [disabled]="(evForm.get(stat)?.value || 0) <= 0"
+          >
+            <mat-icon class="mini-icon">remove</mat-icon>
+          </button>
+
+          <input
+            type="number"
+            [value]="evForm.get(stat)?.value || 0"
+            (input)="onEvInput(stat, $event)"
+            class="stat-input"
+          />
+
+          <button
+            mat-mini-fab
+            color="primary"
+            class="mini-control-button"
+            (click)="increaseEv(stat)"
+            [disabled]="!canIncreaseEv(stat)"
+          >
+            <mat-icon class="mini-icon">add</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Iv Controls -->
+      <div class="column-ivs">
+        <div class="controls-container">
+          <button
+            mat-mini-fab
+            color="accent"
+            class="mini-control-button"
+            (click)="decreaseIv(stat)"
+            [disabled]="(ivForm.get(stat)?.value || 0) <= statsService.ivMin"
+          >
+            <mat-icon class="mini-icon">remove</mat-icon>
+          </button>
+
+          <input
+            type="number"
+            [value]="ivForm.get(stat)?.value || 31"
+            (input)="onIvInput(stat, $event)"
+            class="stat-input"
+            [min]="statsService.ivMin"
+            [max]="statsService.ivMax"
+          />
+
+          <button
+            mat-mini-fab
+            color="accent"
+            class="mini-control-button"
+            (click)="increaseIv(stat)"
+            [disabled]="(ivForm.get(stat)?.value || 0) >= statsService.ivMax"
+          >
+            <mat-icon class="mini-icon">add</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Stat total at 100 -->
+      <div class="column-final">{{ calculateFinalStat(stat) }}</div>
+    </div>
   </div>
+
+  <div class="button-row">
+    <button mat-button (click)="goBack()">Back</button>
+    <button mat-raised-button color="primary" (click)="saveStatsAndContinue()">
+      Save
+    </button>
+  </div>
+</div>
+
+<div class="no-pokemon" *ngIf="!currentPokemon">
+  <p>Please select a Pokémon first</p>
+  <button mat-button (click)="goBack()">Back to Item Selection</button>
+</div>

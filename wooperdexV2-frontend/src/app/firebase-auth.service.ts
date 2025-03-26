@@ -1,3 +1,4 @@
+//Incomplete implementation
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
@@ -44,13 +45,13 @@ export class FirebaseAuthService {
     this.handleRedirectResult();
   }
 
-  /** Load stored user from localStorage */
+  //  Load stored user from localStorage
   private loadStoredUser(): UserData | null {
     const storedUser = localStorage.getItem('currentUser');
     return storedUser ? JSON.parse(storedUser) : null;
   }
 
-  /** Saves user data to localStorage */
+  //  Saves user data to localStorage
   private saveUser(user: UserData | null): void {
     if (user) {
       localStorage.setItem('currentUser', JSON.stringify(user));
@@ -60,7 +61,7 @@ export class FirebaseAuthService {
     this.currentUserSubject.next(user);
   }
 
-  /** Listens for Firebase auth state changes */
+  // Listens for Firebase auth state changes
   private setupAuthStateListener(): void {
     this.auth.onAuthStateChanged((user) =>
       user ? this.syncUserWithBackend(user) : this.saveUser(null)
@@ -79,7 +80,7 @@ export class FirebaseAuthService {
     }
   }
 
-  /** Handles Google redirect sign-in */
+  // Handles Google redirect sign-in
   private async handleRedirectResult(): Promise<void> {
     if (this.isProcessingRedirect) return;
     this.isProcessingRedirect = true;
@@ -97,7 +98,7 @@ export class FirebaseAuthService {
     }
   }
 
-  /** Sign in with email/password */
+  // Sign in with email/password
   async signInWithEmailandPassword(
     email: string,
     password: string
@@ -110,7 +111,7 @@ export class FirebaseAuthService {
     return this.syncUserWithBackend(credential.user);
   }
 
-  /** Sign in with Google */
+  // Sign in with Google
   async signInWithGoogle(): Promise<UserData | null> {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({
@@ -149,7 +150,6 @@ export class FirebaseAuthService {
     return !!this.currentUserSubject.value;
   }
 
-  /** Sign up with email/password */
   async signUpWithEmailandPassword(
     email: string,
     password: string,
@@ -190,12 +190,12 @@ export class FirebaseAuthService {
 
     try {
       const response = await firstValueFrom(
-        //post to save data
+        //Post to dbs
         this.http.post<any>(`api/users/firebase-auth`, {
           firebaseId: userData.id,
           email: userData.email,
           name: userData.name,
-          idToken: idToken, // Send the ID token to the backend
+          idToken: idToken,
         })
       );
 
