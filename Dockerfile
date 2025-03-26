@@ -15,7 +15,7 @@ WORKDIR /server
 
 COPY /wooperdexV2-backend .
 
-COPY --from=builder1 /client/dist/wooperdexV2-frontend/browser /server/src/main/resources/static
+COPY --from=builder1 /client/dist/wooperdex-v2-frontend/browser /server/src/main/resources/static
 
 RUN chmod a+x mvnw
 RUN ./mvnw install -DskipTests
