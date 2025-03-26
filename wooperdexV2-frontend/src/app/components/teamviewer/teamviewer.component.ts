@@ -5,7 +5,7 @@ import { BuilderService } from '../../builder.service';
 import { BuiltPokemon, BaseStats, Team, Trainer } from '../../models';
 import { StatsService } from '../../stats.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { switchMap, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { ImagePathService } from '../../image-path.service';
 import { combineLatest } from 'rxjs';
 

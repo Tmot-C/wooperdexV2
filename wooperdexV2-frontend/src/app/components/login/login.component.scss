@@ -1,0 +1,112 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #bde5ff;
+    background-image: linear-gradient(
+      to bottom right,
+      rgba(189, 229, 255, 0.8),
+      rgba(189, 229, 255, 1)
+    );
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Decorative elements */
+  .login-container::before,
+  .login-container::after {
+    content: "";
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+  }
+  
+  .login-container::before {
+    width: 300px;
+    height: 300px;
+    top: 10%;
+    right: 5%;
+  }
+  
+  .login-container::after {
+    width: 200px;
+    height: 200px;
+    bottom: 10%;
+    left: 5%;
+  }
+  
+  .login-card {
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 480px;
+    padding: 48px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .login-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+  
+  .app-title {
+    color: var(--primary-dark-color, #2962FF);
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+  
+  .logo-image {
+    width: 120px; /* You may want to adjust size based on your specific GIF */
+    height: 120px;
+    object-fit: contain; /* Change to 'contain' if you don't want to crop the GIF */
+    margin-bottom: 16px;
+  }
+  
+  .login-content {
+    width: 100%;
+  }
+  
+  .login-message {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 32px;
+  }
+  
+  .google-sign-in {
+    width: 100%;
+    height: 48px;
+    font-size: 16px;
+    margin-bottom: 24px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+  }
+  
+  .use-info {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    .login-card {
+      padding: 32px 16px;
+    }
+    
+    .app-title {
+      font-size: 24px;
+    }
+  }

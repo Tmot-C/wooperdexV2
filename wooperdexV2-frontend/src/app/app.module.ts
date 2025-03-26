@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { provideHttpClient } from '@angular/common/http';
@@ -19,6 +19,7 @@ import { MoveselectComponent } from './components/teambuilder/moveselect/movesel
 import { StatselectComponent } from './components/teambuilder/statselect/statselect.component';
 import { DexAIComponent } from './components/teambuilder/dex-ai/dex-ai.component';
 import { RouterModule } from '@angular/router';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,12 @@ import { RouterModule } from '@angular/router';
     ReactiveFormsModule,
     FormsModule,
     MaterialModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
   ],
   providers: [provideHttpClient()],
   bootstrap: [AppComponent],

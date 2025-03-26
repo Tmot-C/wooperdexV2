@@ -1,5 +1,4 @@
-import { Component, inject, Inject, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FirebaseAuthService } from '../../firebase-auth.service';
 
@@ -7,50 +6,13 @@ import { FirebaseAuthService } from '../../firebase-auth.service';
   selector: 'app-login',
   standalone: false,
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
-  loginForm!: FormGroup;
-  errorMessage: string = '';
-
-  private fb = inject(FormBuilder);
+export class LoginComponent {
   private authService = inject(FirebaseAuthService);
   private router = inject(Router);
 
-  ngOnInit(): void {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-    });
-  }
-
-  async onLogin(): Promise<void> {
-    if (this.loginForm.invalid) {
-      return;
-    }
-    const { email, password } = this.loginForm.value;
-    try {
-      await this.authService.signInWithEmailandPassword(email, password);
-      this.router.navigate(['/homepage']);
-    } catch (error: any) {
-      console.error('Login error:', error);
-      this.errorMessage = error.message;
-    }
-  }
-
-  async onSignUp(): Promise<void> {
-    if (this.loginForm.invalid) {
-      return;
-    }
-    const { email, password } = this.loginForm.value;
-    try {
-      await this.authService.signUpWithEmailandPassword(email, password);
-      this.router.navigate(['/homepage']);
-    } catch (error: any) {
-      console.error('Sign-Up error:', error);
-      this.errorMessage = error.message;
-    }
-  }
+  errorMessage: string = '';
 
   async onGoogleSignIn(): Promise<void> {
     try {
@@ -60,7 +22,8 @@ export class LoginComponent implements OnInit {
       }
     } catch (error: any) {
       console.error('Google Sign-In error:', error);
-      this.errorMessage = error.message;
+      this.errorMessage =
+        error.message || 'Failed to sign in with Google. Please try again.';
     }
   }
 }

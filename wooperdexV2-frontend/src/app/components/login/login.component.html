@@ -1,22 +1,19 @@
-<form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-  <div>
-    <label>Email:</label>
-    <input type="email" formControlName="email" />
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="app-title">Welcome to WooperDex!</div>
+      <!-- Just change the src path to your GIF file -->
+      <img src="assets/images/queg.gif" alt="WooperDex Logo" class="logo-image">
+    </div>
+    
+    <div class="login-content">
+      <p class="login-message">Create and manage your Pokémon teams with ease</p>
+      
+      <button mat-raised-button color="primary" class="google-sign-in" (click)="onGoogleSignIn()">
+        Sign in with Google
+      </button>
+      
+      <p class="use-info">Sign in to save your teams and access them from any device</p>
+    </div>
   </div>
-  <div>
-    <label>Password:</label>
-    <input type="password" formControlName="password" />
-  </div>
-  <div>
-    <button type="submit">Login</button>
-    <button type="button" (click)="onSignUp()">Sign Up</button>
-  </div>
-</form>
-
-<div>
-  <button type="button" (click)="onGoogleSignIn()">Sign in with Google</button>
-</div>
-
-<div *ngIf="errorMessage">
-  <p>Error: {{ errorMessage }}</p>
 </div>
