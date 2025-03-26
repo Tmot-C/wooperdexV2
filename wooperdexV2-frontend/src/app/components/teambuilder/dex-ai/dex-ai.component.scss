@@ -4,8 +4,17 @@
   overflow: hidden;
 }
 
+::ng-deep .cdk-overlay-pane {
+  max-width: 90vw !important;
+  width: 900px !important;
+}
+
+::ng-deep .mat-mdc-dialog-surface {
+  max-height: 80vh !important;
+}
+
 mat-dialog-content {
-  max-height: 60vh;
+  max-height: 70vh;
   padding: 16px;
 }
 
@@ -15,6 +24,7 @@ mat-dialog-content {
     line-height: 1.6;
     margin: 0;
     font-size: 16px;
+    color: #000000;
   }
 }
 

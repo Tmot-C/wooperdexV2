@@ -8,6 +8,11 @@ public class ChatGptRequest {
     private List<Message> messages;
     private double temperature;
 
+    private String gptRequestTemplate = """
+            Tell me how %s is built competitively. Do so in a similar manner to how the rotomdex would, but try to not be too overly wordy.
+            Do not talk mention Terastallization, as that is not allowed in the current format.
+            """;
+
     // Nested Message class
     public static class Message {
         private String role;
@@ -35,7 +40,7 @@ public class ChatGptRequest {
         this.model = "gpt-4o";
         this.messages = Collections.singletonList(
             new Message("user", 
-                String.format("Tell me how %s is built competitively. Do so in a similar manner to how the rotomdex would, but try to not be too overly wordy", 
+                String.format(gptRequestTemplate, 
                 pokemon)
             )
         );
