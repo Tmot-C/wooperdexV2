@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.constraints.Email;
 import wooperdexV2_backend.models.Trainer;
 import wooperdexV2_backend.models.User;
 import wooperdexV2_backend.repositories.MongoRepository;
 import wooperdexV2_backend.repositories.UserRepository;
+import wooperdexV2_backend.services.EmailService;
 
 @RestController
 @RequestMapping("/api/users")
@@ -23,6 +25,9 @@ public class FirebaseAuthController {
 
     @Autowired
     private MongoRepository mongoRepo;
+
+    @Autowired
+    private EmailService emailService;
 
 
     @PostMapping("/firebase-auth")
@@ -62,7 +67,7 @@ public class FirebaseAuthController {
             newTrainer.setEmail(email);
             newTrainer.setName(name);
             mongoRepo.saveTrainer(newTrainer);
-
+            emailService.sendConfirmationEmail(email);
         }
 
         Map<String, Object> response = new HashMap<>();
