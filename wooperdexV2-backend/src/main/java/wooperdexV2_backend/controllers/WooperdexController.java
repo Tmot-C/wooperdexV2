@@ -58,13 +58,13 @@ public class WooperdexController {
     public Trainer getTrainerById(@PathVariable String id) {
         System.out.println(id);
         Trainer trainer = getSvc.getTrainer(id);
-        System.out.println(trainer.toString());
+        
         return trainer;
     }
 
     @PostMapping("/trainer/{id}")
     public ResponseEntity<Void> updateTrainer(@PathVariable String id, @RequestBody Trainer trainer) {
-        System.out.println("LALALALA" + trainer.toString());
+        
         getSvc.saveTrainer(trainer);
 
         return ResponseEntity.ok().build();

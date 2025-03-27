@@ -70,7 +70,7 @@ public class MongoRepository {
         System.out.println(id);
         Query query = new Query(Criteria.where("firebaseId").is(id));
         Trainer trainer = mongoTemplate.findOne(query, Trainer.class, "trainers");
-        System.out.println(trainer.toString());
+        
         return trainer;
     }
 
